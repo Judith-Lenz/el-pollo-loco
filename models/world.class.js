@@ -29,7 +29,7 @@ class World {
     this.addObjectsToMap(this.enemies);
 
     //draw() wird immer wieder aufgerufen.
-    let self = this;
+    let self = this; //this klappt hier nicht, daher das self=this
     requestAnimationFrame(function () {
       self.draw();
     });
