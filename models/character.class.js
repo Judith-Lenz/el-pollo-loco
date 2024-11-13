@@ -10,6 +10,7 @@ class Character extends MovableObject {
     "img/2_character_pepe/2_walk/W-25.png",
     "img/2_character_pepe/2_walk/W-26.png",
   ];
+  world; //damit wir auf die Variablen aus world zugreifen können (siehe setWorld inn world), u.a. keyboard.
 
   constructor() {
     super().loadImage("img/2_character_pepe/2_walk/W-21.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
@@ -22,10 +23,12 @@ class Character extends MovableObject {
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
     setInterval(() => {
-      let i = this.currentImage % this.IMAGES_WALKING.length; //let i=0 % 6, modulu ist der mathematische Rest
-      let path = this.IMAGES_WALKING[i];
-      this.img = this.imageCache[path];
-      this.currentImage++;
+      if (this.world.keyboard.RIGHT) {
+        let i = this.currentImage % this.IMAGES_WALKING.length; //let i=0 % 6, modulu ist der mathematische Rest
+        let path = this.IMAGES_WALKING[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+      }
     }, 100);
   }
 

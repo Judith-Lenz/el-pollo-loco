@@ -11,12 +11,20 @@ class World {
 
   canvas;
   ctx; //Variable context
+  keyboard; // leere Variable
 
-  constructor(canvas) {
+  constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
+    this.keyboard = keyboard;
     this.draw();
+    this.setWorld();
+  }
+
+  //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
+  setWorld() {
+    this.character.world = this;
   }
 
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen
