@@ -7,6 +7,7 @@ class MovableObject {
   imageCache = {}; //in dieses JSON laden wir Bilder rein.
   currentImage = 0;
   speed = 0.15;
+  otherDirection = false;
 
   //loadImage('img/test.png);
   loadImage(path) {
