@@ -52,7 +52,7 @@ class World {
   addToMap(mo) {
     if (mo.otherDirection) {
       this.ctx.save();
-      this.ctx.translate(mo.width, 0);
+      this.ctx.translate(mo.width, 0); //Elemente spiegelverkehrt einfügen
       this.ctx.scale(-1, 1);
       mo.x = mo.x * -1;
     }
