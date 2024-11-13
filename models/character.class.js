@@ -2,6 +2,7 @@ class Character extends MovableObject {
   height = 200;
   width = 90;
   y = 220;
+  speed = 5;
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -24,12 +25,23 @@ class Character extends MovableObject {
   animate() {
     setInterval(() => {
       if (this.world.keyboard.RIGHT) {
+        this.x += this.speed;
+      }
+      if (this.world.keyboard.LEFT) {
+        this.x -= this.speed;
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        //also entweder links ODER rechts ist true
+        //Walk Animation
         let i = this.currentImage % this.IMAGES_WALKING.length; //let i=0 % 6, modulu ist der mathematische Rest
         let path = this.IMAGES_WALKING[i];
         this.img = this.imageCache[path];
         this.currentImage++;
       }
-    }, 100);
+    }, 30);
   }
 
   jump() {}
