@@ -12,6 +12,7 @@ class World {
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable
+  camera_x = 0;
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -31,10 +32,12 @@ class World {
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
+    this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     this.addObjectsToMap(this.backgroundObjects);
     this.addObjectsToMap(this.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.enemies);
+    this.ctx.translate(-this.camera_x, 0);
 
     //draw() wird immer wieder aufgerufen.
     let self = this; //this klappt hier nicht, daher das self=this

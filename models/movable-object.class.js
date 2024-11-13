@@ -1,5 +1,5 @@
 class MovableObject {
-  x = 120;
+  x = 100; //hier startet der Character,also camera auch direkt um soviel verschoben
   y = 280;
   img;
   height = 150;
