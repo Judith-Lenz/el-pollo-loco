@@ -1,12 +1,12 @@
 class MovableObject {
-  x = 100; //hier startet der Character,also camera auch direkt um soviel verschoben
+  x = 0; //hier startet der Character,also camera auch direkt um soviel verschoben
   y = 280;
   img;
   height = 150;
   width = 90;
   imageCache = {}; //in dieses JSON laden wir Bilder rein.
   currentImage = 0;
-  speed = 0.15;
+  speed = 0.15; //standard, wird jeweils evtl. überschrieben
   otherDirection = false;
 
   //loadImage('img/test.png);
