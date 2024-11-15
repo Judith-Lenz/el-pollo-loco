@@ -24,15 +24,16 @@ class Character extends MovableObject {
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
     setInterval(() => {
-      if (this.world.keyboard.RIGHT) {
+      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.x += this.speed;
         this.otherDirection = false;
       }
-      if (this.world.keyboard.LEFT) {
+      if (this.world.keyboard.LEFT && this.x >= -100) {
+        //hier kann ich sagen, wie weit Character nach links laufen kann.
         this.x -= this.speed;
         this.otherDirection = true;
       }
-      this.world.camera_x = -this.x;
+      this.world.camera_x = -this.x + 100; //hier wird ja die Kamera x Kooridnate gleichgesetzt mit der vom character, wenn wir +100 machen, ist das versetzt, wie wir es wollen.
     }, 1000 / 60);
 
     setInterval(() => {

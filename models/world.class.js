@@ -1,9 +1,8 @@
 class World {
   //an der x-Koordinate 0 werden 4 Grafiken eingefügt.
-  backgroundObjects = level1.backgroundObjects;
+
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
-  enemies = level1.enemies;
-  clouds = level1.clouds;
+  level = level1;
 
   canvas;
   ctx; //Variable context
@@ -29,10 +28,10 @@ class World {
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
     this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
-    this.addObjectsToMap(this.backgroundObjects);
-    this.addObjectsToMap(this.clouds);
+    this.addObjectsToMap(this.level.backgroundObjects);
+    this.addObjectsToMap(this.level.clouds);
     this.addToMap(this.character);
-    this.addObjectsToMap(this.enemies);
+    this.addObjectsToMap(this.level.enemies);
     this.ctx.translate(-this.camera_x, 0);
 
     //draw() wird immer wieder aufgerufen.
