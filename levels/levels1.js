@@ -1,10 +1,6 @@
+//definiert wie viele Objekte auftauchen
 const level1 = new Level(
-  [
-    new Salsa("img/6_salsa_bottle/1_salsa_bottle_on_ground.png"),
-    new Salsa("img/6_salsa_bottle/2_salsa_bottle_on_ground.png"),
-    new Salsa("img/6_salsa_bottle/1_salsa_bottle_on_ground.png"),
-    new Salsa("img/6_salsa_bottle/2_salsa_bottle_on_ground.png"),
-  ],
+  [new Salsa(), new Salsa(), new Salsa(), new Salsa()],
   [new Coin(), new Coin()],
   [
     new ChickenSmall(),

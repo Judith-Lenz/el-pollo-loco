@@ -26,14 +26,15 @@ class World {
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen
 
   draw() {
+    //hier kommt es auf die Reihenfolge an. alles wird von oben nach unten geschichtet.
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
     this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.salsas);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.salsas);
     this.ctx.translate(-this.camera_x, 0);
 
     //draw() wird immer wieder aufgerufen.
