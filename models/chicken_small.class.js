@@ -1,7 +1,7 @@
 class ChickenSmall extends MovableObject {
   y = 375; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
   height = 40;
-  width = 45;
+  width = 40;
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",

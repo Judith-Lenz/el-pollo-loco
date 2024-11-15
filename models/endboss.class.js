@@ -13,7 +13,7 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_WALKING[3]); //Startbild laden, brauchen wir evtl. gar nicht
     this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
-    this.x = 2500; //später noch viel weiter nach rechts, aber ich will ihn ja erstmal sehen.
+    this.x = 2500; //wie weit rechts er eingefügt wird.
     this.animate();
   }
 

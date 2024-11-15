@@ -32,6 +32,8 @@ class World {
     this.addObjectsToMap(this.level.clouds);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.salsas);
     this.ctx.translate(-this.camera_x, 0);
 
     //draw() wird immer wieder aufgerufen.
