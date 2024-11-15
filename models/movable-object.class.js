@@ -28,6 +28,13 @@ class MovableObject {
     });
   }
 
+  playAnimation(images) {
+    let i = this.currentImage % this.IMAGES_WALKING.length; // Index berechnen
+    let path = images[i]; // Aktuelles Bild holen
+    this.img = this.imageCache[path]; // Bild aktualisieren
+    this.currentImage++; // Nächste Bildposition vorbereiten
+  }
+
   moveRight() {
     console.log("Moving right");
   }
