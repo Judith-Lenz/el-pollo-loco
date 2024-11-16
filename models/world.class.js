@@ -30,7 +30,7 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
     this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     this.addObjectsToMap(this.level.backgroundObjects);
-    this.addObjectsToMap(this.level.clouds);
+    this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.salsas);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
@@ -50,6 +50,7 @@ class World {
     });
   }
 
+  //Verwendet die drawImage()-Methode des Canvas, um das Bild (der Wolke) basierend auf ihrer aktuellen Position (mo.x und mo.y) zu zeichnen:
   addToMap(mo) {
     if (mo.otherDirection) {
       this.ctx.save();

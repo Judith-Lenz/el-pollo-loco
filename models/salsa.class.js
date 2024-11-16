@@ -1,4 +1,5 @@
 class Salsa extends MovableObject {
+  //wg. load image
   height = 55;
   width = 50;
   y = 355;

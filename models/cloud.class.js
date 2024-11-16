@@ -7,10 +7,11 @@ class Cloud extends MovableObject {
     "img/5_background/layers/4_clouds/2.png",
   ];
 
-  constructor() {
-    super().loadImage(this.CLOUDS_WALKING[1]);
-    this.loadImages(this.CLOUDS_WALKING);
-    this.x = 0 + Math.random() * 500; // zufällig Zahl zwi. 0 und 500. zwischen 200 und 700?
-    this.moveLeft();
+  constructor(imagePath) {
+    super(); //super() hier startet standardKonstruktor in movableObject
+    this.loadImage(imagePath); // lädt das Bild, das übergeben wurde in level1
+    this.loadImages([imagePath]); //lädt alle WolkenBilder in den img Cache (Bildspeicher), optional.
+    this.x = Math.random() * (700 - 200) + 200; //Positioniert die Wolken zufällig zwischen 200 und 700 Pixel in der horizontalen Achse.
+    this.moveLeft(); //Startet die Bewegung der Wolken nach links. ist in movableObject definiert
   }
 }

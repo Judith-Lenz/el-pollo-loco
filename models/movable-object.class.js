@@ -42,6 +42,6 @@ class MovableObject {
   moveLeft() {
     setInterval(() => {
       this.x -= this.speed;
-    }, 1000 / 60); //60xproSekunde wird WErt abgezogen.
+    }, 1000 / 60); //60xproSekunde wird WErt abgezogen. Die x-Koordinate wird 60 Mal pro Sekunde um den Wert von this.speed (0.15) verringert. Dadurch kontinuierliche Bewegung nach links.
   }
 }
