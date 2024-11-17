@@ -43,11 +43,13 @@ class Character extends MovableObject {
       this.walking_sound.pause(); //wenn er steht kein Sound
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
+        this.otherDirection = false;
         this.walking_sound.play();
       }
       if (this.world.keyboard.LEFT && this.x >= -100) {
         //hier kann ich sagen, wie weit Character nach links laufen kann. Er soll halt nicht aus der welt rauslaufen können.
         this.moveLeft();
+        this.otherDirection = true;
         this.walking_sound.play();
       }
 
