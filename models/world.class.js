@@ -60,6 +60,12 @@ class World {
       mo.x = mo.x * -1;
     }
     this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    this.ctx.beginPath();
+    this.ctx.lineWidth = "5";
+    this.ctx.strokeStyle = "blue";
+    this.ctx.rect(mo.x, mo.y, mo.x + mo.width, mo.y + mo.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
+    this.ctx.stroke();
+
     if (mo.otherDirection) {
       mo.x = mo.x * -1;
       this.ctx.restore();
