@@ -51,6 +51,11 @@ class Character extends MovableObject {
         this.otherDirection = true;
         this.walking_sound.play();
       }
+
+      if (this.world.keyboard.SPACE) {
+        this.speedY = 20;
+      }
+
       this.world.camera_x = -this.x + 100; //hier wird ja die Kamera x Kooridnate gleichgesetzt mit der vom character, wenn wir +100 machen, ist das versetzt, wie wir es wollen.
     }, 1000 / 60);
 
