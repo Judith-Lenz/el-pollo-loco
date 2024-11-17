@@ -38,11 +38,13 @@ class MovableObject {
   }
 
   drawFrame(ctx) {
-    ctx.beginPath();
-    ctx.lineWidth = "5";
-    ctx.strokeStyle = "blue";
-    ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
-    ctx.stroke();
+    if (this instanceof Character || this instanceof ChickenNormal) {
+      ctx.beginPath();
+      ctx.lineWidth = "5";
+      ctx.strokeStyle = "blue";
+      ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
+      ctx.stroke();
+    }
   }
 
   //lädt mehrere Bilder, indem es ein Array von Bildpfaden verwendet und diese in einem Cache speichert.
