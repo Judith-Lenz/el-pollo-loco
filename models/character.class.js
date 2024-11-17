@@ -3,6 +3,8 @@ class Character extends MovableObject {
   width = 90;
   y = 80; //wie hoch ist Pepe (220), weniger ist höher, weil man von oben Anfängt
   speed = 10;
+  canJump = true; // Character kann springen, wenn er auf dem Boden ist.
+
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -35,6 +37,15 @@ class Character extends MovableObject {
     this.animate();
   }
 
+  //hier überschreiben wir die eigtl. Funktion aus der movableObject KLasse
+  isAboveGround() {
+    const aboveGround = super.isAboveGround(); // Originalmethode aufrufen
+    if (!aboveGround) {
+      this.canJump = true; // Boden berührt, Sprung wieder erlaubt,Charakter kann wieder springen
+    }
+    return aboveGround; // Gibt den Wert der Basismethode zurück
+  }
+
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
@@ -52,8 +63,10 @@ class Character extends MovableObject {
         this.walking_sound.play();
       }
 
-      if (this.world.keyboard.SPACE) {
+      if (this.world.keyboard.SPACE && this.canJump) {
+        //spaceTaste drücken und canJump
         this.speedY = 20;
+        this.canJump = false; // Kein weiterer Sprung erlaubt, bis man den Boden wieder berührt
       }
 
       this.world.camera_x = -this.x + 100; //hier wird ja die Kamera x Kooridnate gleichgesetzt mit der vom character, wenn wir +100 machen, ist das versetzt, wie wir es wollen.
