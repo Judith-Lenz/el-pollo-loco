@@ -32,6 +32,19 @@ class MovableObject {
     this.img.src = path;
   }
 
+  draw(ctx) {
+    //womit wir zeichnen wollen, ist ctx.
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+  }
+
+  drawFrame(ctx) {
+    ctx.beginPath();
+    ctx.lineWidth = "5";
+    ctx.strokeStyle = "blue";
+    ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
+    ctx.stroke();
+  }
+
   //lädt mehrere Bilder, indem es ein Array von Bildpfaden verwendet und diese in einem Cache speichert.
   loadImages(arr) {
     // hier wurde als Parameter das ganze Array reingegeben. und dann iteriert man durch
