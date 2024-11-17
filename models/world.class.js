@@ -7,7 +7,7 @@ class World {
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable
-  camera_x = 0;
+  camera_x = 0; //Die Position der Kamera auf der X-Achse. Sie bewegt sich, wenn der Spieler läuft.
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -29,6 +29,7 @@ class World {
     //hier kommt es auf die Reihenfolge an. alles wird von oben nach unten geschichtet.
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
     this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
+    this.updateCloudPositions(); // Vor dem Hinzufügen der Wolken aufrufen
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.salsas);
@@ -63,5 +64,17 @@ class World {
       mo.x = mo.x * -1;
       this.ctx.restore();
     }
+  }
+
+  updateCloudPositions() {
+    this.level.clouds.forEach((cloud) => {
+      cloud.x -= 0.2; // Wolken bewegen sich langsam nach links
+      const rightEdgeOfCamera = this.camera_x + this.canvas.width;
+
+      if (cloud.x + cloud.width < this.camera_x) {
+        // Wolke ist komplett aus dem sichtbaren Bereich nach links herausgerutscht
+        cloud.x = rightEdgeOfCamera; // Neue Position: genau am rechten Rand des sichtbaren Bereichs
+      }
+    });
   }
 }

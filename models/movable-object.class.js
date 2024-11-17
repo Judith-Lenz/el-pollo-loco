@@ -8,6 +8,22 @@ class MovableObject {
   currentImage = 0;
   speed = 0.15; //standard, wird jeweils evtl. überschrieben
   otherDirection = false;
+  speedY = 0;
+  acceleration = 2.5; //so schnell fällt das Objekt
+
+  applyGravity() {
+    setInterval(() => {
+      if (this.isAboveGround()) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      }
+    }, 1000 / 25);
+  }
+
+  //braucht man später, wenn man wissen will, ob Objekt sich grade in der Luft befindet.
+  isAboveGround() {
+    return this.y < 215; //gibt nur den Wert von y zurück. siehe y in ApplyGravity
+  }
 
   //loadImage('img/test.png);
   loadImage(path) {
