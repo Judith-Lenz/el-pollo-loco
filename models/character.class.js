@@ -3,7 +3,6 @@ class Character extends MovableObject {
   width = 90;
   y = 80; //wie hoch ist Pepe (220), weniger ist höher, weil man von oben Anfängt
   speed = 10;
-  canJump = true; // Character kann springen, wenn er auf dem Boden ist.
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -37,36 +36,24 @@ class Character extends MovableObject {
     this.animate();
   }
 
-  //hier überschreiben wir die eigtl. Funktion aus der movableObject KLasse
-  isAboveGround() {
-    const aboveGround = super.isAboveGround(); // Originalmethode aufrufen
-    if (!aboveGround) {
-      this.canJump = true; // Boden berührt, Sprung wieder erlaubt,Charakter kann wieder springen
-    }
-    return aboveGround; // Gibt den Wert der Basismethode zurück
-  }
-
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
     setInterval(() => {
-      this.walking_sound.pause();
+      this.walking_sound.pause(); //wenn er steht kein Sound
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.x += this.speed;
-        this.otherDirection = false;
+        this.moveRight();
         this.walking_sound.play();
       }
       if (this.world.keyboard.LEFT && this.x >= -100) {
-        //hier kann ich sagen, wie weit Character nach links laufen kann.
-        this.x -= this.speed;
-        this.otherDirection = true;
+        //hier kann ich sagen, wie weit Character nach links laufen kann. Er soll halt nicht aus der welt rauslaufen können.
+        this.moveLeft();
         this.walking_sound.play();
       }
 
-      if (this.world.keyboard.SPACE && this.canJump) {
-        //spaceTaste drücken und canJump
-        this.speedY = 20;
-        this.canJump = false; // Kein weiterer Sprung erlaubt, bis man den Boden wieder berührt
+      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+        //spaceTaste drücken
+        this.jump(); //siehe movableObject.
       }
 
       this.world.camera_x = -this.x + 100; //hier wird ja die Kamera x Kooridnate gleichgesetzt mit der vom character, wenn wir +100 machen, ist das versetzt, wie wir es wollen.
@@ -85,5 +72,7 @@ class Character extends MovableObject {
     }, 50);
   }
 
-  jump() {}
+  jump() {
+    this.speedY = 30;
+  }
 }

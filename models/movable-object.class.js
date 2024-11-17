@@ -52,12 +52,16 @@ class MovableObject {
   }
 
   moveRight() {
-    console.log("Moving right");
+    this.x += this.speed;
+    this.otherDirection = false;
   }
 
   moveLeft() {
-    setInterval(() => {
-      this.x -= this.speed;
-    }, 1000 / 60); //60xproSekunde wird WErt abgezogen. Die x-Koordinate wird 60 Mal pro Sekunde um den Wert von this.speed (0.15) verringert. Dadurch kontinuierliche Bewegung nach links.
+    this.x -= this.speed;
+    this.otherDirection = true;
+  }
+
+  jump() {
+    this.speedY = 30;
   }
 }

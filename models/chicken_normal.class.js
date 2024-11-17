@@ -17,7 +17,10 @@ class ChickenNormal extends MovableObject {
   }
 
   animate() {
-    this.moveLeft();
+    setInterval(() => {
+      //chicken soll sich mit 60fps nach links bewegen.
+      this.moveLeft();
+    }, 1000 / 60);
 
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
