@@ -16,11 +16,24 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.checkCollisions();
   }
 
   //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
   setWorld() {
     this.character.world = this;
+  }
+
+  //solange eine Überlappung stattfindet, wird jede Sekunde in der Konsole geschrieben (Collision with ...)
+  checkCollisions() {
+    setInterval(() => {
+      this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy)) {
+          console.log("Collision with character", enemy);
+        }
+        //alles in der geschweiften Klammer wird jede Sekunde für alle Gegner(enemies) ausgeführt.
+      });
+    }, 200); //1x pro Sekunde, also 1000 wären dann 1000 MilliSekunden wird also geprüft, ob Objekte kollidieren, 5x reicht wohl auch
   }
 
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen

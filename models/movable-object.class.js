@@ -38,13 +38,38 @@ class MovableObject {
   }
 
   drawFrame(ctx) {
-    if (this instanceof Character || this instanceof ChickenNormal) {
+    if (
+      this instanceof Character ||
+      this instanceof ChickenNormal ||
+      this instanceof ChickenSmall
+    ) {
+      //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.
       ctx.beginPath();
       ctx.lineWidth = "5";
       ctx.strokeStyle = "blue";
       ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
       ctx.stroke();
     }
+  }
+
+  // // Bessere Formel zur Kollisionsberechnung (Genauer) //z.B. character.isColliding(chicken)
+  // isColliding(obj) {
+  //   return (
+  //     this.x + this.width >= obj.x &&
+  //     this.x <= obj.x + obj.width &&
+  //     this.y + this.offsetY + this.height >= obj.y &&
+  //     this.y + this.offsetY <= obj.y + obj.height &&
+  //     obj.onCollisionCourse
+  //   ); // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+  // }
+
+  isColliding(mo) {
+    return (
+      this.x + this.width > mo.x &&
+      this.y + this.height > mo.y &&
+      this.x < mo.x &&
+      this.y < mo.y + mo.height
+    );
   }
 
   //lädt mehrere Bilder, indem es ein Array von Bildpfaden verwendet und diese in einem Cache speichert.
