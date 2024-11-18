@@ -29,7 +29,11 @@ class World {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
-          console.log("Collision with character", enemy);
+          this.character.energy -= 25;
+          console.log(
+            "Collision with character, energy",
+            this.character.energy
+          );
         }
         //alles in der geschweiften Klammer wird jede Sekunde für alle Gegner(enemies) ausgeführt.
       });
