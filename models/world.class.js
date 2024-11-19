@@ -8,6 +8,7 @@ class World {
   ctx; //Variable context
   keyboard; // leere Variable
   camera_x = 0; //Die Position der Kamera auf der X-Achse. Sie bewegt sich, wenn der Spieler läuft.
+  statusBarHealth = new StatusBarHealth();
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -50,6 +51,7 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.salsas);
+    this.addToMap(this.statusBarHealth);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
@@ -62,6 +64,7 @@ class World {
     });
   }
 
+  //mehrere Objekte aus einem Array
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);

@@ -20,21 +20,6 @@ class MovableObject extends DrawableObject {
     return this.y < 215; //gibt nur den Wert von y zurück. siehe y in ApplyGravity
   }
 
-  drawFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof ChickenNormal ||
-      this instanceof ChickenSmall
-    ) {
-      //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
-      ctx.stroke();
-    }
-  }
-
   //z.B. character.isColliding(chicken), Formel gibt true oder false zurück
   isColliding(obj) {
     return (

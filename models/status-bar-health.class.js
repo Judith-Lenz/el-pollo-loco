@@ -11,7 +11,13 @@ class StatusBarHealth extends DrawableObject {
   percentage = 100; //Anfangswert
 
   constructor() {
+    super();
     this.loadImages(this.IMAGES_STATUSHURT);
+    this.x = 40;
+    this.y = 10;
+    this.width = 200;
+    this.height = 60;
+    this.setPercentage(100);
   }
 
   //Wenn sich Wert ändert, muss diese Methode ausgeführt werden, damit der neue Wert gespeichert wird.
