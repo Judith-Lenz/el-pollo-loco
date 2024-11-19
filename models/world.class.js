@@ -3,7 +3,7 @@ class World {
 
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
   level = level1;
-
+  //hier noch irgendwo initlevel1 rein
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable
@@ -30,10 +30,10 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
-          console.log(
-            "Collision with character, energy",
-            this.character.energy
-          );
+          // console.log(
+          //   "Collision with character, energy",
+          //   this.character.energy
+          // );
         }
         //alles in der geschweiften Klammer wird jede Sekunde für alle Gegner(enemies) ausgeführt.
       });

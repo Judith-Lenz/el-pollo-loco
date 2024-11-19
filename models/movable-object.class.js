@@ -11,6 +11,7 @@ class MovableObject {
   speedY = 0;
   acceleration = 2.5; //so schnell fällt das Objekt
   energy = 100; //100%
+  lastHit = 0;
 
   applyGravity() {
     setInterval(() => {
@@ -79,7 +80,15 @@ class MovableObject {
     if (this.energy < 0) {
       //wenn unter Null, zurücksetzen auf Null
       this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime(); //so speichert man Zeit in Zahlenform Zeit seit dem 01.01.1970
     }
+  }
+
+  isHurt() {
+    let timepassed = new Date().getTime() - this.lastHit; //Differenz in MilliSekunden.
+    timepassed = timepassed / 1000; //Millisekunden durch 1000, dann haben wir die Sekunden.
+    return timepassed < 1; //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
   }
 
   //ist Objekt tot oder nicht, also true/false
@@ -100,7 +109,7 @@ class MovableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % this.IMAGES_WALKING.length; // Index berechnen
+    let i = this.currentImage % images.length; // Index berechnen
     let path = images[i]; // Aktuelles Bild holen
     this.img = this.imageCache[path]; // Bild aktualisieren
     this.currentImage++; // Nächste Bildposition vorbereiten

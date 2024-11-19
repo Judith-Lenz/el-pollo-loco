@@ -25,6 +25,12 @@ class Character extends MovableObject {
     " img/2_character_pepe/3_jump/J-39.png",
   ];
 
+  IMAGES_HURT = [
+    "img/2_character_pepe/4_hurt/H-41.png",
+    "img/2_character_pepe/4_hurt/H-42.png",
+    "img/2_character_pepe/4_hurt/H-43.png",
+  ];
+
   IMAGES_DEAD = [
     "img/2_character_pepe/5_dead/D-51.png",
     "img/2_character_pepe/5_dead/D-52.png",
@@ -42,6 +48,7 @@ class Character extends MovableObject {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
     this.loadImages(this.IMAGES_WALKING); //das ganze Array wird als Parameter übergeben
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
     this.animate();
@@ -74,7 +81,9 @@ class Character extends MovableObject {
 
     setInterval(() => {
       if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
+        this.playAnimation(this.IMAGES_DEAD); //nur wenn energy bei null ist.
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         //wenn über dem Fußbodenniveau
         this.playAnimation(this.IMAGES_JUMPING); //spiele diese Animation ab
