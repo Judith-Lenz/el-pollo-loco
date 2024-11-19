@@ -25,6 +25,16 @@ class Character extends MovableObject {
     " img/2_character_pepe/3_jump/J-39.png",
   ];
 
+  IMAGES_DEAD = [
+    "img/2_character_pepe/5_dead/D-51.png",
+    "img/2_character_pepe/5_dead/D-52.png",
+    "img/2_character_pepe/5_dead/D-53.png",
+    "img/2_character_pepe/5_dead/D-54.png",
+    "img/2_character_pepe/5_dead/D-55.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-57.png",
+  ];
+
   world; //damit wir auf die Variablen aus world zugreifen können (siehe setWorld inn world), u.a. keyboard. Verweis auf die world-Instanz
   walking_sound = new Audio("audio/running2.mp3"); //Audio Objekt
 
@@ -32,6 +42,7 @@ class Character extends MovableObject {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
     this.loadImages(this.IMAGES_WALKING); //das ganze Array wird als Parameter übergeben
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
     this.animate();
   }
@@ -62,13 +73,15 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAboveGround()) {
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      } else if (this.isAboveGround()) {
         //wenn über dem Fußbodenniveau
         this.playAnimation(this.IMAGES_JUMPING); //spiele diese Animation ab
       } //wenn nicht, dann Walking Animation zeigen (also wenn man z.B. rechts oder links drückt)
       else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         //also entweder links ODER rechts ist true
-        //Walk Animation
+        //Walk Animation Bilder anzeigen.
         this.playAnimation(this.IMAGES_WALKING); //wenn er läuft, dann sollen es diese Grafiken sein
       }
     }, 50);

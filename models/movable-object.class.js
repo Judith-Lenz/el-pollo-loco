@@ -53,14 +53,14 @@ class MovableObject {
     }
   }
 
-  // Bessere Formel zur Kollisionsberechnung (Genauer) //z.B. character.isColliding(chicken)
+  //z.B. character.isColliding(chicken), Formel gibt true oder false zurück
   isColliding(obj) {
     return (
       this.x + this.width >= obj.x &&
       this.x <= obj.x + obj.width &&
       this.y + this.height >= obj.y &&
       this.y <= obj.y + obj.height
-    ); // Optional: hiermit könnten wir schauen, ob ein Objekt sich in die richtige Richtung bewegt. Nur dann kollidieren wir. Nützlich bei Gegenständen, auf denen man stehen kann.
+    );
   }
 
   // //gibt einfach nur true oder false zurück
@@ -72,6 +72,20 @@ class MovableObject {
   //     this.y < mo.y + mo.height
   //   );
   // }
+
+  //Ändert Wert der Energie
+  hit() {
+    this.energy -= 5;
+    if (this.energy < 0) {
+      //wenn unter Null, zurücksetzen auf Null
+      this.energy = 0;
+    }
+  }
+
+  //ist Objekt tot oder nicht, also true/false
+  isDead() {
+    return this.energy == 0;
+  }
 
   //lädt mehrere Bilder, indem es ein Array von Bildpfaden verwendet und diese in einem Cache speichert.
   loadImages(arr) {

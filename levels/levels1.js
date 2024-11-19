@@ -3,6 +3,7 @@ const level1 = new Level(
   [new Salsa(), new Salsa(), new Salsa(), new Salsa()],
   [new Coin(), new Coin()],
   [
+    //enemies Parameter
     new ChickenSmall(),
     new ChickenSmall(),
     new ChickenSmall(),
