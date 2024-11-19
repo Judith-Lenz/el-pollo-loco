@@ -89,6 +89,7 @@ class MovableObject {
     let timepassed = new Date().getTime() - this.lastHit; //Differenz in MilliSekunden.
     timepassed = timepassed / 1000; //Millisekunden durch 1000, dann haben wir die Sekunden.
     return timepassed < 1; //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
+    //dann wird die Animation mit den HurtBildern 1 Sekunde angezeigt.
   }
 
   //ist Objekt tot oder nicht, also true/false

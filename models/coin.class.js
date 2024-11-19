@@ -1,6 +1,6 @@
 class Coin extends MovableObject {
-  height = 50;
-  width = 50;
+  height = 100;
+  width = 100;
   y = 350;
   baseY = 350; // Grundposition
   floatDirection = 1; // 1: nach oben, -1: nach unten
@@ -9,7 +9,9 @@ class Coin extends MovableObject {
 
   constructor() {
     super().loadImage("img/8_coin/coin_1.png");
-    this.x = 200 + Math.random() * 500;
+    this.x = 200 + Math.random() * 500; //-x-Wert zwischen 200 und 700
+    this.y = 100 + Math.random() * 200; //y Wert zwischen 100 (MindestY Wert) und 300
+    this.baseY = this.y; // Grundposition an den Startwert anpassen
     this.animateFloating();
   }
 
