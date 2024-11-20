@@ -9,6 +9,8 @@ class World {
   keyboard; // leere Variable
   camera_x = 0; //Die Position der Kamera auf der X-Achse. Sie bewegt sich, wenn der Spieler läuft.
   statusBarHealth = new StatusBarHealth();
+  statusBarCoin = new StatusBarCoin();
+  statusBarBottle = new StatusBarBottle();
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -25,20 +27,26 @@ class World {
     this.character.world = this;
   }
 
-  //solange eine Überlappung stattfindet, wird jede Sekunde in der Konsole geschrieben (Collision with ...)
   checkCollisions() {
     setInterval(() => {
+      this.level.coins.forEach((coin) => {
+        if (this.character.isColliding(coin)) {
+          this.handleCoinCollision(coin);
+        }
+      });
+
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
-          // console.log(
-          //   "Collision with character, energy",
-          //   this.character.energy
-          // );
+          console.log("Kollision mit Gegner, Energie", this.character.energy);
         }
-        //alles in der geschweiften Klammer wird jede Sekunde für alle Gegner(enemies) ausgeführt.
       });
-    }, 200); //1x pro Sekunde, also 1000 wären dann 1000 MilliSekunden wird also geprüft, ob Objekte kollidieren, 5x reicht wohl auch
+    }, 100); // alle 100ms wird das in der geschweiften Klammer ausgeführt.
+  }
+
+  handleCoinCollision(coin) {
+    coin.collect(); // Auf das richtige Coin-Objekt zugreifen
+    console.log("Kollision mit Münze");
   }
 
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen
@@ -52,6 +60,8 @@ class World {
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.salsas);
     this.addToMap(this.statusBarHealth);
+    this.addToMap(this.statusBarCoin);
+    this.addToMap(this.statusBarBottle);
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);

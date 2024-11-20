@@ -7,6 +7,8 @@ class Coin extends MovableObject {
   floatRange = 3; // Wie weit die Coins schweben
   floatSpeed = 0.2; // Geschwindigkeit der Bewegung
 
+  collect_sound = new Audio("audio/coins.mp3");
+
   constructor() {
     super().loadImage("img/8_coin/coin_1.png");
     this.x = 200 + Math.random() * 500; //-x-Wert zwischen 200 und 700
@@ -28,5 +30,29 @@ class Coin extends MovableObject {
         this.floatDirection *= -1;
       }
     }, 1000 / 60); // 60x pro Sekunde aktualisieren
+  }
+
+  collect() {
+    this.playSound();
+    this.startAnimation();
+    this.removeFromWorld();
+  }
+
+  playSound() {
+    console.log("Coin-Sound abgespielt");
+    this.collect_sound.play();
+    // Hier kannst du den Soundcode einfügen
+  }
+
+  startAnimation() {
+    console.log("Coin-Animation gestartet");
+    // Animation für das Einsammeln
+  }
+
+  removeFromWorld() {
+    const index = world.level.coins.indexOf(this);
+    if (index > -1) {
+      world.level.coins.splice(index, 1);
+    }
   }
 }

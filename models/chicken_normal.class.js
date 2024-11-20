@@ -8,6 +8,8 @@ class ChickenNormal extends MovableObject {
     "img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
   ];
 
+  walking_sound = new Audio("audio/chickens.mp3"); //Audio Objekt
+
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -23,6 +25,7 @@ class ChickenNormal extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
+      // this.walking_sound.play();  // geht nur mit voriger Interaktion also mit Klick auf StartButton (oder mit Druck auf Taste) verbinden z.B.
       this.playAnimation(this.IMAGES_WALKING);
     }, 200);
   }
