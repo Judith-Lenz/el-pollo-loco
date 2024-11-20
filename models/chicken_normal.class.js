@@ -27,7 +27,7 @@ class ChickenNormal extends MovableObject {
     setInterval(() => {
       //chicken soll sich mit 60fps nach links bewegen.
       this.moveLeft();
-    }, 1000 / 60);
+    }, 100000000 / 60);
 
     setInterval(() => {
       // this.walking_sound.play();  // geht nur mit voriger Interaktion also mit Klick auf StartButton (oder mit Druck auf Taste) verbinden z.B.

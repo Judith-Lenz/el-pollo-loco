@@ -20,7 +20,7 @@ class ChickenSmall extends MovableObject {
     setInterval(() => {
       //chicken soll sich mit 60fps nach links bewegen.
       this.moveLeft();
-    }, 1000 / 60);
+    }, 1000000000 / 60); //eigtl. 1000/60 als StandardWert
 
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
