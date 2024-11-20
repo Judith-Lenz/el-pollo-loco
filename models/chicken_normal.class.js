@@ -16,6 +16,11 @@ class ChickenNormal extends MovableObject {
     this.x = 200 + Math.random() * 500; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
     this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
     this.animate();
+    // Hitbox spezifisch für Hühner
+    this.collisionOffsetX = 5;
+    this.collisionOffsetY = 10;
+    this.collisionWidth = 70;
+    this.collisionHeight = 80;
   }
 
   animate() {

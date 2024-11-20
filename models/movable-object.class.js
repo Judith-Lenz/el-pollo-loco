@@ -5,6 +5,11 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5; //so schnell fällt das Objekt
   energy = 100; //100%
   lastHit = 0;
+  // Eigenschaften für die Hitbox
+  collisionOffsetX = 0; // Abstand zur linken Kante
+  collisionOffsetY = 0; // Abstand zur oberen Kante
+  collisionWidth = this.width; // Breite der Hitbox
+  collisionHeight = this.height; // Höhe der Hitbox
 
   applyGravity() {
     setInterval(() => {
@@ -20,25 +25,37 @@ class MovableObject extends DrawableObject {
     return this.y < 215; //gibt nur den Wert von y zurück. siehe y in ApplyGravity
   }
 
-  //z.B. character.isColliding(chicken), Formel gibt true oder false zurück
+  //z.B. character.isColliding(chicken), Formel gibt true oder false zurück ALT
+  // isColliding(obj) {
+  //   return (
+  //     this.x + this.width >= obj.x &&
+  //     this.x <= obj.x + obj.width &&
+  //     this.y + this.height >= obj.y &&
+  //     this.y <= obj.y + obj.height
+  //   );
+  // }
+
+  // Kollisionsprüfung mit der Hitbox NEU
   isColliding(obj) {
+    const thisBox = this.getCollisionBox();
+    const otherBox = obj.getCollisionBox();
     return (
-      this.x + this.width >= obj.x &&
-      this.x <= obj.x + obj.width &&
-      this.y + this.height >= obj.y &&
-      this.y <= obj.y + obj.height
+      thisBox.x + thisBox.width >= otherBox.x &&
+      thisBox.x <= otherBox.x + otherBox.width &&
+      thisBox.y + thisBox.height >= otherBox.y &&
+      thisBox.y <= otherBox.y + otherBox.height
     );
   }
 
-  // //gibt einfach nur true oder false zurück
-  // isColliding(mo) {
-  //   return (
-  //     this.x + this.width > mo.x &&
-  //     this.y + this.height > mo.y &&
-  //     this.x < mo.x &&
-  //     this.y < mo.y + mo.height
-  //   );
-  // }
+  // Methode zum Berechnen der tatsächlichen Hitbox
+  getCollisionBox() {
+    return {
+      x: this.x + this.collisionOffsetX,
+      y: this.y + this.collisionOffsetY,
+      width: this.collisionWidth,
+      height: this.collisionHeight,
+    };
+  }
 
   //Ändert Wert der Energie
   hit() {

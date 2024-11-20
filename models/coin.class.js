@@ -15,6 +15,11 @@ class Coin extends MovableObject {
     this.y = 100 + Math.random() * 200; //y Wert zwischen 100 (MindestY Wert) und 300
     this.baseY = this.y; // Grundposition an den Startwert anpassen
     this.animateFloating();
+    // Hitbox spezifisch für Münzen
+    this.collisionOffsetX = 5;
+    this.collisionOffsetY = 5;
+    this.collisionWidth = 40;
+    this.collisionHeight = 40;
   }
 
   animateFloating() {

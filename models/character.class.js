@@ -52,6 +52,11 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
     this.animate();
+    // Hitbox spezifisch für den Character
+    this.collisionOffsetX = 10; // Etwas schmaler links/rechts
+    this.collisionOffsetY = 50; // Oben etwas weniger
+    this.collisionWidth = 70; // Breite der Hitbox
+    this.collisionHeight = 120; // Höhe der Hitbox
   }
 
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.

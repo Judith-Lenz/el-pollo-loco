@@ -23,13 +23,24 @@ class DrawableObject {
     if (
       this instanceof Character ||
       this instanceof ChickenNormal ||
-      this instanceof ChickenSmall
+      this instanceof ChickenSmall ||
+      this instanceof Coin ||
+      this instanceof Salsa ||
+      this instanceof Cloud ||
+      this instanceof Endboss
     ) {
       //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.
       ctx.beginPath();
-      ctx.lineWidth = "5";
+      ctx.lineWidth = "3";
       ctx.strokeStyle = "blue";
       ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
+      ctx.stroke();
+      // Zeichne die Hitbox (roter Rahmen)
+      const box = this.getCollisionBox();
+      ctx.beginPath();
+      ctx.lineWidth = "2";
+      ctx.strokeStyle = "red";
+      ctx.rect(box.x, box.y, box.width, box.height);
       ctx.stroke();
     }
   }
