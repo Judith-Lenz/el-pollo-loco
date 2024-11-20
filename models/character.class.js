@@ -4,6 +4,19 @@ class Character extends MovableObject {
   y = 115; //muss gleich sein wie y in aboveGround(), sonst fällt er ins Bild.
   speed = 10;
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
+
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -46,6 +59,7 @@ class Character extends MovableObject {
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
+    this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING); //das ganze Array wird als Parameter übergeben
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
@@ -91,12 +105,15 @@ class Character extends MovableObject {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         //wenn über dem Fußbodenniveau
-        this.playAnimation(this.IMAGES_JUMPING); //spiele diese Animation ab
+        this.playAnimation(this.IMAGES_JUMPING, 2); //spiele diese Animation ab
       } //wenn nicht, dann Walking Animation zeigen (also wenn man z.B. rechts oder links drückt)
       else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         //also entweder links ODER rechts ist true
         //Walk Animation Bilder anzeigen.
         this.playAnimation(this.IMAGES_WALKING); //wenn er läuft, dann sollen es diese Grafiken sein
+      } else {
+        // Idle-Animation langsamer abspielen (z. B. jedes 5. Frame)
+        this.playAnimation(this.IMAGES_IDLE, 5);
       }
     }, 50);
   }

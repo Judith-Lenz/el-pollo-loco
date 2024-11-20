@@ -83,11 +83,20 @@ class MovableObject extends DrawableObject {
     return this.energy == 0;
   }
 
-  playAnimation(images) {
-    let i = this.currentImage % images.length; // Index berechnen
-    let path = images[i]; // Aktuelles Bild holen
-    this.img = this.imageCache[path]; // Bild aktualisieren
-    this.currentImage++; // Nächste Bildposition vorbereiten
+  // playAnimation(images) {
+  //   let i = this.currentImage % images.length; // Index berechnen
+  //   let path = images[i]; // Aktuelles Bild holen
+  //   this.img = this.imageCache[path]; // Bild aktualisieren
+  //   this.currentImage++; // Nächste Bildposition vorbereiten
+  // }
+
+  playAnimation(images, frameRate = 1) {
+    if (this.currentImage % frameRate === 0) {
+      let i = (this.currentImage / frameRate) % images.length; // Index basierend auf Frame-Rate
+      let path = images[i];
+      this.img = this.imageCache[path];
+    }
+    this.currentImage++; // Bildposition hochzählen
   }
 
   moveRight() {
