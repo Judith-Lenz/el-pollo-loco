@@ -17,6 +17,19 @@ class Character extends MovableObject {
     "img/2_character_pepe/1_idle/idle/I-10.png",
   ];
 
+  IMAGES_LONG_IDLE = [
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
+
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
     "img/2_character_pepe/2_walk/W-22.png",
@@ -26,16 +39,19 @@ class Character extends MovableObject {
     "img/2_character_pepe/2_walk/W-26.png",
   ];
 
-  IMAGES_JUMPING = [
-    " img/2_character_pepe/3_jump/J-31.png",
-    " img/2_character_pepe/3_jump/J-32.png",
-    " img/2_character_pepe/3_jump/J-33.png",
-    " img/2_character_pepe/3_jump/J-34.png",
-    " img/2_character_pepe/3_jump/J-35.png",
-    " img/2_character_pepe/3_jump/J-36.png",
-    " img/2_character_pepe/3_jump/J-37.png",
-    " img/2_character_pepe/3_jump/J-38.png",
-    " img/2_character_pepe/3_jump/J-39.png",
+  IMAGES_JUMPING_UP = [
+    // Absprung-Bilder
+    "img/2_character_pepe/3_jump/J-33.png",
+    "img/2_character_pepe/3_jump/J-34.png",
+    "img/2_character_pepe/3_jump/J-35.png",
+    // "img/2_character_pepe/3_jump/J-36.png",
+  ];
+
+  IMAGES_JUMPING_DOWN = [
+    // "img/2_character_pepe/3_jump/J-34.png", // Fallen-Bilder
+    "img/2_character_pepe/3_jump/J-35.png",
+    "img/2_character_pepe/3_jump/J-36.png",
+    "img/2_character_pepe/3_jump/J-37.png",
   ];
 
   IMAGES_HURT = [
@@ -60,8 +76,10 @@ class Character extends MovableObject {
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
     this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_LONG_IDLE);
     this.loadImages(this.IMAGES_WALKING); //das ganze Array wird als Parameter übergeben
-    this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_JUMPING_UP);
+    this.loadImages(this.IMAGES_JUMPING_DOWN);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
@@ -104,16 +122,17 @@ class Character extends MovableObject {
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
-        //wenn über dem Fußbodenniveau
-        this.playAnimation(this.IMAGES_JUMPING, 2); //spiele diese Animation ab
-      } //wenn nicht, dann Walking Animation zeigen (also wenn man z.B. rechts oder links drückt)
-      else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        if (this.speedY > 0) {
+          this.playAnimation(this.IMAGES_JUMPING_UP, 4);
+        } else {
+          this.playAnimation(this.IMAGES_JUMPING_DOWN, 10);
+        }
+      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         //also entweder links ODER rechts ist true
-        //Walk Animation Bilder anzeigen.
         this.playAnimation(this.IMAGES_WALKING); //wenn er läuft, dann sollen es diese Grafiken sein
       } else {
         // Idle-Animation langsamer abspielen (z. B. jedes 5. Frame)
-        this.playAnimation(this.IMAGES_IDLE, 5);
+        this.playAnimation(this.IMAGES_IDLE, 4); //langsame Animation (1=Standard, 3=Mittel,10=sehr langsam)siehe playAnimation().
       }
     }, 50);
   }
