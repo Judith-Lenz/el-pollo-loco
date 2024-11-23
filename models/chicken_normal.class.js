@@ -1,7 +1,7 @@
 class ChickenNormal extends MovableObject {
-  y = 350; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
-  height = 70;
-  width = 60;
+  y = 335; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
+  height = 85;
+  width = 70;
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
@@ -17,10 +17,10 @@ class ChickenNormal extends MovableObject {
     this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
     this.animate();
     // Hitbox spezifisch für Hühner
-    this.collisionOffsetX = 5;
-    this.collisionOffsetY = 10;
-    this.collisionWidth = 70;
-    this.collisionHeight = 80;
+    this.collisionOffsetX = 1;
+    this.collisionOffsetY = 1;
+    this.collisionWidth = 68;
+    this.collisionHeight = 83;
   }
 
   animate() {

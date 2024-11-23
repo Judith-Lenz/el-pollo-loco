@@ -1,7 +1,7 @@
 class ChickenSmall extends MovableObject {
-  y = 375; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
-  height = 40;
-  width = 40;
+  y = 365; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
+  height = 50;
+  width = 50;
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -14,6 +14,10 @@ class ChickenSmall extends MovableObject {
     this.x = 200 + Math.random() * 500; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
     this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
     this.animate();
+    this.collisionOffsetX = 1;
+    this.collisionOffsetY = 1;
+    this.collisionWidth = 47;
+    this.collisionHeight = 47;
   }
 
   animate() {

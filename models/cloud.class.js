@@ -14,5 +14,9 @@ class Cloud extends MovableObject {
     // this.x = Math.random() * (700 - 200) + 200; //Positioniert die Wolken zufällig zwischen 200 und 700 Pixel in der horizontalen Achse.
     this.x = Math.random() * 1000; // Initial zufällige X-Position
     // this.moveLeft(); //Startet die Bewegung der Wolken nach links. ist in movableObject definiert
+    this.collisionOffsetX = 15; // Etwas schmaler links/rechts, mehr =weiternachrechts
+    this.collisionOffsetY = 10; // Oben etwas weniger, mehr=weiter runter
+    this.collisionWidth = 450; // Breite der Hitbox
+    this.collisionHeight = 100; // Höhe der Hitbox
   }
 }

@@ -1,7 +1,7 @@
 class Bottle extends MovableObject {
   //wg. load image
-  height = 70;
-  width = 70;
+  height = 75;
+  width = 75;
   y = 355;
 
   collect_bottle_sound = new Audio("audio/collect_pop2.mp3");
@@ -16,6 +16,10 @@ class Bottle extends MovableObject {
     const randomIndex = Math.floor(Math.random() * this.BOTTLE_IMAGES.length); // Zufälligen Index berechnen
     this.loadImage(this.BOTTLE_IMAGES[randomIndex]); // Zufälliges Bild laden
     this.x = 200 + Math.random() * 500;
+    this.collisionOffsetX = 26; // mehr =weiternachrechts
+    this.collisionOffsetY = 12; // Oben etwas weniger, mehr=weiter runter
+    this.collisionWidth = 32; // Breite der Hitbox
+    this.collisionHeight = 55; // Höhe der Hitbox
   }
   collectBottle() {
     this.playBottleSound();

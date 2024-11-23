@@ -2,7 +2,6 @@ class Endboss extends MovableObject {
   height = 450;
   width = 350;
   y = 0; //wo genau es eingefügt wird, also welche Höhe
-
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
     "img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -15,6 +14,10 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
     this.x = 2500; //wie weit rechts er eingefügt wird.
     this.animate();
+    this.collisionOffsetX = 20; // Etwas schmaler links/rechts, mehr =weiternachrechts
+    this.collisionOffsetY = 70; // Oben etwas weniger, mehr=weiter runter
+    this.collisionWidth = 320; // Breite der Hitbox
+    this.collisionHeight = 370; // Höhe der Hitbox
   }
 
   animate() {
