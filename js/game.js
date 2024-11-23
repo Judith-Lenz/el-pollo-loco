@@ -1,5 +1,5 @@
 let canvas; //brauch ich hier außerhalb, weil ich woanders auch noch benutzen möchte.
-let world;
+let world; // Globale Variable für die World-Instanz
 let keyboard = new Keyboard();
 
 function init() {

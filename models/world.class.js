@@ -1,6 +1,6 @@
 class World {
   //an der x-Koordinate 0 werden 4 Grafiken eingefügt.
-
+  allSoundsMuted = false; // Statusvariable für Sound
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
   level = level1;
   //hier noch irgendwo initlevel1 rein
@@ -45,7 +45,7 @@ class World {
   }
 
   handleCoinCollision(coin) {
-    coin.collect(); // Auf das richtige Coin-Objekt zugreifen
+    coin.collectCoin(); // Auf das richtige Coin-Objekt zugreifen
     console.log("Kollision mit Münze");
   }
 
@@ -111,11 +111,38 @@ class World {
     this.level.clouds.forEach((cloud) => {
       cloud.x -= 0.2; // Wolken bewegen sich langsam nach links
       const rightEdgeOfCamera = this.camera_x + this.canvas.width;
-
       if (cloud.x + cloud.width < this.camera_x) {
         // Wolke ist komplett aus dem sichtbaren Bereich nach links herausgerutscht
         cloud.x = rightEdgeOfCamera; // Neue Position: genau am rechten Rand des sichtbaren Bereichs
       }
     });
+  }
+
+  toggleMuteAllSounds() {
+    this.allSoundsMuted = !this.allSoundsMuted; // Status umschalten
+
+    // Charakter-Sounds
+    this.character.walking_sound.muted = this.allSoundsMuted;
+    this.character.snoring_sound.muted = this.allSoundsMuted;
+
+    // Münz-Sounds
+    this.level.coins.forEach((coin) => {
+      coin.collect_coin_sound.muted = this.allSoundsMuted;
+    });
+    //für weiter sounds, die noch kommen (enemy, salsa, etc.), so erweitern:
+    // this.level.enemies.forEach(enemy => {
+    //   if (enemy.sound) enemy.sound.muted = this.allSoundsMuted;
+    // });
+
+    console.log(
+      `Sounds ${this.allSoundsMuted ? "stummgeschaltet" : "aktiviert"}`
+    );
+    // Text dynamisch anpassen
+    const muteDiv = document.getElementById("muteDiv");
+    if (this.allSoundsMuted) {
+      muteDiv.innerHTML = "Play Sounds"; // Wenn Sounds stumm sind
+    } else {
+      muteDiv.innerHTML = "Mute Sounds"; // Wenn Sounds wieder aktiv sind
+    }
   }
 }

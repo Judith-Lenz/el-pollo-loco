@@ -149,8 +149,7 @@ class Character extends MovableObject {
           this.snoring_sound.play();
           return; // Verhindert, dass die normale Idle-Animation überschrieben wird
         }
-
-        // Normale Idle-Animation, wenn Idle-Zeit unter 15 Sekunden ist
+        // Normale Idle-Animation, wenn Idle-Zeit unter zig Sekunden ist
         this.playAnimation(this.IMAGES_IDLE, 4);
       }
     }, 50);
