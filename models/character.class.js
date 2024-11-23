@@ -96,7 +96,7 @@ class Character extends MovableObject {
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
     let idleStartTime = null; // Startzeit für die Idle-Animation
-    const idleThreshold = 5000; // 15 Sekunden in Millisekunden //hier Zeit einstellen, bis er schnarcht.
+    const idleThreshold = 500000; // 15 Sekunden in Millisekunden //hier Zeit einstellen, bis er schnarcht.
 
     setInterval(() => {
       this.walking_sound.pause(); // kein Sound, wenn er steht

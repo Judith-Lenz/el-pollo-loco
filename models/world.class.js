@@ -35,6 +35,12 @@ class World {
         }
       });
 
+      this.level.bottles.forEach((bottle) => {
+        if (this.character.isColliding(bottle)) {
+          this.handleBottleCollision(bottle);
+        }
+      });
+
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
@@ -49,6 +55,11 @@ class World {
     console.log("Kollision mit Münze");
   }
 
+  handleBottleCollision(coin) {
+    coin.collectBottle(); // Auf das richtige Bottle-Objekt zugreifen
+    console.log("Kollision mit Flasche");
+  }
+
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen
 
   draw() {
@@ -58,7 +69,7 @@ class World {
     this.updateCloudPositions(); // Vor dem Hinzufügen der Wolken aufrufen
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
-    this.addObjectsToMap(this.level.salsas);
+    this.addObjectsToMap(this.level.bottles);
     this.addToMap(this.statusBarHealth);
     this.addToMap(this.statusBarCoin);
     this.addToMap(this.statusBarBottle);
@@ -129,7 +140,12 @@ class World {
     this.level.coins.forEach((coin) => {
       coin.collect_coin_sound.muted = this.allSoundsMuted;
     });
-    //für weiter sounds, die noch kommen (enemy, salsa, etc.), so erweitern:
+    // Bottle-Sounds
+    this.level.bottles.forEach((bottle) => {
+      bottle.collect_bottle_sound.muted = this.allSoundsMuted;
+    });
+
+    //für weiter sounds, die noch kommen (enemy, bottle, etc.), so erweitern:
     // this.level.enemies.forEach(enemy => {
     //   if (enemy.sound) enemy.sound.muted = this.allSoundsMuted;
     // });
@@ -140,9 +156,11 @@ class World {
     // Text dynamisch anpassen
     const muteDiv = document.getElementById("muteDiv");
     if (this.allSoundsMuted) {
-      muteDiv.innerHTML = "Play Sounds"; // Wenn Sounds stumm sind
+      muteDiv.innerHTML = //hier noch die img Pfade einfügen für die sound on und off einfügen
+        '<img src="play-icon.png" alt="Play Icon" style="height: 20px; vertical-align: middle;"> Play Sounds';
     } else {
-      muteDiv.innerHTML = "Mute Sounds"; // Wenn Sounds wieder aktiv sind
+      muteDiv.innerHTML =
+        '<img src="mute-icon.png" alt="Mute Icon" style="height: 20px; vertical-align: middle;"> Mute Sounds';
     }
   }
 }

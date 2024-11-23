@@ -25,7 +25,7 @@ class DrawableObject {
       this instanceof ChickenNormal ||
       this instanceof ChickenSmall ||
       this instanceof Coin ||
-      this instanceof Salsa ||
+      this instanceof Bottle ||
       this instanceof Cloud ||
       this instanceof Endboss
     ) {
