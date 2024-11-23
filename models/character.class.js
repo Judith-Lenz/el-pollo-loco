@@ -72,6 +72,7 @@ class Character extends MovableObject {
 
   world; //damit wir auf die Variablen aus world zugreifen können (siehe setWorld inn world), u.a. keyboard. Verweis auf die world-Instanz
   walking_sound = new Audio("audio/running2.mp3"); //Audio Objekt
+  snoring_sound = new Audio("audio/snoring.mp3");
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
@@ -94,45 +95,63 @@ class Character extends MovableObject {
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
+    let idleStartTime = null; // Startzeit für die Idle-Animation
+    const idleThreshold = 5000; // 15 Sekunden in Millisekunden //hier Zeit einstellen, bis er schnarcht.
+
     setInterval(() => {
-      this.walking_sound.pause(); //wenn er steht kein Sound
+      this.walking_sound.pause(); // kein Sound, wenn er steht
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirection = false;
         this.walking_sound.play();
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
       if (this.world.keyboard.LEFT && this.x >= -100) {
-        //hier kann ich sagen, wie weit Character nach links laufen kann. Er soll halt nicht aus der welt rauslaufen können.
         this.moveLeft();
         this.otherDirection = true;
         this.walking_sound.play();
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
 
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        //spaceTaste drücken
-        this.jump(); //siehe movableObject.
+        this.jump(); // Springen
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
 
-      this.world.camera_x = -this.x + 100; //hier wird ja die Kamera x Kooridnate gleichgesetzt mit der vom character, wenn wir +100 machen, ist das versetzt, wie wir es wollen.
+      this.world.camera_x = -this.x + 100; // Kamera-Bewegung
     }, 1000 / 60);
 
     setInterval(() => {
+      this.snoring_sound.pause();
       if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD); //nur wenn energy bei null ist.
+        this.playAnimation(this.IMAGES_DEAD);
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isAboveGround()) {
         if (this.speedY > 0) {
           this.playAnimation(this.IMAGES_JUMPING_UP, 4);
         } else {
           this.playAnimation(this.IMAGES_JUMPING_DOWN, 10);
         }
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        //also entweder links ODER rechts ist true
-        this.playAnimation(this.IMAGES_WALKING); //wenn er läuft, dann sollen es diese Grafiken sein
+        this.playAnimation(this.IMAGES_WALKING);
+        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else {
-        // Idle-Animation langsamer abspielen (z. B. jedes 5. Frame)
-        this.playAnimation(this.IMAGES_IDLE, 4); //langsame Animation (1=Standard, 3=Mittel,10=sehr langsam)siehe playAnimation().
+        // Wenn der Charakter stillsteht (idle)
+        if (!idleStartTime) {
+          idleStartTime = Date.now(); // Idle-Zeit starten
+        } else if (Date.now() - idleStartTime >= idleThreshold) {
+          // 15 Sekunden Idle erreicht
+          this.playAnimation(this.IMAGES_LONG_IDLE, 4); // Neue Animation starten (du musst diese Animation hinzufügen)
+          this.snoring_sound.play();
+          return; // Verhindert, dass die normale Idle-Animation überschrieben wird
+        }
+
+        // Normale Idle-Animation, wenn Idle-Zeit unter 15 Sekunden ist
+        this.playAnimation(this.IMAGES_IDLE, 4);
       }
     }, 50);
   }
