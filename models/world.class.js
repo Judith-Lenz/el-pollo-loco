@@ -146,6 +146,7 @@ class World {
     });
 
     //für weiter sounds, die noch kommen (enemy, bottle, etc.), so erweitern:
+
     // this.level.enemies.forEach(enemy => {
     //   if (enemy.sound) enemy.sound.muted = this.allSoundsMuted;
     // });
