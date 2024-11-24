@@ -96,20 +96,38 @@ class Character extends MovableObject {
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
     let idleStartTime = null; // Startzeit für die Idle-Animation
-    const idleThreshold = 500000; // 15 Sekunden in Millisekunden //hier Zeit einstellen, bis er schnarcht.
+    const idleThreshold = 50000; // Zeit einstellen, bis er schnarcht
 
     setInterval(() => {
       this.walking_sound.pause(); // kein Sound, wenn er steht
+
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirection = false;
-        this.walking_sound.play();
+
+        // Walking-Sound nur abspielen, wenn der Charakter am Boden ist
+        if (!this.isAboveGround()) {
+          if (this.walking_sound.paused) {
+            this.walking_sound.play();
+          }
+        } else {
+          this.walking_sound.pause();
+        }
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
+
       if (this.world.keyboard.LEFT && this.x >= -100) {
         this.moveLeft();
         this.otherDirection = true;
-        this.walking_sound.play();
+
+        // Walking-Sound nur abspielen, wenn der Charakter am Boden ist
+        if (!this.isAboveGround()) {
+          if (this.walking_sound.paused) {
+            this.walking_sound.play();
+          }
+        } else {
+          this.walking_sound.pause();
+        }
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
 
@@ -123,6 +141,7 @@ class Character extends MovableObject {
 
     setInterval(() => {
       this.snoring_sound.pause();
+
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
@@ -144,12 +163,12 @@ class Character extends MovableObject {
         if (!idleStartTime) {
           idleStartTime = Date.now(); // Idle-Zeit starten
         } else if (Date.now() - idleStartTime >= idleThreshold) {
-          // 15 Sekunden Idle erreicht
-          this.playAnimation(this.IMAGES_LONG_IDLE, 4); // Neue Animation starten (du musst diese Animation hinzufügen)
+          // Idle-Zeit erreicht
+          this.playAnimation(this.IMAGES_LONG_IDLE, 4);
           this.snoring_sound.play();
           return; // Verhindert, dass die normale Idle-Animation überschrieben wird
         }
-        // Normale Idle-Animation, wenn Idle-Zeit unter zig Sekunden ist
+        // Normale Idle-Animation, wenn Idle-Zeit unter Threshold ist
         this.playAnimation(this.IMAGES_IDLE, 4);
       }
     }, 50);

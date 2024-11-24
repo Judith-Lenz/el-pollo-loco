@@ -38,11 +38,12 @@ class MovableObject extends DrawableObject {
   //   );
   // }
 
-  // Kollisionsprüfung mit der Hitbox NEU
+  // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
     const thisBox = this.getCollisionBox();
     const otherBox = obj.getCollisionBox();
     return (
+      //prüft, ob Kollision statt findet, wenn alle ja, dann true
       thisBox.x + thisBox.width >= otherBox.x &&
       thisBox.x <= otherBox.x + otherBox.width &&
       thisBox.y + thisBox.height >= otherBox.y &&
