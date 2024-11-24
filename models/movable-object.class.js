@@ -42,12 +42,15 @@ class MovableObject extends DrawableObject {
   isColliding(obj) {
     const thisBox = this.getCollisionBox();
     const otherBox = obj.getCollisionBox();
+    // Prüfen, ob Kollision stattfindet und ob der Charakter in der Luft ist
     return (
       //prüft, ob Kollision statt findet, wenn alle ja, dann true
       thisBox.x + thisBox.width >= otherBox.x &&
       thisBox.x <= otherBox.x + otherBox.width &&
       thisBox.y + thisBox.height >= otherBox.y &&
       thisBox.y <= otherBox.y + otherBox.height
+      //&& this.isAboveGround()
+      // Zusätzliche Bedingung: Der Charakter muss in der Luft sein
     );
   }
 
