@@ -43,8 +43,16 @@ class World {
 
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
-          this.character.hit();
-          console.log("Kollision mit Gegner, Energie", this.character.energy);
+          if (this.character.isAboveGround()) {
+            console.log("Charakter springt auf den Gegner!");
+            // this.handleEnemyStomp(enemy); // Methode für das Eliminieren eines Gegners
+          } else {
+            console.log(
+              "Kollision mit Gegner! Energie:",
+              this.character.energy
+            );
+            this.character.hit(); // Charakter nimmt Schaden
+          }
         }
       });
     }, 100); // alle 100ms wird das in der geschweiften Klammer ausgeführt.

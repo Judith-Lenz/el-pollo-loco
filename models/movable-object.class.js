@@ -40,8 +40,8 @@ class MovableObject extends DrawableObject {
 
   // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
-    const thisBox = this.getCollisionBox();
-    const otherBox = obj.getCollisionBox();
+    const thisBox = this.getCollisionBox(); //das Objekt, das die Methode aufgerufen hat, z.B. player
+    const otherBox = obj.getCollisionBox(); //übergebenes Objekt, z.B. enemy. Also z.B. player.isColliding(enemy)
     // Prüfen, ob Kollision stattfindet und ob der Charakter in der Luft ist
     return (
       //prüft, ob Kollision statt findet, wenn alle ja, dann true
