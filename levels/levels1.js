@@ -1,12 +1,12 @@
 //definiert wie viele Objekte auftauchen
 const level1 = new Level(
-  [new Bottle(), new Bottle(), new Bottle(), new Bottle()],
-  [new Coin(), new Coin(), new Coin(), new Coin(), new Coin()],
+  [new Bottle(250)], //in die Klammer bei Bedarf die genaue Position einfügen
+  [new Coin(250, 150)],
   [
+    ,
     //enemies Parameter
-    new ChickenSmall(),
-    new ChickenSmall(),
-    new ChickenSmall(),
+    new ChickenNormal(),
+    new ChickenNormal(),
     new ChickenNormal(),
     new Endboss(),
   ],

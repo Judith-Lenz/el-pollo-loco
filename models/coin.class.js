@@ -9,10 +9,12 @@ class Coin extends MovableObject {
 
   collect_coin_sound = new Audio("audio/coins.mp3");
 
-  constructor() {
+  constructor(x, y) {
     super().loadImage("img/8_coin/coin_1.png");
-    this.x = 200 + Math.random() * 500; // x-Wert zwischen 200 und 700
-    this.y = 100 + Math.random() * 200; // y-Wert zwischen 100 (MindestY Wert) und 300
+    // this.x = 200 + Math.random() * 500; // x-Wert zwischen 200 und 700
+    // this.y = 100 + Math.random() * 200; // y-Wert zwischen 100 (MindestY Wert) und 300
+    this.x = x; //bei Bedarf an der Stelle, die ich übergebe
+    this.y = y; //bei Bedarf an der Stelle, die ich übergebe
     this.baseY = this.y; // Grundposition an den Startwert anpassen
     this.animateFloating();
     // Hitbox spezifisch für Münzen

@@ -8,6 +8,8 @@ class ChickenSmall extends MovableObject {
     "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
+  dead_enemy_sound = new Audio("audio/collect_click.mp3");
+
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
     this.loadImages(this.IMAGES_WALKING);
@@ -24,10 +26,33 @@ class ChickenSmall extends MovableObject {
     setInterval(() => {
       //chicken soll sich mit 60fps nach links bewegen.
       this.moveLeft();
-    }, 1000000000 / 60); //eigtl. 1000/60 als StandardWert
+    }, 10000000 / 60); //eigtl. 1000/60 als StandardWert
 
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 200);
+  }
+
+  deadEnemy() {
+    this.playDeadEnemySound();
+    this.startDeadEnemyAnimation();
+    this.removeDeadEnemyFromWorld();
+  }
+
+  playDeadEnemySound() {
+    console.log("DeadEnemy-Sound abgespielt");
+    this.dead_enemy_sound.play();
+  }
+
+  startDeadEnemyAnimation() {
+    console.log("DeadEnemyAnimation gestartet");
+    // Animation für den toten Enemy einfügen
+  }
+
+  removeDeadEnemyFromWorld() {
+    const index = world.level.enemies.indexOf(this);
+    if (index > -1) {
+      world.level.enemies.splice(index, 1);
+    }
   }
 }

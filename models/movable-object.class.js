@@ -12,18 +12,33 @@ class MovableObject extends DrawableObject {
   collisionHeight = this.height; // Höhe der Hitbox
 
   //Lässt Objekt fallen, wenn in der Luft.
+  // applyGravity() {
+  //   setInterval(() => {
+  //     if (this.isAboveGround() || this.speedY > 0) {
+  //       this.y -= this.speedY; //Character wird nach unten bewegt.
+  //       this.speedY -= this.acceleration; //Geschwindigkeit nimmt ab.
+  //     }
+  //   }, 1000 / 25);
+  // }
+
+  //solange isAboveGround() oder this.speedY > 0 wahr sind, läuft die Funktion weiter.
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
-        this.y -= this.speedY; //Character wird nach unten bewegt.
-        this.speedY -= this.acceleration; //Geschwindigkeit nimmt ab.
+        console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
+        if (!this.isPaused) {
+          // Neue Flagge
+          this.y -= this.speedY; // Charakter wird nach unten bewegt.
+          this.speedY -= this.acceleration; // Geschwindigkeit nimmt ab.
+        }
       }
     }, 1000 / 25);
   }
 
-  //gibt zurück, ob Objekt gerade in der Luft ist oder nicht. Wenn Nein, Objekt fällt.
+  //gibt zurück, ob Y vom Objekt kleiner ist als 115. Wenn nein, dann fällt Objekt.
   //hier Bodenniveau einstellen.
   isAboveGround() {
+    // console.log("ist in der Luft");
     return this.y < 115; //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
     //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
   }

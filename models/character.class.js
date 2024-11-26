@@ -1,7 +1,7 @@
 class Character extends MovableObject {
   height = 310; //CAVE: wenn ich hier was ändere, muss ich Schwellenwert für Gravitation anpassen!
   width = 150;
-  y = 115; //muss gleich sein wie y in aboveGround(), sonst fällt er ins Bild.
+  y = 115; //muss gleich sein wie y in aboveGround(), sonst fällt er ins Bild, anstatt zu stehen.
   speed = 10;
 
   IMAGES_IDLE = [
@@ -87,9 +87,9 @@ class Character extends MovableObject {
     this.animate();
     // Hitbox spezifisch für den Character
     this.collisionOffsetX = 18; // Etwas schmaler links/rechts, mehr =weiternachrechts
-    this.collisionOffsetY = 117; // Oben etwas weniger, mehr=weiter runter
-    this.collisionWidth = 100; // Breite der Hitbox
-    this.collisionHeight = 180; // Höhe der Hitbox
+    this.collisionOffsetY = 115; // Oben etwas weniger, mehr=weiter runter (115)
+    this.collisionWidth = 100; // Breite der Hitbox (100)
+    this.collisionHeight = 180; // Höhe der Hitbox (180)
   }
 
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.

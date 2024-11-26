@@ -11,16 +11,18 @@ class Bottle extends MovableObject {
     "img/6_salsa_bottle/2_salsa_bottle_on_ground.png", // Index 1
   ];
 
-  constructor() {
+  constructor(x) {
     super();
     const randomIndex = Math.floor(Math.random() * this.BOTTLE_IMAGES.length); // Zufälligen Index berechnen
     this.loadImage(this.BOTTLE_IMAGES[randomIndex]); // Zufälliges Bild laden
-    this.x = 200 + Math.random() * 500;
+    // this.x = 200 + Math.random() * 500; //an zufälliger Stelle
+    this.x = x; // an der Stelle, die übergeben wird. CAVE: bezieht sich auf Bild, nicht auf Hitbox.
     this.collisionOffsetX = 26; // mehr =weiternachrechts
     this.collisionOffsetY = 12; // Oben etwas weniger, mehr=weiter runter
     this.collisionWidth = 32; // Breite der Hitbox
     this.collisionHeight = 55; // Höhe der Hitbox
   }
+
   collectBottle() {
     this.playBottleSound();
     this.startAnimation();

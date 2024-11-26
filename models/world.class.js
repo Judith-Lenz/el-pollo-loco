@@ -42,11 +42,19 @@ class World {
       });
 
       this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-          if (this.character.isAboveGround()) {
+        // Prüfen, ob der Enemy nicht tot ist
+        if (!enemy.isDead) {
+          // Prüfen, ob Charakter in der Luft ist und mit dem Feind kollidiert
+          if (
+            this.character.isAboveGround() &&
+            this.character.speedY < 0 &&
+            this.character.isColliding(enemy)
+          ) {
             console.log("Charakter springt auf den Gegner!");
-            // this.handleEnemyStomp(enemy); // Methode für das Eliminieren eines Gegners
-          } else {
+            this.character.speedY = 20; // Höhe des erneuten Sprungs
+            this.handleJumpOnEnemy(enemy); // Methode zum Eliminieren des Gegners
+          } else if (this.character.isColliding(enemy)) {
+            // Prüfen, ob eine "normale" Kollision vorliegt
             console.log(
               "Kollision mit Gegner! Energie:",
               this.character.energy
@@ -63,11 +71,15 @@ class World {
     console.log("Kollision mit Münze");
   }
 
-  handleBottleCollision(coin) {
-    coin.collectBottle(); // Auf das richtige Bottle-Objekt zugreifen
+  handleBottleCollision(bottle) {
+    bottle.collectBottle(); // Auf das richtige Bottle-Objekt zugreifen
     console.log("Kollision mit Flasche");
   }
 
+  handleJumpOnEnemy(enemy) {
+    enemy.deadEnemy();
+    console.log("jumped on enemy");
+  }
   // Variablen die oben deklariert sind und auf die man zugreifen möchte, muss man mit this ansprechen
 
   draw() {
@@ -166,10 +178,10 @@ class World {
     const muteDiv = document.getElementById("muteDiv");
     if (this.allSoundsMuted) {
       muteDiv.innerHTML = //hier noch die img Pfade einfügen für die sound on und off einfügen
-        '<img src="play-icon.png" alt="Play Icon" style="height: 20px; vertical-align: middle;"> Play Sounds';
+        '<img src="img/volume_up.svg" alt="Play Icon" style="height: 20px; vertical-align: middle;"> Play Sounds';
     } else {
       muteDiv.innerHTML =
-        '<img src="mute-icon.png" alt="Mute Icon" style="height: 20px; vertical-align: middle;"> Mute Sounds';
+        '<img src="img/volume_off.svg" alt="Mute Icon" style="height: 20px; vertical-align: middle;"> Mute Sounds';
     }
   }
 }
