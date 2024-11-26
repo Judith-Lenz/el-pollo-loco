@@ -151,11 +151,9 @@ class World {
 
   toggleMuteAllSounds() {
     this.allSoundsMuted = !this.allSoundsMuted; // Status umschalten
-
     // Charakter-Sounds
     this.character.walking_sound.muted = this.allSoundsMuted;
     this.character.snoring_sound.muted = this.allSoundsMuted;
-
     // Münz-Sounds
     this.level.coins.forEach((coin) => {
       coin.collect_coin_sound.muted = this.allSoundsMuted;
@@ -177,11 +175,9 @@ class World {
     // Text dynamisch anpassen
     const muteDiv = document.getElementById("muteDiv");
     if (this.allSoundsMuted) {
-      muteDiv.innerHTML = //hier noch die img Pfade einfügen für die sound on und off einfügen
-        '<img src="img/volume_up.svg" alt="Play Icon" style="height: 20px; vertical-align: middle;"> Play Sounds';
+      muteDiv.innerHTML = '<img src="img/volume_off.svg" alt="Play Icon">'; //hier noch die img Pfade einfügen für die sound on und off einfügen
     } else {
-      muteDiv.innerHTML =
-        '<img src="img/volume_off.svg" alt="Mute Icon" style="height: 20px; vertical-align: middle;"> Mute Sounds';
+      muteDiv.innerHTML = '<img src="img/volume_up.svg" alt="Mute Icon">';
     }
   }
 }

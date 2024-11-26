@@ -16,3 +16,8 @@ canvas {
   border-color: aqua;
   border-width: 10px;
 }
+
+.muteDiv {
+  height: 20px;
+  vertical-align: middle;
+}
