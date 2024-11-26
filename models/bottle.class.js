@@ -18,7 +18,7 @@ class Bottle extends MovableObject {
     // this.x = 200 + Math.random() * 500; //an zufälliger Stelle
     this.x = x; // an der Stelle, die übergeben wird. CAVE: bezieht sich auf Bild, nicht auf Hitbox.
     this.collisionOffsetX = 26; // mehr =weiternachrechts
-    this.collisionOffsetY = 12; // Oben etwas weniger, mehr=weiter runter
+    this.collisionOffsetY = 12; // mehr=weiter runter
     this.collisionWidth = 32; // Breite der Hitbox
     this.collisionHeight = 55; // Höhe der Hitbox
   }

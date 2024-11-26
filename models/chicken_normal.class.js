@@ -30,7 +30,7 @@ class ChickenNormal extends MovableObject {
   animate() {
     this.walkingInterval = setInterval(() => {
       if (!this.isDead) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
-    }, 1000 / 60);
+    }, 1000000 / 60);
 
     this.animationInterval = setInterval(() => {
       if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot

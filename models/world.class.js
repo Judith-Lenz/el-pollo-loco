@@ -175,7 +175,7 @@ class World {
     // Text dynamisch anpassen
     const muteDiv = document.getElementById("muteDiv");
     if (this.allSoundsMuted) {
-      muteDiv.innerHTML = '<img src="img/volume_off.svg" alt="Play Icon">'; //hier noch die img Pfade einfügen für die sound on und off einfügen
+      muteDiv.innerHTML = '<img src="img/volume_off.svg" alt="Play Icon">';
     } else {
       muteDiv.innerHTML = '<img src="img/volume_up.svg" alt="Mute Icon">';
     }

@@ -18,6 +18,14 @@ canvas {
 }
 
 .muteDiv {
-  height: 20px;
+  height: 40px;
   vertical-align: middle;
+}
+
+.muteDiv img {
+  height: 40px;
+}
+
+.muteDiv :hover {
+  cursor: pointer;
 }
