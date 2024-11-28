@@ -60,6 +60,7 @@ class World {
               this.character.energy
             );
             this.character.hit(); // Charakter nimmt Schaden
+            this.statusBarHealth.setPercentage(this.character.energy);
           }
         }
       });
@@ -85,14 +86,19 @@ class World {
   draw() {
     //hier kommt es auf die Reihenfolge an. alles wird von oben nach unten geschichtet.
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
-    this.ctx.translate(this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
+    this.ctx.translate(this.camera_x, 0);
     this.updateCloudPositions(); // Vor dem Hinzufügen der Wolken aufrufen
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.bottles);
+
+    this.ctx.translate(-this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
+    //--------------------------- Space for fixed objects -----------
     this.addToMap(this.statusBarHealth);
     this.addToMap(this.statusBarCoin);
     this.addToMap(this.statusBarBottle);
+    this.ctx.translate(this.camera_x, 0);
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
