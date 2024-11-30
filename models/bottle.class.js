@@ -21,11 +21,12 @@ class Bottle extends MovableObject {
     this.collisionOffsetY = 12; // mehr=weiter runter
     this.collisionWidth = 32; // Breite der Hitbox
     this.collisionHeight = 55; // Höhe der Hitbox
+    this.throwBottle(100, 150);
   }
 
   collectBottle() {
     this.playBottleSound();
-    this.startAnimation();
+    this.startBottleAnimation();
     this.removeBottleFromWorld();
   }
 
@@ -35,7 +36,7 @@ class Bottle extends MovableObject {
     // Hier kannst du den Soundcode einfügen
   }
 
-  startAnimation() {
+  startBottleAnimation() {
     console.log("Bottle-Animation gestartet");
     // Animation für das Einsammeln
   }
@@ -45,5 +46,16 @@ class Bottle extends MovableObject {
     if (index > -1) {
       world.level.bottles.splice(index, 1);
     }
+  }
+
+  throwBottle(x, y) {
+    //je nachdem wo der Character steht, werden die Koordinaten dazu gesetzt.
+    this.x = x;
+    this.y = y;
+    this.speedY = 30;
+    this.applyGravity();
+    setInterval(() => {
+      this.x += 10; //Geschwindigkeit, also x soll sich immer um 10 erhöhen.
+    }, 25); //je kleiner, desto schneller fliegt die Flasche
   }
 }

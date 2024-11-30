@@ -25,6 +25,9 @@ window.addEventListener("keydown", (e) => {
   if (e.keyCode == 32) {
     keyboard.SPACE = true;
   }
+  if (e.keyCode == 68) {
+    keyboard.D = true;
+  }
   // console.log(e.key); // Zeigt die Taste
   // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.
   // console.log("KeyCode der gedrückten Taste:", e.keyCode); //Code als Zahl,ist veraltet, klappt aber trotzdem noch.
@@ -45,6 +48,9 @@ window.addEventListener("keyup", (e) => {
   }
   if (e.keyCode == 32) {
     keyboard.SPACE = false;
+  }
+  if (e.keyCode == 68) {
+    keyboard.D = false;
   }
   // console.log(e.key); // Zeigt die Taste
   // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.

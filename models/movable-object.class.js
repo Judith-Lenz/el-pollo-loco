@@ -25,7 +25,7 @@ class MovableObject extends DrawableObject {
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
-        console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
+        // console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
         if (!this.isPaused) {
           // Neue Flagge
           this.y -= this.speedY; // Charakter wird nach unten bewegt.
@@ -38,9 +38,16 @@ class MovableObject extends DrawableObject {
   //gibt zurück, ob Y vom Objekt kleiner ist als 115. Wenn nein, dann fällt Objekt.
   //hier Bodenniveau einstellen.
   isAboveGround() {
-    // console.log("ist in der Luft");
-    return this.y < 115; //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
+    if (this instanceof Bottle) {
+      //Bottles sollen immer weiter fallen.
+      return true;
+    } else {
+      // console.log("ist in der Luft");
+      return this.y < 115;
+    }
+    //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
     //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
+    //die Flaschen sollen nicht auf dem Boden aufkommen und liegen bleiben, daher die if Abfrage.
   }
 
   //z.B. character.isColliding(chicken), Formel gibt true oder false zurück ALT
