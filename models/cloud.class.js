@@ -18,7 +18,7 @@ class Cloud extends MovableObject {
     this.collisionOffsetY = 10; // Oben etwas weniger, mehr=weiter runter
     this.collisionWidth = 450; // Breite der Hitbox
     this.collisionHeight = 100; // Höhe der Hitbox
-    this.speed = 1.5; // Geschwindigkeit der Wolkenbewegung
+    this.speed = 0.2; // Geschwindigkeit der Wolkenbewegung
 
     // Bewegung der Wolke nach links starten
     setInterval(() => {

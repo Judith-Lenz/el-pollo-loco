@@ -26,7 +26,7 @@ class DrawableObject {
       this instanceof ChickenSmall ||
       this instanceof Coin ||
       this instanceof Bottle ||
-      this instanceof Cloud ||
+      // this instanceof Cloud ||
       this instanceof Endboss
     ) {
       //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.

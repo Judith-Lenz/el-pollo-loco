@@ -4,7 +4,11 @@ const level1 = new Level(
   [new Coin(250, 150)],
   [
     //enemies Parameter
+    new ChickenNormal(),
+    new ChickenNormal(),
+    new ChickenNormal(),
 
+    new ChickenNormal(),
     new Endboss(),
   ],
   [

@@ -1,4 +1,10 @@
+@font-face {
+  font-family: "zabras";
+  src: url("fonts/zabars.ttf") format("truetype"); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}
+
 body {
+  font-family: "zabras", Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,6 +21,12 @@ canvas {
   border-radius: 20px;
   border-color: aqua;
   border-width: 10px;
+}
+
+h1 {
+  font-size: 75px;
+  letter-spacing: 7px;
+  text-shadow: 2px 2px 8px rgb(0, 0, 0, 0.5);
 }
 
 .muteDiv {
