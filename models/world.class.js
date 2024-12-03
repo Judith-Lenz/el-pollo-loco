@@ -11,6 +11,7 @@ class World {
   statusBarHealth = new StatusBarHealth();
   statusBarCoin = new StatusBarCoin();
   statusBarBottle = new StatusBarBottle();
+  throwableObjects = [];
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -19,7 +20,7 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.run(); //intervall, das regelmäßig ausgeführt wird.
   }
 
   //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
@@ -27,44 +28,65 @@ class World {
     this.character.world = this;
   }
 
-  checkCollisions() {
+  run() {
     setInterval(() => {
-      this.level.coins.forEach((coin) => {
-        if (this.character.isColliding(coin)) {
-          this.handleCoinCollision(coin);
-        }
-      });
-
-      this.level.bottles.forEach((bottle) => {
-        if (this.character.isColliding(bottle)) {
-          this.handleBottleCollision(bottle);
-        }
-      });
-
-      this.level.enemies.forEach((enemy) => {
-        // Prüfen, ob der Enemy nicht tot ist
-        if (!enemy.isDead) {
-          // Prüfen, ob Charakter in der Luft ist und mit dem Feind kollidiert
-          if (
-            this.character.isAboveGround() &&
-            this.character.speedY < 0 &&
-            this.character.isColliding(enemy)
-          ) {
-            console.log("Charakter springt auf den Gegner!");
-            this.character.speedY = 20; // Höhe des erneuten Sprungs
-            this.handleJumpOnEnemy(enemy); // Methode zum Eliminieren des Gegners
-          } else if (this.character.isColliding(enemy)) {
-            // Prüfen, ob eine "normale" Kollision vorliegt
-            console.log(
-              "Kollision mit Gegner! Energie:",
-              this.character.energy
-            );
-            this.character.hit(); // Charakter nimmt Schaden
-            this.statusBarHealth.setPercentage(this.character.energy);
-          }
-        }
-      });
+      this.checkCollisionCoins();
+      this.checkCollisionBottles();
+      this.checkCollisionEnemies();
+      this.checkThrowObjects(); //wenn eine Taste gedrückt wird.
     }, 100); // alle 100ms wird das in der geschweiften Klammer ausgeführt.
+  }
+
+  checkThrowObjects() {
+    if (this.keyboard.D) {
+      let bottle = new ThrowableObject(
+        this.character.x + 100,
+        this.character.y + 100
+      );
+      this.throwableObjects.push(bottle);
+    }
+  }
+
+  checkCollisionCoins() {
+    //checkCollisions Coin
+    this.level.coins.forEach((coin) => {
+      if (this.character.isColliding(coin)) {
+        this.handleCoinCollision(coin);
+      }
+    });
+  }
+
+  checkCollisionBottles() {
+    //checkCollisions Bottle
+    this.level.bottles.forEach((bottle) => {
+      if (this.character.isColliding(bottle)) {
+        this.handleBottleCollision(bottle);
+      }
+    });
+  }
+
+  checkCollisionEnemies() {
+    //checkCollisions Enemy
+    this.level.enemies.forEach((enemy) => {
+      // Prüfen, ob der Enemy nicht tot ist
+      if (!enemy.isDead) {
+        // Prüfen, ob Charakter in der Luft ist und mit dem Feind kollidiert
+        if (
+          this.character.isAboveGround() &&
+          this.character.speedY < 0 &&
+          this.character.isColliding(enemy)
+        ) {
+          console.log("Charakter springt auf den Gegner!");
+          this.character.speedY = 20; // Höhe des erneuten Sprungs
+          this.handleJumpOnEnemy(enemy); // Methode zum Eliminieren des Gegners
+        } else if (this.character.isColliding(enemy)) {
+          // Prüfen, ob eine "normale" Kollision vorliegt
+          console.log("Kollision mit Gegner! Energie:", this.character.energy);
+          this.character.hit(); // Charakter nimmt Schaden
+          this.statusBarHealth.setPercentage(this.character.energy);
+        }
+      }
+    });
   }
 
   handleCoinCollision(coin) {
@@ -91,6 +113,7 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.bottles);
+    this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     //--------------------------- Space for fixed objects -----------

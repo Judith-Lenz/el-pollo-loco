@@ -38,7 +38,8 @@ class MovableObject extends DrawableObject {
   //gibt zurück, ob Y vom Objekt kleiner ist als 115. Wenn nein, dann fällt Objekt.
   //hier Bodenniveau einstellen.
   isAboveGround() {
-    if (this instanceof Bottle) {
+    if (this instanceof ThrowableObject) {
+      //wenn es eine Instanz ist von ThrowableObject, hört sie nicht auf zu fallen
       //Bottles sollen immer weiter fallen.
       return true;
     } else {
