@@ -17,6 +17,7 @@ body {
 }
 
 canvas {
+  display: block; /*sehr wichtig das hier für responsive design */
   background-color: black;
   border-radius: 20px;
   border-color: aqua;
@@ -40,4 +41,17 @@ h1 {
 
 .muteDiv :hover {
   cursor: pointer;
+}
+
+/*  Smartphones -------------------*/
+@media only screen and (max-width: 740px) {
+  canvas {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: 100vh;
+  }
 }
