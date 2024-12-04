@@ -11,9 +11,12 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  background-image: url("img/desert2.png");
+  background-image: url("img/desert9.webp");
   /* background-image: none; */
-  background-position: center;
+  background-repeat: no-repeat; /* Verhindert das Wiederholen */
+  background-size: cover; /* Füllt den gesamten Hintergrund aus */
+  background-position: center; /* Zentriert das Bild */
+  background-attachment: fixed; /* Optional: Hält das Bild beim Scrollen fest */
 }
 
 canvas {
@@ -43,15 +46,52 @@ h1 {
   cursor: pointer;
 }
 
+.startScreen {
+  display: block;
+}
+.startScreen img {
+  width: 100%; /* Füllt die Breite aus */
+  height: auto; /* Höhe proportional zur Breite */
+  max-width: 900px; /* Optional: Begrenzung der Breite */
+  max-height: 480px; /* Optional: Begrenzung der Höhe */
+}
+
+.startBtn {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: white;
+  font-size: 20px;
+  height: 55px;
+  width: 80px;
+  cursor: pointer;
+  border-radius: 30px;
+  border-color: black;
+}
+
+.d-none {
+  display: none;
+}
+
 /*  Smartphones -------------------*/
 @media only screen and (max-width: 740px) {
   canvas {
     width: 100%;
+  }
+
+  .startScreen img {
+    width: 100%; /* Füllt die Breite des Bildschirms */
+    height: auto; /* Beibehaltung der Proportionen */
   }
 }
 
 @media only screen and (max-height: 480px) {
   canvas {
     height: 100vh;
+  }
+
+  .startScreen img {
+    height: 100%; /* Passt sich an die Bildschirmhöhe an */
+    width: auto; /* Beibehaltung der Proportionen */
   }
 }

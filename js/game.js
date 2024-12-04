@@ -2,6 +2,11 @@ let canvas; //brauch ich hier außerhalb, weil ich woanders auch noch benutzen m
 let world; // Globale Variable für die World-Instanz
 let keyboard = new Keyboard();
 
+function startGame() {
+  document.getElementById("canvas").classList.remove("d-none");
+  document.getElementById("startScreen").classList.add("d-none");
+}
+
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
