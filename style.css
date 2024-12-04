@@ -25,6 +25,16 @@ canvas {
   border-radius: 20px;
   border-color: aqua;
   border-width: 10px;
+  opacity: 0; /* Start: Unsichtbar */
+  transition: opacity 0.3s ease-in; /* Sanftes Einblenden */
+}
+
+canvas.d-none {
+  display: none; /* Komplett versteckt */
+}
+
+canvas.show {
+  opacity: 1; /* Voll sichtbar */
 }
 
 h1 {
@@ -67,6 +77,19 @@ h1 {
   cursor: pointer;
   border-radius: 30px;
   border-color: black;
+}
+
+.fade-out {
+  animation: fadeOut 0.1s forwards; /* 0.3s für den Fade-Out */
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1; /* Start: Voll sichtbar */
+  }
+  to {
+    opacity: 0; /* Ende: Unsichtbar */
+  }
 }
 
 .d-none {

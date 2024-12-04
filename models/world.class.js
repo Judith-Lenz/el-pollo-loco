@@ -3,7 +3,6 @@ class World {
   allSoundsMuted = false; // Statusvariable für Sound
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
   level = level1;
-  //hier noch irgendwo initlevel1 rein
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable

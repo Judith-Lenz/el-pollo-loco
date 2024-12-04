@@ -2,17 +2,33 @@ let canvas; //brauch ich hier außerhalb, weil ich woanders auch noch benutzen m
 let world; // Globale Variable für die World-Instanz
 let keyboard = new Keyboard();
 
-function startGame() {
-  document.getElementById("canvas").classList.remove("d-none");
-  document.getElementById("startScreen").classList.add("d-none");
-}
-
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas, keyboard);
-
-  console.log("My Character is", world.character);
 }
+
+function startGame() {
+  // Blende den StartScreen langsam aus
+  document.getElementById("startScreen").classList.add("fade-out");
+
+  // Warte 300ms, um den Fade-Out abzuschließen
+  setTimeout(() => {
+    document.getElementById("startScreen").classList.add("d-none"); // Verstecke den StartScreen endgültig
+    const canvasElement = document.getElementById("canvas");
+    canvasElement.classList.remove("d-none"); // Zeige das Canvas
+    canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas
+
+    // Initialisiere das Level und die Spielwelt
+    initLevel();
+    world = new World(canvas, keyboard);
+  }, 300); // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
+}
+
+// function init() {
+//   canvas = document.getElementById("canvas");
+//   world = new World(canvas, keyboard);
+
+//   console.log("My Character is", world.character);
+// }
 
 window.addEventListener("keydown", (e) => {
   if (e.keyCode == 37) {
