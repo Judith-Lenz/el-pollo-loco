@@ -5,7 +5,7 @@ class StatusBarCoin extends DrawableObject {
     "img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png",
     "img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png",
     "img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png",
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png", //5
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png", // 5
   ];
 
   percentage = 0; //Anfangswert

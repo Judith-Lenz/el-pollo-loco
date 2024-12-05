@@ -8,7 +8,10 @@ class ChickenSmall extends MovableObject {
     "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
+  IMAGE_DEAD = "img/3_enemies_chicken/chicken_small/2_dead/dead.png";
+
   dead_enemy_sound = new Audio("audio/collect_click.mp3");
+  isDead = false; // Neuer Zustand: Ist der Feind tot?
 
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
@@ -23,20 +26,26 @@ class ChickenSmall extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-      //chicken soll sich mit 60fps nach links bewegen.
-      this.moveLeft();
-    }, 10000000 / 60); //eigtl. 1000/60 als StandardWert
+    this.walkingInterval = setInterval(() => {
+      if (!this.isDead) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
+    }, 100000 / 60);
 
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
+    this.animationInterval = setInterval(() => {
+      if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot
     }, 200);
   }
 
   deadEnemy() {
+    this.isDead = true; // Zustand auf "tot" setzen
     this.playDeadEnemySound();
     this.startDeadEnemyAnimation();
-    this.removeDeadEnemyFromWorld();
+    // Stoppe alle Bewegungen und Animationen
+    this.stopAnimation();
+    this.deactivateHitBox();
+    // Entferne den Enemy nach 5 Sekunden (5000ms)
+    setTimeout(() => {
+      this.removeDeadEnemyFromWorld();
+    }, 5000); // 5 Sekunden
   }
 
   playDeadEnemySound() {
@@ -46,13 +55,27 @@ class ChickenSmall extends MovableObject {
 
   startDeadEnemyAnimation() {
     console.log("DeadEnemyAnimation gestartet");
+    this.speed = 0; // Feind bleibt stehen
+    this.loadImage(this.IMAGE_DEAD); //Dead-Image laden
     // Animation für den toten Enemy einfügen
   }
 
+  stopAnimation() {
+    clearInterval(this.walkingInterval); // Bewegen stoppen
+    clearInterval(this.animationInterval); // Animation stoppen
+  }
+
   removeDeadEnemyFromWorld() {
+    console.log("Feind wird entfernt");
     const index = world.level.enemies.indexOf(this);
     if (index > -1) {
       world.level.enemies.splice(index, 1);
     }
+  }
+  deactivateHitBox() {
+    this.collisionOffsetX = 0;
+    this.collisionOffsetY = 0;
+    this.collisionWidth = 0;
+    this.collisionHeight = 0;
   }
 }

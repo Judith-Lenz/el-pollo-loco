@@ -13,6 +13,8 @@ class World {
   throwableObjects = [];
   collectedCoins = 0; // Neue Variable für die gesammelten Münzen
   totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
+  collectedBottles = 0; // Anzahl der eingesammelten Flaschen
+  totalBottles = 0; // Gesamtanzahl der Flaschen im Level
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
@@ -20,6 +22,8 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.totalCoins = this.level.coins.length; // Gesamtanzahl der Münzen speichern
+    this.totalBottles = this.level.bottles.length; // Anzahl der Flaschen im Level speichern
+    this.updateBottleStatusBar(); // StatusBar auf den Anfangswert setzen
     this.draw();
     this.setWorld();
     this.run(); //intervall, das regelmäßig ausgeführt wird.
@@ -40,12 +44,15 @@ class World {
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D) {
+    if (this.keyboard.D && this.collectedBottles > 0) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
-      this.throwableObjects.push(bottle);
+      this.throwableObjects.push(bottle); // Flasche werfen
+      this.collectedBottles--; // Anzahl der Flaschen reduzieren
+      this.updateBottleStatusBar(); // StatusBar aktualisieren
+      console.log(`Flasche geworfen. Verbleibend: ${this.collectedBottles}`);
     }
   }
 
@@ -113,8 +120,26 @@ class World {
   }
 
   handleBottleCollision(bottle) {
-    bottle.collectBottle(); // Auf das richtige Bottle-Objekt zugreifen
-    console.log("Kollision mit Flasche");
+    bottle.collectBottle(); // Flasche einsammeln
+    this.collectedBottles++; // Zähler für Flaschen erhöhen
+    this.updateBottleStatusBar(); // StatusBar aktualisieren
+    console.log(`Flasche eingesammelt: ${this.collectedBottles}`);
+  }
+
+  updateBottleStatusBar() {
+    // Prozentsatz berechnen (max. 100%)
+    const percentage = Math.min(
+      (this.collectedBottles / this.totalBottles) * 100,
+      100
+    );
+    this.statusBarBottle.setPercentage(percentage); // StatusBar aktualisieren
+    console.log("----- Debugging StatusBarBottle -----");
+    console.log(`Eingesammelte Flaschen: ${this.collectedBottles}`);
+    console.log(
+      `Ursprüngliche Anzahl Flaschen (totalBottles): ${this.totalBottles}`
+    );
+    console.log(`Berechneter Prozentsatz für StatusBar: ${percentage}%`);
+    console.log("-------------------------------------");
   }
 
   handleJumpOnEnemy(enemy) {

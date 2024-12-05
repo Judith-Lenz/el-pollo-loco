@@ -44,7 +44,7 @@ class MovableObject extends DrawableObject {
       return true;
     } else {
       // console.log("ist in der Luft");
-      return this.y < 115;
+      return this.y < 120;
     }
     //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
     //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
