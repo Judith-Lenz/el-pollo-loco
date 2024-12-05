@@ -11,12 +11,15 @@ class World {
   statusBarCoin = new StatusBarCoin();
   statusBarBottle = new StatusBarBottle();
   throwableObjects = [];
+  collectedCoins = 0; // Neue Variable für die gesammelten Münzen
+  totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
 
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.totalCoins = this.level.coins.length; // Gesamtanzahl der Münzen speichern
     this.draw();
     this.setWorld();
     this.run(); //intervall, das regelmäßig ausgeführt wird.
@@ -89,8 +92,24 @@ class World {
   }
 
   handleCoinCollision(coin) {
-    coin.collectCoin(); // Auf das richtige Coin-Objekt zugreifen
-    console.log("Kollision mit Münze");
+    coin.collectCoin(); // Münze einsammeln
+    this.collectedCoins++; // Zähler erhöhen
+    this.updateCoinStatusBar(); // StatusBar aktualisieren
+    console.log(`Kollision mit Münze: ${this.collectedCoins}`); // Debug: Anzahl der Münzen
+  }
+
+  updateCoinStatusBar() {
+    // Prozentsatz basierend auf der Anzahl eingesammelter Münzen
+    const percentage = Math.min(
+      (this.collectedCoins / this.totalCoins) * 100,
+      100
+    );
+    this.statusBarCoin.setPercentage(percentage); // StatusBar aktualisieren
+    console.log("----- Debugging StatusBarCoin -----");
+    console.log(`Gesammelte Münzen: ${this.collectedCoins}`);
+    console.log(`Ursprüngliche Anzahl Münzen (totalCoins): ${this.totalCoins}`);
+    console.log(`Berechneter Prozentsatz für StatusBar: ${percentage}%`);
+    console.log("-----------------------------------");
   }
 
   handleBottleCollision(bottle) {

@@ -1,14 +1,14 @@
 class StatusBarCoin extends DrawableObject {
   IMAGES_STATUSCOIN = [
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png", // 0
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png",
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/40.png",
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/60.png",
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png",
-    "img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png", //5
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png", // 0
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png",
+    "img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png", //5
   ];
 
-  percentage = 100; //Anfangswert
+  percentage = 0; //Anfangswert
 
   constructor() {
     super();
@@ -17,7 +17,7 @@ class StatusBarCoin extends DrawableObject {
     this.y = 85;
     this.width = 200;
     this.height = 55;
-    this.setPercentage(100);
+    this.setPercentage(0);
   }
 
   //Wenn sich Wert ändert, muss diese Methode ausgeführt werden, damit der neue Wert gespeichert wird.
@@ -29,18 +29,18 @@ class StatusBarCoin extends DrawableObject {
 
   //gibt Index vom Bild im Array zurück
   resolveImageIndex() {
-    if (this.percentage == 100) {
-      return 5;
-    } else if (this.percentage > 80) {
-      return 4;
-    } else if (this.percentage > 60) {
-      return 3;
-    } else if (this.percentage > 40) {
-      return 2;
-    } else if (this.percentage > 20) {
-      return 1;
-    } else {
+    if (this.percentage == 0) {
       return 0;
+    } else if (this.percentage <= 20) {
+      return 1;
+    } else if (this.percentage <= 40) {
+      return 2;
+    } else if (this.percentage <= 60) {
+      return 3;
+    } else if (this.percentage <= 80) {
+      return 4;
+    } else {
+      return 5;
     }
   }
 }

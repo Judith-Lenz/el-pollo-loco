@@ -17,7 +17,7 @@ class ChickenNormal extends MovableObject {
   constructor() {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
     this.loadImages(this.IMAGES_WALKING);
-    this.x = 200 + Math.random() * 500; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
+    this.x = 500 + Math.random() * 500; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
     this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
     this.animate();
     // Hitbox spezifisch für Hühner
@@ -30,7 +30,7 @@ class ChickenNormal extends MovableObject {
   animate() {
     this.walkingInterval = setInterval(() => {
       if (!this.isDead) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
-    }, 1000 / 60);
+    }, 100000 / 60);
 
     this.animationInterval = setInterval(() => {
       if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot

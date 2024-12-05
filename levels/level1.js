@@ -4,12 +4,20 @@ let level1; // Variable wird zunächst nur deklariert
 function initLevel() {
   level1 = new Level(
     [new Bottle(200), new Bottle(300), new Bottle(400)], //in die Klammer bei Bedarf die genaue Position einfügen
-    [new Coin(250, 150)],
+    [
+      new Coin(250, 150),
+      new Coin(400, 50),
+      new Coin(750, 100),
+      new Coin(880, 80),
+      new Coin(920, 90),
+      new Coin(1290, 10),
+      new Coin(1550, 150),
+      new Coin(1750, 50),
+      new Coin(1850, 70),
+      new Coin(1950, 60),
+    ],
     [
       //enemies Parameter
-      new ChickenNormal(),
-      new ChickenNormal(),
-      new ChickenNormal(),
       new ChickenNormal(),
       new Endboss(),
     ],
