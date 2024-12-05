@@ -73,7 +73,7 @@ class Character extends MovableObject {
   world; //damit wir auf die Variablen aus world zugreifen können (siehe setWorld inn world), u.a. keyboard. Verweis auf die world-Instanz
   walking_sound = new Audio("audio/running2.mp3"); //Audio Objekt
   snoring_sound = new Audio("audio/snoring.mp3");
-  hurting_sound = new Audio("audio/win.mp3");
+  hurting_sound = new Audio("audio/arriba.mp3");
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
