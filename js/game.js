@@ -17,7 +17,7 @@ function startGame() {
     canvasElement.classList.remove("d-none"); // Zeige das Canvas
     canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas
 
-    // Initialisiere das Level und die Spielwelt
+    // Initialisiere das Level und die Spielwelt, immer zuerst level erstellen und dann erst die Welt, sonst wird mit der welt noch ein altes level erstellt.
     initLevel();
     world = new World(canvas, keyboard);
   }, 300); // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein

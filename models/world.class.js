@@ -1,6 +1,6 @@
 class World {
   //an der x-Koordinate 0 werden 4 Grafiken eingefügt.
-  allSoundsMuted = false; // Statusvariable für Sound
+  allSoundsMuted = false; // Statusvariable für Sound, Also grundsätzlich ist Ton an.
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
   level = level1;
   canvas;
@@ -21,12 +21,16 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+
     this.totalCoins = this.level.coins.length; // Gesamtanzahl der Münzen speichern
     this.totalBottles = this.level.bottles.length; // Anzahl der Flaschen im Level speichern
     this.updateBottleStatusBar(); // StatusBar auf den Anfangswert setzen
+    // Alle Sounds gleich am Anfang stumm schalten. muss ich dann am Ende wieder löschen.
+    this.toggleMuteAllSounds();
     this.draw();
     this.setWorld();
     this.run(); //intervall, das regelmäßig ausgeführt wird.
+    // Alle Sounds direkt stumm schalten
   }
 
   //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
@@ -214,33 +218,51 @@ class World {
 
   toggleMuteAllSounds() {
     this.allSoundsMuted = !this.allSoundsMuted; // Status umschalten
-    // Charakter-Sounds
-    this.character.walking_sound.muted = this.allSoundsMuted;
-    this.character.snoring_sound.muted = this.allSoundsMuted;
-    // Münz-Sounds
-    this.level.coins.forEach((coin) => {
-      coin.collect_coin_sound.muted = this.allSoundsMuted;
-    });
-    // Bottle-Sounds
-    this.level.bottles.forEach((bottle) => {
-      bottle.collect_bottle_sound.muted = this.allSoundsMuted;
-    });
-
-    //für weiter sounds, die noch kommen (enemy, bottle, etc.), so erweitern:
-
-    // this.level.enemies.forEach(enemy => {
-    //   if (enemy.sound) enemy.sound.muted = this.allSoundsMuted;
-    // });
-
+    // Sounds für verschiedene Gruppen stummschalten
+    this.toggleCharacterSounds();
+    this.toggleCoinSounds();
+    this.toggleBottleSounds();
+    this.toggleEnemySounds();
+    // Zusätzliche Aufgaben in kleinere Funktionen auslagern
+    this.updateMuteButton(); // Aktualisiere das Mute-Button-Icon
     console.log(
       `Sounds ${this.allSoundsMuted ? "stummgeschaltet" : "aktiviert"}`
     );
-    // Text dynamisch anpassen
+  }
+
+  toggleCharacterSounds() {
+    this.character.walking_sound.muted = this.allSoundsMuted;
+    this.character.snoring_sound.muted = this.allSoundsMuted;
+    this.character.hurting_sound.muted = this.allSoundsMuted;
+  }
+
+  toggleCoinSounds() {
+    this.level.coins.forEach((coin) => {
+      coin.collect_coin_sound.muted = this.allSoundsMuted;
+    });
+  }
+
+  toggleBottleSounds() {
+    this.level.bottles.forEach((bottle) => {
+      bottle.collect_bottle_sound.muted = this.allSoundsMuted;
+    });
+  }
+
+  toggleEnemySounds() {
+    this.level.enemies.forEach((enemy) => {
+      if (enemy.walking_sound) {
+        enemy.walking_sound.muted = this.allSoundsMuted;
+      }
+      if (enemy.dead_enemy_sound) {
+        enemy.dead_enemy_sound.muted = this.allSoundsMuted;
+      }
+    });
+  }
+
+  updateMuteButton() {
     const muteDiv = document.getElementById("muteDiv");
-    if (this.allSoundsMuted) {
-      muteDiv.innerHTML = '<img src="img/volume_off.svg" alt="Play Icon">';
-    } else {
-      muteDiv.innerHTML = '<img src="img/volume_up.svg" alt="Mute Icon">';
-    }
+    muteDiv.innerHTML = this.allSoundsMuted
+      ? '<img src="img/volume_off.svg" alt="Mute Icon">'
+      : '<img src="img/volume_up.svg" alt="Volume Icon">';
   }
 }
