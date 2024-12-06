@@ -30,12 +30,10 @@ function initLevel() {
       new ChickenNormal(),
       new ChickenNormal(),
       new ChickenNormal(),
-
+      new ChickenSmall(700 + Math.random() * 500),
       new ChickenSmall(900 + Math.random() * 500),
       new ChickenSmall(1200 + Math.random() * 500),
-
-      new ChickenSmall(2100 + Math.random() * 500),
-
+      new ChickenSmall(1700 + Math.random() * 500),
       new Endboss(),
     ],
     [

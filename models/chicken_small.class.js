@@ -72,6 +72,7 @@ class ChickenSmall extends MovableObject {
       world.level.enemies.splice(index, 1);
     }
   }
+
   deactivateHitBox() {
     this.collisionOffsetX = 0;
     this.collisionOffsetY = 0;

@@ -2,7 +2,7 @@ class MovableObject extends DrawableObject {
   speed = 0.15; //standard, wird jeweils evtl. überschrieben
   otherDirection = false;
   speedY = 0;
-  acceleration = 2.5; //so schnell fällt das Objekt
+  acceleration = 2.5; //so schnell fällt das Objekt, 2.5
   energy = 100; //100%
   lastHit = 0;
   // Eigenschaften für die Hitbox
@@ -25,17 +25,17 @@ class MovableObject extends DrawableObject {
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
-        // console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
-        if (!this.isPaused) {
-          // Neue Flagge
-          this.y -= this.speedY; // Charakter wird nach unten bewegt.
-          this.speedY -= this.acceleration; // Geschwindigkeit nimmt ab.
-        }
+        console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+      } else {
+        this.y = 120; // Auf die korrekte Bodenhöhe zurücksetzen
+        this.speedY = 0; // Geschwindigkeitsrücksetzung
       }
     }, 1000 / 25);
   }
 
-  //gibt zurück, ob Y vom Objekt kleiner ist als 115. Wenn nein, dann fällt Objekt.
+  //gibt zurück, ob Y vom Objekt kleiner ist als 120. Wenn nein, dann fällt Objekt.
   //hier Bodenniveau einstellen.
   isAboveGround() {
     if (this instanceof ThrowableObject) {
@@ -64,7 +64,7 @@ class MovableObject extends DrawableObject {
   // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
     const thisBox = this.getCollisionBox(); //das Objekt, das die Methode aufgerufen hat, z.B. player
-    const otherBox = obj.getCollisionBox(); //übergebenes Objekt, z.B. enemy. Also z.B. player.isColliding(enemy)
+    const otherBox = obj.getCollisionBox(); //übergebenes Objekt mit dem kollidiert wird, z.B. enemy. Also z.B. player.isColliding(enemy)
     // Prüfen, ob Kollision stattfindet und ob der Charakter in der Luft ist
     return (
       //prüft, ob Kollision statt findet, wenn alle ja, dann true
@@ -72,8 +72,8 @@ class MovableObject extends DrawableObject {
       thisBox.x <= otherBox.x + otherBox.width &&
       thisBox.y + thisBox.height >= otherBox.y &&
       thisBox.y <= otherBox.y + otherBox.height
-      //&& this.isAboveGround()
-      // Zusätzliche Bedingung: Der Charakter muss in der Luft sein
+      //&& thisBox.isAboveGround()  //dann werden bottles nur im Sprung eingesammelt.
+      // Zusätzliche Bedingung: Der Charakter muss in der Luft sein, nicht hier einbauen!
     );
   }
 
