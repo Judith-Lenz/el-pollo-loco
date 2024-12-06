@@ -32,7 +32,7 @@ class MovableObject extends DrawableObject {
         this.y = 120; // Auf die korrekte Bodenhöhe zurücksetzen
         this.speedY = 0; // Geschwindigkeitsrücksetzung
       }
-    }, 1000 / 25);
+    }, 1000 / 60);
   }
 
   //gibt zurück, ob Y vom Objekt kleiner ist als 120. Wenn nein, dann fällt Objekt.

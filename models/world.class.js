@@ -40,7 +40,7 @@ class World {
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
       this.checkThrowObjects(); //wenn eine Taste gedrückt wird.
-    }, 100); // alle 100ms wird das in der geschweiften Klammer ausgeführt.
+    }, 5); // alle 10ms wird das in der geschweiften Klammer ausgeführt.
   }
 
   checkThrowObjects() {
@@ -85,8 +85,10 @@ class World {
           this.character.speedY < 0 &&
           this.character.isColliding(enemy)
         ) {
-          console.log("Charakter springt auf den Gegner!");
-          this.character.speedY = 20; // Höhe des erneuten Sprungs
+          console.log(
+            "------Charakter springt auf den Gegner!-Hier komm ich manchmal nicht rein-------"
+          );
+          this.character.speedY = 25; // Höhe des erneuten Sprungs
           this.handleJumpOnEnemy(enemy); // Methode zum Eliminieren des Gegners
         } else if (this.character.isColliding(enemy)) {
           // Prüfen, ob eine "normale" Kollision vorliegt
