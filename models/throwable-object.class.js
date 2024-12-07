@@ -12,11 +12,14 @@ class ThrowableObject extends MovableObject {
   }
 
   throw() {
-    //je nachdem wo der Character steht, werden die Koordinaten dazu gesetzt.
-    this.speedY = 30; //Tempo nach oben
-    this.applyGravity(); //damit es auch wieder runter fällt.
-    setInterval(() => {
-      this.x += 10; //Geschwindigkeit, also x soll sich immer um 10 erhöhen.
-    }, 25); //je kleiner, desto schneller fliegt die Flasche
+    this.speedY = 30; // Tempo nach oben
+    this.applyGravity(); // Gravitation hinzufügen
+    this.throwInterval = setInterval(() => {
+      this.x += 10; // Geschwindigkeit der Flasche
+      if (this.x > 1000) {
+        // Flasche verschwindet außerhalb des Bildschirms
+        clearInterval(this.throwInterval); // Intervall stoppen
+      }
+    }, 25); // 25 ms für glatte Bewegung
   }
 }

@@ -24,15 +24,39 @@ class MovableObject extends DrawableObject {
   //solange isAboveGround() oder this.speedY > 0 wahr sind, läuft die Funktion weiter.
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) {
-        console.log(`y: ${this.y}, speedY: ${this.speedY}`); // Debugging
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
+      this.applyGravityStep(); // Gravitation auf das Objekt anwenden
+      if (this instanceof ThrowableObject) {
+        this.limitBottleFall(); // Begrenzung der Flaschenhöhe
       } else {
-        this.y = 120; // Auf die korrekte Bodenhöhe zurücksetzen
-        this.speedY = 0; // Geschwindigkeitsrücksetzung
+        this.resetCharacterToGround(); // Charakter auf Bodenhöhe zurücksetzen
       }
     }, 1000 / 60);
+  }
+
+  // Schwerkraft auf das Objekt anwenden
+  applyGravityStep() {
+    if (this.isAboveGround() || this.speedY > 0) {
+      this.y -= this.speedY;
+      this.speedY -= this.acceleration;
+    }
+  }
+
+  // Begrenzung für Flaschen
+  limitBottleFall() {
+    if (this.y > 600) {
+      // Beispielhöhe 600
+      this.y = 600; // Begrenze die Y-Position
+      this.speedY = 0; // Stoppe die Gravitation
+    }
+  }
+
+  // Rücksetzung des Charakters auf die Bodenhöhe
+  resetCharacterToGround() {
+    if (this.y > 120) {
+      // Beispielbodenhöhe 120
+      this.y = 120;
+      this.speedY = 0; // Stoppe die Bewegung
+    }
   }
 
   //gibt zurück, ob Y vom Objekt kleiner ist als 120. Wenn nein, dann fällt Objekt.
@@ -89,12 +113,22 @@ class MovableObject extends DrawableObject {
 
   //Ändert Wert der Energie
   hit() {
-    this.energy -= 5;
-    if (this.energy < 0) {
-      //wenn unter Null, zurücksetzen auf Null
-      this.energy = 0;
-    } else {
-      this.lastHit = new Date().getTime(); //so speichert man Zeit in Zahlenform Zeit seit dem 01.01.1970
+    const currentTime = new Date().getTime();
+    // Holt die aktuelle Zeit in Millisekunden (Zeit seit dem 1. Januar 1970).
+    if (currentTime - this.lastHit > 500) {
+      // Prüft, ob seit dem letzten Treffer mehr als 500 Millisekunden vergangen sind.
+      // Wenn ja, darf der Charakter erneut Energie verlieren.
+      this.energy -= 5;
+      // Reduziert die Energie des Charakters um 5 Punkte.
+      if (this.energy < 0) {
+        // Falls die Energie unter 0 fällt:
+        this.energy = 0;
+        // Setze die Energie auf 0, da negative Energie keinen Sinn ergibt.
+      } else {
+        // Wenn die Energie noch über 0 liegt:
+        this.lastHit = currentTime;
+        // Speichere die aktuelle Zeit als `lastHit`, um die nächste Trefferzeit zu berechnen.
+      }
     }
   }
 

@@ -43,12 +43,15 @@ class World {
       this.checkCollisionCoins();
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
+    }, 5);
+
+    setInterval(() => {
       this.checkThrowObjects(); //wenn eine Taste gedrückt wird.
-    }, 5); // alle 10ms wird das in der geschweiften Klammer ausgeführt.
+    }, 25); // alle 10ms wird das in der geschweiften Klammer ausgeführt.
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D && this.collectedBottles > 0) {
+    if (this.keyboard.D && this.collectedBottles > 0 && !this.throwCooldown) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
@@ -57,6 +60,11 @@ class World {
       this.collectedBottles--; // Anzahl der Flaschen reduzieren
       this.updateBottleStatusBar(); // StatusBar aktualisieren
       console.log(`Flasche geworfen. Verbleibend: ${this.collectedBottles}`);
+
+      this.throwCooldown = true; // Cooldown aktivieren
+      setTimeout(() => {
+        this.throwCooldown = false; // Cooldown deaktivieren nach 300 ms
+      }, 300); // 300 ms Cooldown-Zeit
     }
   }
 
