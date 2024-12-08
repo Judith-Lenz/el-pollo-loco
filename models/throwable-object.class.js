@@ -6,7 +6,7 @@ class ThrowableObject extends MovableObject {
   acceleration = 1.0; // Individueller Wert für Gravitation nur für ThrowableObject
 
   constructor(x, y) {
-    super().loadImage("img/6_salsa_bottle/salsa_bottle.png");
+    super().loadImage("img/6_salsa_bottle/salsa_bottle.png"); //mit super () wird erstmal die übergeordnete Klasse aufgerufen.
     this.x = x; //je nachdem was man übergeben hat siehe world.class)
     this.y = y;
     this.width = 40;
