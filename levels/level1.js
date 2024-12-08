@@ -5,6 +5,13 @@ function initLevel() {
   level1 = new Level(
     [
       new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
+      new Bottle(200),
       new Bottle(300),
       new Bottle(400),
       new Bottle(550),
@@ -27,12 +34,9 @@ function initLevel() {
     ],
     [
       //enemies Parameter
+
       new ChickenNormal(),
-      new ChickenNormal(),
-      new ChickenNormal(),
-      new ChickenSmall(700),
-      new ChickenSmall(900),
-      new ChickenSmall(1200),
+
       new ChickenSmall(1700),
       new Endboss(),
     ],

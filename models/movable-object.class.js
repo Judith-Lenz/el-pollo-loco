@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5; //so schnell fällt das Objekt, 2.5
   energy = 100; //100%
   lastHit = 0;
+  lastHurtSoundTime = 0; // Zeitpunkt des letzten abgespielten Sounds
   // Eigenschaften für die Hitbox
   collisionOffsetX = 0; // Abstand zur linken Kante
   collisionOffsetY = 0; // Abstand zur oberen Kante
@@ -43,7 +44,7 @@ class MovableObject extends DrawableObject {
 
   // Begrenzung für Flaschen
   limitBottleFall() {
-    if (this.y > 600) {
+    if (this.y > 1000) {
       // Beispielhöhe 600
       this.y = 600; // Begrenze die Y-Position
       this.speedY = 0; // Stoppe die Gravitation
@@ -133,7 +134,7 @@ class MovableObject extends DrawableObject {
   }
 
   isHurt() {
-    let timepassed = new Date().getTime() - this.lastHit; //Differenz in MilliSekunden.
+    let timepassed = new Date().getTime() - this.lastHit; //Zeit seit letztem Treffer,Differenz in MilliSekunden.
     timepassed = timepassed / 1000; //Millisekunden durch 1000, dann haben wir die Sekunden.
     return timepassed < 1; //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
     //dann wird die Animation mit den HurtBildern 1 Sekunde angezeigt.
@@ -151,13 +152,21 @@ class MovableObject extends DrawableObject {
   //   this.currentImage++; // Nächste Bildposition vorbereiten
   // }
 
-  playAnimation(images, frameRate = 1) {
+  playAnimation(images, frameRate = 1, loop = true) {
     if (this.currentImage % frameRate === 0) {
-      let i = (this.currentImage / frameRate) % images.length; // Index basierend auf Frame-Rate
+      let i = Math.floor(this.currentImage / frameRate); // Index basierend auf Frame-Rate
+      if (!loop && i >= images.length - 1) {
+        // Wenn keine Schleife und letzter Frame erreicht, setze auf letztes Bild
+        i = images.length - 1;
+      } else {
+        i = i % images.length; // Modulo für die Schleife
+      }
       let path = images[i];
       this.img = this.imageCache[path];
     }
-    this.currentImage++; // Bildposition hochzählen
+    if (loop || this.currentImage / frameRate < images.length - 1) {
+      this.currentImage++; // Bildposition hochzählen
+    }
   }
 
   moveRight() {

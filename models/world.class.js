@@ -46,18 +46,19 @@ class World {
     }, 5);
 
     setInterval(() => {
-      this.checkThrowObjects(); //wenn eine Taste gedrückt wird.
+      this.checkThrowObjects(); //wenn Taste D gedrückt wird.
     }, 25); // alle 10ms wird das in der geschweiften Klammer ausgeführt.
   }
 
   checkThrowObjects() {
     if (this.keyboard.D && this.collectedBottles > 0 && !this.throwCooldown) {
-      let bottle = new ThrowableObject(
-        this.character.x + 100,
-        this.character.y + 100
+      //Taste D gedrückt, Flaschen auch vorhanden, nicht zu viele Flaschen hintereinander werfen.
+      let bottle = new ThrowableObject( //neue Instanz von throwableObject
+        this.character.x + 100, //wird 100px neben dem x vom Character erstellt
+        this.character.y + 100 //wird 100px unterhalb des Y vom Character erstellt.
       );
-      this.throwableObjects.push(bottle); // Flasche werfen
-      this.collectedBottles--; // Anzahl der Flaschen reduzieren
+      this.throwableObjects.push(bottle); //bottle wird zum Array hinzugefügt
+      this.collectedBottles--; // Anzahl der gesammelten Flaschen reduzieren
       this.updateBottleStatusBar(); // StatusBar aktualisieren
       console.log(`Flasche geworfen. Verbleibend: ${this.collectedBottles}`);
 

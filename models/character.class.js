@@ -73,7 +73,7 @@ class Character extends MovableObject {
   world; //damit wir auf die Variablen aus world zugreifen können (siehe setWorld inn world), u.a. keyboard. Verweis auf die world-Instanz
   walking_sound = new Audio("audio/running2.mp3"); //Audio Objekt
   snoring_sound = new Audio("audio/snoring.mp3");
-  hurting_sound = new Audio("audio/arriba.mp3");
+  hurting_sound = new Audio("audio/hurt.mp3");
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
@@ -144,11 +144,19 @@ class Character extends MovableObject {
       this.snoring_sound.pause();
 
       if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
+        // Dead-Animation ohne Wiederholung abspielen, langsamer (frameRate = 10)
+        this.playAnimation(this.IMAGES_DEAD, 50, false);
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isHurt()) {
+        const currentTime = new Date().getTime();
+        const hurtSoundCooldown = 1000; // Cooldown für den Sound (1 Sekunde), kann noch angepasst werden, falls sound zu oft wiederholt wird.
+
+        if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
+          this.hurting_sound.play();
+          this.lastHurtSoundTime = currentTime; // Zeitpunkt des letzten Sounds speichern
+        }
         this.playAnimation(this.IMAGES_HURT);
-        this.hurting_sound.play();
+
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isAboveGround()) {
         if (this.speedY > 0) {
