@@ -37,6 +37,7 @@ class ThrowableObject extends MovableObject {
   }
 
   throw() {
+    this.startBottleAnimation();
     this.speedY = 10; // Tempo nach oben
     this.applyGravity(); // Gravitation hinzugefügt, die alle 1/60 Sek ausgeführt wird
     this.throwInterval = setInterval(() => {
@@ -46,5 +47,11 @@ class ThrowableObject extends MovableObject {
         clearInterval(this.throwInterval); // Intervall stoppen
       }
     }, 25); // 25 ms für glatte Bewegung
+  }
+
+  startBottleAnimation() {
+    setInterval(() => {
+      this.playAnimation(this.BOTTLE_FLY_IMAGES, 4);
+    }, 1000 / 60);
   }
 }
