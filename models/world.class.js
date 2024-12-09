@@ -51,6 +51,7 @@ class World {
   }
 
   checkThrowObjects() {
+    //wird in run alle 25ms ausgeführt.
     if (this.keyboard.D && this.collectedBottles > 0 && !this.throwCooldown) {
       //Taste D gedrückt, Flaschen auch vorhanden, nicht zu viele Flaschen hintereinander werfen.
       let bottle = new ThrowableObject( //neue Instanz von throwableObject

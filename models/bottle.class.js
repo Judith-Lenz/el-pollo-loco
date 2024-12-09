@@ -6,15 +6,17 @@ class Bottle extends MovableObject {
 
   collect_bottle_sound = new Audio("audio/collect_pop2.mp3");
 
-  BOTTLE_IMAGES = [
+  BOTTLE__GROUND_IMAGES = [
     "img/6_salsa_bottle/1_salsa_bottle_on_ground.png", // Index 0
     "img/6_salsa_bottle/2_salsa_bottle_on_ground.png", // Index 1
   ];
 
   constructor(x) {
     super();
-    const randomIndex = Math.floor(Math.random() * this.BOTTLE_IMAGES.length); // Zufälligen Index berechnen
-    this.loadImage(this.BOTTLE_IMAGES[randomIndex]); // Zufälliges Bild laden
+    const randomIndex = Math.floor(
+      Math.random() * this.BOTTLE__GROUND_IMAGES.length
+    ); // Zufälligen Index berechnen
+    this.loadImage(this.BOTTLE__GROUND_IMAGES[randomIndex]); // Zufälliges Bild laden
     // this.x = 200 + Math.random() * 500; //an zufälliger Stelle
     this.x = x; // an der Stelle, die übergeben wird. CAVE: bezieht sich auf Bild, nicht auf Hitbox.
     this.collisionOffsetX = 26; // mehr =weiternachrechts
