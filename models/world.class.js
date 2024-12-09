@@ -43,7 +43,7 @@ class World {
       this.checkCollisionCoins();
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
-    }, 5);
+    }, 5); //wird alle 5ms ausgeführt.
 
     setInterval(() => {
       this.checkThrowObjects(); //wenn Taste D gedrückt wird.
@@ -80,7 +80,7 @@ class World {
   }
 
   checkCollisionBottles() {
-    //checkCollisions Bottle
+    //checkCollisions Bottle on Ground
     this.level.bottles.forEach((bottle) => {
       if (this.character.isColliding(bottle)) {
         this.handleBottleCollision(bottle);
