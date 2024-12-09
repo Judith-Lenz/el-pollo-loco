@@ -2,8 +2,9 @@
 //Eine Instanz wäre dann ein konkretes Objekt, das mit dem Bauplan erstellt wurde. => new ThrowableObject
 class ThrowableObject extends MovableObject {
   speedX = 20; //Flasche bewegt sich mit 20Pixeln pro Frame nach rechts
-  speedY = 15; //Flasche beginnt mit der Aufwärtsbewegung (=> negative Y-Geschwindigkeit)
+  speedY = 10; //Flasche beginnt mit der Aufwärtsbewegung (=> negative Y-Geschwindigkeit)
   acceleration = 1.0; // Individueller Wert für Gravitation nur für ThrowableObject
+  //so schnell wird die Flasche wieder nach unten gezogen. Je höher, desto eher gehts wieder abwärts.S
 
   BOTTLE_FLY_IMAGES = [
     "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -38,10 +39,10 @@ class ThrowableObject extends MovableObject {
 
   throw() {
     this.startBottleAnimation();
-    this.speedY = 10; // Tempo nach oben
+    this.speedY = 10; // Tempo nach oben, also wie hoch
     this.applyGravity(); // Gravitation hinzugefügt, die alle 1/60 Sek ausgeführt wird
     this.throwInterval = setInterval(() => {
-      this.x += 20; // Geschwindigkeit der Flasche
+      this.x += 20; // Geschwindigkeit der Flasche nach rechts, also die Weite.
       if (this.y > 600) {
         // Flasche verschwindet außerhalb des Bildschirms
         clearInterval(this.throwInterval); // Intervall stoppen
