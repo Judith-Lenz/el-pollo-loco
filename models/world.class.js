@@ -48,6 +48,7 @@ class World {
       this.checkCollisionCoins();
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
+      this.checkCollisionBottlesWithEnemies();
     }, 5); //wird alle 5ms ausgeführt.
 
     setInterval(() => {
@@ -117,6 +118,39 @@ class World {
         }
       }
     });
+  }
+
+  checkCollisionBottlesWithEnemies() {
+    this.throwableObjects.forEach((bottle, bottleIndex) => {
+      this.level.enemies.forEach((enemy) => {
+        if (!enemy.isDead && bottle.isColliding(enemy)) {
+          console.log("Flasche trifft Gegner!");
+          this.handleBottleEnemyCollision(bottle, bottleIndex, enemy);
+        }
+      });
+    });
+  }
+
+  handleBottleEnemyCollision(bottle, bottleIndex, enemy) {
+    // Flasche stoppen
+    bottle.stopMovement();
+    bottle.disableGravity(); // Gravitation deaktivieren
+
+    // Animation der BOTTLE_FLY_IMAGES stoppen
+    bottle.stopCurrentAnimation();
+
+    // Splash-Animation starten
+    console.log("Splash-Animation gestartet!");
+    bottle.startSplashAnimation();
+
+    // Gegner besiegen
+    enemy.deadEnemy();
+
+    // Flasche nach der Splash-Animation entfernen
+    setTimeout(() => {
+      this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
+      console.log("Flasche entfernt.");
+    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
   }
 
   handleCoinCollision(coin) {

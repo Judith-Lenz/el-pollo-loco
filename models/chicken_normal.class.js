@@ -11,7 +11,7 @@ class ChickenNormal extends MovableObject {
   IMAGE_DEAD = "img/3_enemies_chicken/chicken_normal/2_dead/dead.png";
 
   walking_sound = new Audio("audio/chickens.mp3"); //Audio Objekt
-  dead_enemy_sound = new Audio("audio/collect_click.mp3");
+  dead_enemy_sound = new Audio("audio/chicken_dead.mp3");
   isDead = false; // Neuer Zustand: Ist der Feind tot?
 
   constructor() {

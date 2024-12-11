@@ -26,6 +26,7 @@ class ThrowableObject extends MovableObject {
     super().loadImage("img/6_salsa_bottle/salsa_bottle.png"); //mit super () wird erstmal die übergeordnete Klasse aufgerufen.
     this.loadImages(this.BOTTLE_FLY_IMAGES);
     this.loadImages(this.BOTTLE_SPLASH_IMAGES);
+    this.gravityEnabled = true; // Gravitation standardmäßig aktiv
     this.x = x; //je nachdem was man übergeben hat siehe world.class)
     this.y = y;
     this.width = 70;
@@ -39,20 +40,50 @@ class ThrowableObject extends MovableObject {
 
   throw() {
     this.startBottleAnimation();
-    this.speedY = 10; // Tempo nach oben, also wie hoch
-    this.applyGravity(); // Gravitation hinzugefügt, die alle 1/60 Sek ausgeführt wird
+    this.speedY = 10;
+    this.applyGravity();
     this.throwInterval = setInterval(() => {
-      this.x += 20; // Geschwindigkeit der Flasche nach rechts, also die Weite.
-      if (this.y > 600) {
-        // Flasche verschwindet außerhalb des Bildschirms
-        clearInterval(this.throwInterval); // Intervall stoppen
+      this.x += this.speedX; // Geschwindigkeit der Flasche nach rechts
+      if (this.y > 600 || !this.gravityEnabled) {
+        // Stoppe, wenn die Flasche den Bildschirm verlässt oder die Gravitation deaktiviert wurde
+        clearInterval(this.throwInterval);
       }
-    }, 25); // 25 ms für glatte Bewegung
+    }, 25);
   }
 
   startBottleAnimation() {
-    setInterval(() => {
+    this.animationInterval = setInterval(() => {
       this.playAnimation(this.BOTTLE_FLY_IMAGES, 4);
     }, 1000 / 60);
+  }
+
+  stopCurrentAnimation() {
+    clearInterval(this.animationInterval); // Stoppt das Animationsintervall
+  }
+
+  startSplashAnimation() {
+    this.stopCurrentAnimation(); // Fluganimation stoppen
+    this.currentImage = 0; // Anfangsbild der Splash-Animation
+    const splashInterval = setInterval(() => {
+      if (this.currentImage < this.BOTTLE_SPLASH_IMAGES.length) {
+        this.img =
+          this.imageCache[this.BOTTLE_SPLASH_IMAGES[this.currentImage]];
+        this.currentImage++; // Nächstes Bild
+      } else {
+        clearInterval(splashInterval); // Intervall beenden
+      }
+    }, 100); // 100ms pro Bild
+  }
+
+  stopMovement() {
+    this.speedX = 0;
+    this.speedY = 0;
+    clearInterval(this.throwInterval); // Bewegung vollständig stoppen
+  }
+
+  disableGravity() {
+    this.gravityEnabled = false; // Gravitation deaktivieren
+    clearInterval(this.gravityInterval); // Beendet das Intervall
+    this.speedY = 0; // Setzt die vertikale Geschwindigkeit auf 0
   }
 }

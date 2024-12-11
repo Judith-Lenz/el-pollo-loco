@@ -36,6 +36,10 @@ class MovableObject extends DrawableObject {
 
   // Schwerkraft auf das Objekt anwenden
   applyGravityStep() {
+    if (this instanceof ThrowableObject && !this.gravityEnabled) {
+      return; // Gravitation deaktivieren nur für Flaschen
+    }
+
     if (this.isAboveGround() || this.speedY > 0) {
       this.y -= this.speedY;
       this.speedY -= this.acceleration;
@@ -44,8 +48,10 @@ class MovableObject extends DrawableObject {
 
   // Begrenzung für Flaschen
   limitBottleFall() {
+    if (!this.gravityEnabled) {
+      return; // Keine Aktion, wenn Gravitation deaktiviert ist
+    }
     if (this.y > 1000) {
-      // Beispielhöhe 600
       this.y = 600; // Begrenze die Y-Position
       this.speedY = 0; // Stoppe die Gravitation
     }
