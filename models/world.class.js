@@ -135,17 +135,13 @@ class World {
     // Flasche stoppen
     bottle.stopMovement();
     bottle.disableGravity(); // Gravitation deaktivieren
-
     // Animation der BOTTLE_FLY_IMAGES stoppen
     bottle.stopCurrentAnimation();
-
     // Splash-Animation starten
     console.log("Splash-Animation gestartet!");
     bottle.startSplashAnimation();
-
     // Gegner besiegen
     enemy.deadEnemy();
-
     // Flasche nach der Splash-Animation entfernen
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
@@ -246,7 +242,7 @@ class World {
     }
 
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
+    // mo.drawFrame(this.ctx); //Hitboxen ein- bzw. ausblenden.
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);
