@@ -6,6 +6,7 @@ class World {
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable
+  backgroundMusic = new Audio("audio/Bassa Island Game Loop.mp3");
   camera_x = 0; //Die Position der Kamera auf der X-Achse. Sie bewegt sich, wenn der Spieler läuft.
   statusBarHealth = new StatusBarHealth();
   statusBarCoin = new StatusBarCoin();
@@ -25,7 +26,11 @@ class World {
     this.totalCoins = this.level.coins.length; // Gesamtanzahl der Münzen speichern
     this.totalBottles = this.level.bottles.length; // Anzahl der Flaschen im Level speichern
     this.updateBottleStatusBar(); // StatusBar auf den Anfangswert setzen
+    this.backgroundMusic.loop = true; // Schleife aktivieren
+    this.backgroundMusic.volume = 0.1; // Lautstärke setzen
+    this.backgroundMusic.play(); // Musik starten
     // Alle Sounds gleich am Anfang stumm schalten. muss ich dann am Ende wieder löschen.
+
     this.toggleMuteAllSounds();
     this.draw();
     this.setWorld();
@@ -233,7 +238,8 @@ class World {
     this.toggleCoinSounds();
     this.toggleBottleSounds();
     this.toggleEnemySounds();
-    // Zusätzliche Aufgaben in kleinere Funktionen auslagern
+    // Hintergrundmusik ein- oder ausschalten
+    this.backgroundMusic.muted = this.allSoundsMuted;
     this.updateMuteButton(); // Aktualisiere das Mute-Button-Icon
     console.log(
       `Sounds ${this.allSoundsMuted ? "stummgeschaltet" : "aktiviert"}`
@@ -244,6 +250,7 @@ class World {
     this.character.walking_sound.muted = this.allSoundsMuted;
     this.character.snoring_sound.muted = this.allSoundsMuted;
     this.character.hurting_sound.muted = this.allSoundsMuted;
+    this.character.jumping_sound.muted = this.allSoundsMuted;
   }
 
   toggleCoinSounds() {

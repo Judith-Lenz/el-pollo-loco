@@ -74,6 +74,7 @@ class Character extends MovableObject {
   walking_sound = new Audio("audio/running2.mp3"); //Audio Objekt
   snoring_sound = new Audio("audio/snoring.mp3");
   hurting_sound = new Audio("audio/hurt.mp3");
+  jumping_sound = new Audio("audio/jump2.mp3");
 
   constructor() {
     super().loadImage("img/2_character_pepe/1_idle/idle/I-1.png"); //übergibt den Pfad an loadImage, das in movableObject aufgerufen wird.
@@ -186,5 +187,6 @@ class Character extends MovableObject {
 
   jump() {
     this.speedY = 30;
+    this.jumping_sound.play();
   }
 }
