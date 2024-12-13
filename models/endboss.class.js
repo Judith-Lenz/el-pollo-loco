@@ -8,6 +8,7 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/1_walk/G3.png",
     "img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
+  isDead = false; // Neuer Zustand: Ist der Feind tot?
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[3]); //Startbild laden, brauchen wir evtl. gar nicht
@@ -24,5 +25,11 @@ class Endboss extends MovableObject {
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 200);
+  }
+
+  deadEnemy() {
+    this.isDead = true; // Setze den Status auf "tot"
+    console.log("Endboss besiegt!");
+    // Hier kannst du weitere Aktionen ergänzen, z. B. Animationen oder Sounds
   }
 }

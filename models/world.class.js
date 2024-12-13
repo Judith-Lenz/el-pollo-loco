@@ -242,7 +242,7 @@ class World {
     }
 
     mo.draw(this.ctx);
-    // mo.drawFrame(this.ctx); //Hitboxen ein- bzw. ausblenden.
+    mo.drawFrame(this.ctx); //Hitboxen ein- bzw. ausblenden.
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);
