@@ -11,6 +11,7 @@ class World {
   statusBarHealth = new StatusBarHealth();
   statusBarCoin = new StatusBarCoin();
   statusBarBottle = new StatusBarBottle();
+  statusBarEndboss = new StatusBarEndboss();
   throwableObjects = [];
   collectedCoins = 0; // Neue Variable für die gesammelten Münzen
   totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
@@ -309,7 +310,7 @@ class World {
   updateMuteButton() {
     const muteDiv = document.getElementById("muteDiv");
     muteDiv.innerHTML = this.allSoundsMuted
-      ? '<img src="img/volume_off.svg" alt="Mute Icon">'
-      : '<img src="img/volume_up.svg" alt="Volume Icon">';
+      ? '<img src="img/icons/volume_off.svg" alt="Mute Icon">'
+      : '<img src="img/icons/volume_up.svg" alt="Volume Icon">';
   }
 }

@@ -11,7 +11,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  background-image: url("img/desert9.webp");
+  background-image: url("img/background/desert9.webp");
   /* background-image: none; */
   background-repeat: no-repeat; /* Verhindert das Wiederholen */
   background-size: cover; /* Füllt den gesamten Hintergrund aus */
