@@ -204,19 +204,17 @@ class World {
     //hier kommt es auf die Reihenfolge an. alles wird von oben nach unten geschichtet.
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // hier wird erstmal gelöscht
     this.ctx.translate(this.camera_x, 0);
-
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.throwableObjects);
-
     this.ctx.translate(-this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     //--------------------------- Space for fixed objects -----------
     this.addToMap(this.statusBarHealth);
     this.addToMap(this.statusBarCoin);
     this.addToMap(this.statusBarBottle);
+    this.addToMap(this.statusBarEndboss);
     this.ctx.translate(this.camera_x, 0);
-
     this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
@@ -229,7 +227,7 @@ class World {
     });
   }
 
-  //mehrere Objekte aus einem Array
+  //mehrere Objekte aus einem Array hinzufügen (enemies, clouds, ...)
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
@@ -237,14 +235,13 @@ class World {
   }
 
   //Verwendet die drawImage()-Methode des Canvas, um das Bild (der Wolke) basierend auf ihrer aktuellen Position (mo.x und mo.y) zu zeichnen:
+  //einzelne Objekte hinzufügen zur Map.
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
     }
-
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx); //Hitboxen ein- bzw. ausblenden.
-
     if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
@@ -261,6 +258,8 @@ class World {
     mo.x = mo.x * -1;
     this.ctx.restore();
   }
+
+  // Sounds ----------------------------------------------------------------------------
 
   toggleMuteAllSounds() {
     this.allSoundsMuted = !this.allSoundsMuted; // Status umschalten
