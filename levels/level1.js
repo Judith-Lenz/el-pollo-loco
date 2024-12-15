@@ -1,4 +1,5 @@
 //definiert wie viele Objekte auftauchen
+//diese Objekte werden über die level Klasse an die World übergeben.
 let level1; // Variable wird zunächst nur deklariert
 
 function initLevel() {

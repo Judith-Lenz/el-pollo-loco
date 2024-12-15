@@ -9,26 +9,17 @@ function init() {
 function startGame() {
   // Blende den StartScreen langsam aus
   document.getElementById("startScreen").classList.add("fade-out");
-
   // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
     document.getElementById("startScreen").classList.add("d-none"); // Verstecke den StartScreen endgültig
     const canvasElement = document.getElementById("canvas");
     canvasElement.classList.remove("d-none"); // Zeige das Canvas
     canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas
-
     // Initialisiere das Level und die Spielwelt, immer zuerst level erstellen und dann erst die Welt, sonst wird mit der welt noch ein altes level erstellt.
     initLevel();
     world = new World(canvas, keyboard);
   }, 300); // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
 }
-
-// function init() {
-//   canvas = document.getElementById("canvas");
-//   world = new World(canvas, keyboard);
-
-//   console.log("My Character is", world.character);
-// }
 
 window.addEventListener("keydown", (e) => {
   if (e.keyCode == 37) {

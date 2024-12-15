@@ -2,7 +2,7 @@ class World {
   //an der x-Koordinate 0 werden 4 Grafiken eingefügt.
   allSoundsMuted = false; // Statusvariable für Sound, Also grundsätzlich ist Ton an.
   character = new Character(); //Variable character wurde Objekt namens Character zugewiesen
-  level = level1;
+  level = level1; //das Level inklusive enemies wird direkt hier verwendet
   canvas;
   ctx; //Variable context
   keyboard; // leere Variable
@@ -11,7 +11,7 @@ class World {
   statusBarHealth = new StatusBarHealth();
   statusBarCoin = new StatusBarCoin();
   statusBarBottle = new StatusBarBottle();
-  statusBarEndboss = new StatusBarEndboss();
+  statusBarEndboss = new StatusBarEndboss(); //Instanz
   throwableObjects = [];
   collectedCoins = 0; // Neue Variable für die gesammelten Münzen
   totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
@@ -207,20 +207,16 @@ class World {
     this.addObjectsToMap(this.level.backgroundObjects);
     this.addObjectsToMap(this.level.clouds); //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.bottles);
+    this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.throwableObjects);
+    this.addToMap(this.character);
+    this.addObjectsToMap(this.level.enemies);
+    this.addToMap(this.statusBarEndboss);
     this.ctx.translate(-this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
-    //--------------------------- Space for fixed objects -----------
+    //---- Space for fixed objects (die also immer mitlaufen mit der Kamera) -----------
     this.addToMap(this.statusBarHealth);
     this.addToMap(this.statusBarCoin);
     this.addToMap(this.statusBarBottle);
-    this.addToMap(this.statusBarEndboss);
-    this.ctx.translate(this.camera_x, 0);
-    this.addToMap(this.character);
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.level.coins);
-    this.ctx.translate(-this.camera_x, 0);
-
-    //draw() wird immer wieder aufgerufen.
     let self = this; //this klappt hier nicht, daher das self=this
     requestAnimationFrame(function () {
       self.draw();
