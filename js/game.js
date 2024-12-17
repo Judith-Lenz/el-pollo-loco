@@ -7,18 +7,25 @@ function init() {
 }
 
 function startGame() {
-  // Blende den StartScreen langsam aus
+  // Spielwelt zurücksetzen, falls vorhanden
+  if (world) {
+    const gameReset = new GameReset(world, canvas);
+    gameReset.resetGame();
+  }
+
+  // Startbildschirm ausblenden
   document.getElementById("startScreen").classList.add("fade-out");
-  // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
-    document.getElementById("startScreen").classList.add("d-none"); // Verstecke den StartScreen endgültig
+    document.getElementById("startScreen").classList.add("d-none");
     const canvasElement = document.getElementById("canvas");
-    canvasElement.classList.remove("d-none"); // Zeige das Canvas
-    canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas
-    // Initialisiere das Level und die Spielwelt, immer zuerst level erstellen und dann erst die Welt, sonst wird mit der welt noch ein altes level erstellt.
+    canvasElement.classList.remove("d-none");
+    canvasElement.classList.add("show");
+
+    // Neues Level und neue World erstellen
     initLevel();
-    world = new World(canvas, keyboard);
-  }, 300); // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
+    world = new World(canvasElement, keyboard); // Neue Instanz der Spielwelt
+    console.log("Neues Spiel gestartet.");
+  }, 300); // Zeit für den Fade-Out
 }
 
 window.addEventListener("keydown", (e) => {

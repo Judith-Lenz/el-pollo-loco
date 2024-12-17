@@ -1,17 +1,10 @@
 //definiert wie viele Objekte auftauchen
 //diese Objekte werden über die level Klasse an die World übergeben.
-let level1; // Variable wird zunächst nur deklariert
+let level1; // globale Variable wird zunächst nur deklariert, damit z.B. world darauf zugreifen kann
 
 function initLevel() {
   level1 = new Level(
     [
-      new Bottle(200),
-      new Bottle(200),
-      new Bottle(200),
-      new Bottle(200),
-      new Bottle(200),
-      new Bottle(200),
-      new Bottle(200),
       new Bottle(200),
       new Bottle(300),
       new Bottle(400),
