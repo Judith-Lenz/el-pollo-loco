@@ -99,8 +99,10 @@ class Character extends MovableObject {
   animate() {
     let idleStartTime = null; // Startzeit für die Idle-Animation
     const idleThreshold = 50000; // Zeit einstellen, bis er schnarcht
+    // Speichere die Interval IDs, um sie später clearen zu können // <-- neu
+    this.intervalID1 = setInterval(() => {
+      // <-- neu
 
-    setInterval(() => {
       this.walking_sound.pause(); // kein Sound, wenn er steht
 
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -141,7 +143,9 @@ class Character extends MovableObject {
       this.world.camera_x = -this.x + 100; // Kamera-Bewegung
     }, 1000 / 60);
 
-    setInterval(() => {
+    this.intervalID2 = setInterval(() => {
+      // <-- neu
+
       this.snoring_sound.pause();
 
       if (this.isDead()) {
@@ -151,7 +155,7 @@ class Character extends MovableObject {
       } else if (this.isHurt()) {
         const currentTime = new Date().getTime();
         const hurtSoundCooldown = 1000; // Cooldown für den Sound (1 Sekunde), kann noch angepasst werden, falls sound zu oft wiederholt wird.
-
+        if (!this.lastHurtSoundTime) this.lastHurtSoundTime = 0; // <-- neu, falls nicht definiert
         if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
           this.hurting_sound.play();
           this.lastHurtSoundTime = currentTime; // Zeitpunkt des letzten Sounds speichern
@@ -188,5 +192,25 @@ class Character extends MovableObject {
   jump() {
     this.speedY = 30;
     this.jumping_sound.play();
+  }
+
+  stop() {
+    // <-- neu: Die neue stop() Methode
+    // Intervalle stoppen
+    clearInterval(this.intervalID1); // <-- neu
+    clearInterval(this.intervalID2); // <-- neu
+
+    // Sounds stoppen und zurücksetzen
+    this.walking_sound.pause(); // <-- neu
+    this.walking_sound.currentTime = 0; // <-- neu
+
+    this.snoring_sound.pause(); // <-- neu
+    this.snoring_sound.currentTime = 0; // <-- neu
+
+    this.hurting_sound.pause(); // <-- neu
+    this.hurting_sound.currentTime = 0; // <-- neu
+
+    this.jumping_sound.pause(); // <-- neu
+    this.jumping_sound.currentTime = 0; // <-- neu
   }
 }

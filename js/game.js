@@ -7,6 +7,11 @@ function init() {
 }
 
 function startGame() {
+  if (world) {
+    // <-- Prüfe, ob es schon eine Welt gibt
+    world.stop(); // <-- neu: Alte Welt stoppen, bevor neue erstellt wird
+  }
+  // resetGame();
   // Blende den StartScreen langsam aus
   document.getElementById("startScreen").classList.add("fade-out");
   // Warte 300ms, um den Fade-Out abzuschließen
@@ -16,29 +21,31 @@ function startGame() {
     canvasElement.classList.remove("d-none"); // Zeige das Canvas
     canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas
     // Initialisiere das Level und die Spielwelt, immer zuerst level erstellen und dann erst die Welt, sonst wird mit der welt noch ein altes level erstellt.
-    initLevel();
+    initLevel(); //damit sind alle Gegenstände wieder am ursprünglichen Platz
     world = new World(canvas, keyboard);
   }, 300); // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
 }
 
 window.addEventListener("keydown", (e) => {
-  if (e.keyCode == 37) {
-    keyboard.LEFT = true;
-  }
-  if (e.keyCode == 39) {
-    keyboard.RIGHT = true;
-  }
-  if (e.keyCode == 38) {
-    keyboard.UP = true;
-  }
-  if (e.keyCode == 40) {
-    keyboard.DOWN = true;
-  }
-  if (e.keyCode == 32) {
-    keyboard.SPACE = true;
-  }
-  if (e.keyCode == 68) {
-    keyboard.D = true;
+  switch (e.code) {
+    case "ArrowLeft":
+      keyboard.LEFT = true;
+      break;
+    case "ArrowRight":
+      keyboard.RIGHT = true;
+      break;
+    case "ArrowUp":
+      keyboard.UP = true;
+      break;
+    case "ArrowDown":
+      keyboard.DOWN = true;
+      break;
+    case "Space":
+      keyboard.SPACE = true;
+      break;
+    case "KeyD":
+      keyboard.D = true;
+      break;
   }
   // console.log(e.key); // Zeigt die Taste
   // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.
@@ -46,23 +53,25 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.keyCode == 37) {
-    keyboard.LEFT = false;
-  }
-  if (e.keyCode == 39) {
-    keyboard.RIGHT = false;
-  }
-  if (e.keyCode == 38) {
-    keyboard.UP = false;
-  }
-  if (e.keyCode == 40) {
-    keyboard.DOWN = false;
-  }
-  if (e.keyCode == 32) {
-    keyboard.SPACE = false;
-  }
-  if (e.keyCode == 68) {
-    keyboard.D = false;
+  switch (e.code) {
+    case "ArrowLeft":
+      keyboard.LEFT = false;
+      break;
+    case "ArrowRight":
+      keyboard.RIGHT = false;
+      break;
+    case "ArrowUp":
+      keyboard.UP = false;
+      break;
+    case "ArrowDown":
+      keyboard.DOWN = false;
+      break;
+    case "Space":
+      keyboard.SPACE = false;
+      break;
+    case "KeyD":
+      keyboard.D = false;
+      break;
   }
   // console.log(e.key); // Zeigt die Taste
   // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.

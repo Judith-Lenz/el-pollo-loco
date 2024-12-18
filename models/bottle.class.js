@@ -37,11 +37,6 @@ class Bottle extends MovableObject {
     // Hier kannst du den Soundcode einfügen
   }
 
-  // startBottleAnimation() {
-  //   console.log("Bottle-Animation gestartet");
-  //   // Animation für das Einsammeln
-  // }
-
   removeBottleFromWorld() {
     const index = world.level.bottles.indexOf(this);
     if (index > -1) {

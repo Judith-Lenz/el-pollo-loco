@@ -28,9 +28,12 @@ function initLevel() {
     ],
     [
       //enemies Parameter
-
-      new ChickenNormal(),
-
+      new ChickenNormal(1050),
+      new ChickenNormal(550),
+      new ChickenNormal(750),
+      new ChickenNormal(950),
+      new ChickenSmall(1000),
+      new ChickenSmall(1500),
       new ChickenSmall(1700),
       new Endboss(),
     ],
