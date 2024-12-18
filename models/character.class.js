@@ -149,13 +149,14 @@ class Character extends MovableObject {
       this.snoring_sound.pause();
 
       if (this.isDead()) {
+        // handleCharacterDeathEvents(this);
         // Dead-Animation ohne Wiederholung abspielen, langsamer (frameRate = 10)
         this.playAnimation(this.IMAGES_DEAD, 50, false);
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isHurt()) {
         const currentTime = new Date().getTime();
         const hurtSoundCooldown = 1000; // Cooldown für den Sound (1 Sekunde), kann noch angepasst werden, falls sound zu oft wiederholt wird.
-        if (!this.lastHurtSoundTime) this.lastHurtSoundTime = 0; // <-- neu, falls nicht definiert
+        // if (!this.lastHurtSoundTime) this.lastHurtSoundTime = 0; // <-- neu, falls nicht definiert, fraglich nötig?
         if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
           this.hurting_sound.play();
           this.lastHurtSoundTime = currentTime; // Zeitpunkt des letzten Sounds speichern
@@ -193,6 +194,24 @@ class Character extends MovableObject {
     this.speedY = 30;
     this.jumping_sound.play();
   }
+
+  // handleCharacterDeathEvents() {
+  //Character entfernen oder alles deaktivieren, sonst kann er noch laufen, springen usw.
+  //   // 1. Hier könnte ein Sound abgespielt werden, z.B.:
+  //   //death_sound.play();
+  //   // 2. Hier kannst du eine Funktion aufrufen, um die Death-Animation abzuspielen.
+  //   // Wenn deine isDead()-Methode die Animation schon abspielt, brauchst du das hier vielleicht nicht doppelt.
+  //   // startDeathAnimation(character); // Beispielhafte Funktion.
+  //   // 3. Nachdem die Animation fertig ist (du kannst z.B. ein setTimeout benutzen oder auf ein Event warten),
+  //   // könntest du ein weiteres Timeout setzen, um nach 2 Sekunden den Game Over Screen anzuzeigen.
+  //   // setTimeout(() => {
+  //   //     showGameOverScreen();
+  //   // }, 2000);
+  //   // 4. Weitere Ereignisse, wie das Stoppen aller Hintergrundgeräusche, kannst du hier einfügen.
+  //   // stopAllSoundsExceptDeathSound(character); // Beispielhafte Funktion.
+  //   // 5. Du kannst hier auch noch Events für ein Leaderboard, Score-Anzeige oder ähnliches hinzufügen.
+  //   // displayFinalScore(character.score); // Beispielhafte Funktion.
+  // }
 
   stop() {
     // <-- neu: Die neue stop() Methode
