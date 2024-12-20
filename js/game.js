@@ -17,6 +17,7 @@ function startGame() {
   // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
     document.getElementById("startScreen").classList.add("d-none"); // Verstecke den StartScreen endgültig
+    document.getElementById("gameOverScreen").classList.add("d-none");
     const canvasElement = document.getElementById("canvas");
     canvasElement.classList.remove("d-none"); // Zeige das Canvas
     canvasElement.classList.add("show"); // Sanftes Einblenden des Canvas

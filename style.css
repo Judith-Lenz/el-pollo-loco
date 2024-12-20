@@ -43,6 +43,39 @@ h1 {
   text-shadow: 2px 2px 8px rgb(0, 0, 0, 0.5);
 }
 
+.canvasContainer {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  position: relative; /* Bezugspunkt für absolute Positionierung */
+  width: 740px; /* Exakte Breite des Canvas */
+
+  margin: 0 auto; /* Zentriert den Container horizontal */
+  overflow: hidden; /* Verhindert Überlauf */
+}
+
+.gameOverScreen {
+  background-image: url("img/9_intro_outro_screens/game_over/game over.png");
+  background-size: cover; /* Skaliert proportional und füllt den Container */
+  background-position: center; /* Zentriert das Bild */
+  background-repeat: no-repeat; /* Verhindert Wiederholungen */
+  border-radius: 20px; /* Rundungen wie zuvor */
+  border-radius: 20px;
+  border-color: aqua;
+  border-width: 10px;
+
+  position: absolute; /* Überlappt andere Elemente im Container */
+  top: 0;
+  left: 0;
+  width: 100%; /* Füllt die Breite des canvasContainer */
+  height: 100%; /* Füllt die Höhe des canvasContainer */
+  display: flex;
+
+  justify-content: center; /* Zentriert das Bild horizontal */
+  align-items: center; /* Zentriert das Bild vertikal */
+  z-index: 2; /* Stellt sicher, dass es über dem Canvas liegt */
+}
+
 .muteDiv {
   height: 40px;
   vertical-align: middle;
@@ -60,10 +93,9 @@ h1 {
   display: block;
 }
 .startScreen img {
-  width: 100%; /* Füllt die Breite aus */
-  height: auto; /* Höhe proportional zur Breite */
-  max-width: 900px; /* Optional: Begrenzung der Breite */
-  max-height: 480px; /* Optional: Begrenzung der Höhe */
+  width: 100%;
+  max-width: 740px;
+  border-radius: 20px;
 }
 
 .startBtn {
@@ -102,15 +134,25 @@ h1 {
     width: 100%;
   }
 
-  .startScreen img {
-    width: 100%; /* Füllt die Breite des Bildschirms */
-    height: auto; /* Beibehaltung der Proportionen */
+  .gameOverScreen {
+    width: 100%;
+    height: auto; /* Höhe passt sich dynamisch an */
+    aspect-ratio: 3 / 2; /* Beibehaltung des Seitenverhältnisses */
+  }
+
+  .canvasContainer {
+    width: 100%;
+    height: auto; /* Höhe passt sich dynamisch an */
   }
 }
 
 @media only screen and (max-height: 480px) {
   canvas {
     height: 100vh;
+  }
+
+  .canvasContainer {
+    width: 100%;
   }
 
   .startScreen img {
