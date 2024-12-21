@@ -120,6 +120,10 @@ class MovableObject extends DrawableObject {
 
   //Ändert Wert der Energie
   hit() {
+    if (this.energy === 0) {
+      return; // Wenn Energie bereits 0 ist, keine weiteren Treffer
+    }
+
     const currentTime = new Date().getTime();
     // Holt die aktuelle Zeit in Millisekunden (Zeit seit dem 1. Januar 1970).
     if (currentTime - this.lastHit > 500) {
@@ -140,6 +144,9 @@ class MovableObject extends DrawableObject {
   }
 
   isHurt() {
+    if (this.energy === 0) {
+      return false; // Wenn Energie 0 ist, kann der Charakter nicht mehr "hurt" sein
+    }
     let timepassed = new Date().getTime() - this.lastHit; //Zeit seit letztem Treffer,Differenz in MilliSekunden.
     timepassed = timepassed / 1000; //Millisekunden durch 1000, dann haben wir die Sekunden.
     return timepassed < 1; //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
@@ -160,16 +167,16 @@ class MovableObject extends DrawableObject {
 
   playAnimation(images, frameRate = 1, loop = true) {
     if (this.currentImage % frameRate === 0) {
-      let i = Math.floor(this.currentImage / frameRate); // Index basierend auf Frame-Rate
+      let i = Math.floor(this.currentImage / frameRate);
       if (!loop && i >= images.length - 1) {
-        // Wenn keine Schleife und letzter Frame erreicht, setze auf letztes Bild
-        i = images.length - 1;
+        i = images.length - 1; // Bleibt auf dem letzten Bild stehen, wenn keine Schleife
       } else {
-        i = i % images.length; // Modulo für die Schleife
+        i = i % images.length;
       }
       let path = images[i];
       this.img = this.imageCache[path];
     }
+
     if (loop || this.currentImage / frameRate < images.length - 1) {
       this.currentImage++; // Bildposition hochzählen
     }

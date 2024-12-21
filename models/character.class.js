@@ -145,23 +145,21 @@ class Character extends MovableObject {
     }, 1000 / 60);
 
     this.intervalID2 = setInterval(() => {
-      // <-- neu
-
       this.snoring_sound.pause();
 
       if (this.isDead()) {
         this.handleCharacterDeathEvents();
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        return; // Beende die weitere Animation, wenn Charakter tot ist
       } else if (this.isHurt()) {
         const currentTime = new Date().getTime();
-        const hurtSoundCooldown = 1000; // Cooldown für den Sound (1 Sekunde), kann noch angepasst werden, falls sound zu oft wiederholt wird.
+        const hurtSoundCooldown = 1500; // Cooldown für den Sound (1 Sekunde), kann noch angepasst werden, falls sound zu oft wiederholt wird.
         // if (!this.lastHurtSoundTime) this.lastHurtSoundTime = 0; // <-- neu, falls nicht definiert, fraglich nötig?
         if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
           this.hurting_sound.play();
           this.lastHurtSoundTime = currentTime; // Zeitpunkt des letzten Sounds speichern
         }
         this.playAnimation(this.IMAGES_HURT);
-
         idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isAboveGround()) {
         if (this.speedY > 0) {
@@ -195,29 +193,45 @@ class Character extends MovableObject {
   }
 
   handleCharacterDeathEvents() {
-    // Dead-Animation ohne Wiederholung abspielen, langsamer (frameRate = 10)
-    this.playAnimation(this.IMAGES_DEAD, 50, false);
-    this.world.backgroundMusic.volume = 0;
-    this.gameOver_sound.play();
-    document.getElementById("gameOverScreen").classList.remove("d-none");
-    //einblenden gameOverScreen, d-none entfernen
-    this.stop();
-    //Character entfernen oder alles deaktivieren, sonst kann er noch laufen, springen usw.
-    //   // 1. Hier könnte ein Sound abgespielt werden, z.B.:
-    //   //death_sound.play();
-    //   // 2. Hier kannst du eine Funktion aufrufen, um die Death-Animation abzuspielen.
-    //   // Wenn deine isDead()-Methode die Animation schon abspielt, brauchst du das hier vielleicht nicht doppelt.
-    //   // startDeathAnimation(character); // Beispielhafte Funktion.
-    //   // 3. Nachdem die Animation fertig ist (du kannst z.B. ein setTimeout benutzen oder auf ein Event warten),
-    //   // könntest du ein weiteres Timeout setzen, um nach 2 Sekunden den Game Over Screen anzuzeigen.
-    //   // setTimeout(() => {
-    //   //     showGameOverScreen();
-    //   // }, 2000);
-    //   // 4. Weitere Ereignisse, wie das Stoppen aller Hintergrundgeräusche, kannst du hier einfügen.
-    //   // stopAllSoundsExceptDeathSound(character); // Beispielhafte Funktion.
-    //   // 5. Du kannst hier auch noch Events für ein Leaderboard, Score-Anzeige oder ähnliches hinzufügen.
-    //   // displayFinalScore(character.score); // Beispielhafte Funktion.
+    // Dead-Animation abspielen
+    this.playAnimation(this.IMAGES_DEAD, 40, false);
+
+    // Dauer der Dead-Animation berechnen
+    const animationDuration = this.IMAGES_DEAD.length * 200; // Anzahl der Bilder * Frame-Dauer (100 ms bei Frame-Rate 10)
+
+    // Aktionen nach der Animation ausführen
+    setTimeout(() => {
+      this.world.backgroundMusic.volume = 0; // Hintergrundmusik leise
+      this.gameOver_sound.play(); // Game Over Sound abspielen
+      document.getElementById("gameOverScreen").classList.remove("d-none"); // Game Over Bildschirm anzeigen
+      this.stop(); // Intervalle und Animationen stoppen
+    }, animationDuration); // Warten, bis die Dead-Animation fertig ist
   }
+
+  // handleCharacterDeathEvents() {
+  //   // Dead-Animation ohne Wiederholung abspielen, langsamer (frameRate = 10)
+  //   this.playAnimation(this.IMAGES_DEAD, 10, false);
+  //   this.world.backgroundMusic.volume = 0;
+  //   this.gameOver_sound.play();
+  //   document.getElementById("gameOverScreen").classList.remove("d-none");
+  //   //einblenden gameOverScreen, d-none entfernen
+  //   this.stop();
+  //   //Character entfernen oder alles deaktivieren, sonst kann er noch laufen, springen usw.
+  //   //   // 1. Hier könnte ein Sound abgespielt werden, z.B.:
+  //   //   //death_sound.play();
+  //   //   // 2. Hier kannst du eine Funktion aufrufen, um die Death-Animation abzuspielen.
+  //   //   // Wenn deine isDead()-Methode die Animation schon abspielt, brauchst du das hier vielleicht nicht doppelt.
+  //   //   // startDeathAnimation(character); // Beispielhafte Funktion.
+  //   //   // 3. Nachdem die Animation fertig ist (du kannst z.B. ein setTimeout benutzen oder auf ein Event warten),
+  //   //   // könntest du ein weiteres Timeout setzen, um nach 2 Sekunden den Game Over Screen anzuzeigen.
+  //   //   // setTimeout(() => {
+  //   //   //     showGameOverScreen();
+  //   //   // }, 2000);
+  //   //   // 4. Weitere Ereignisse, wie das Stoppen aller Hintergrundgeräusche, kannst du hier einfügen.
+  //   //   // stopAllSoundsExceptDeathSound(character); // Beispielhafte Funktion.
+  //   //   // 5. Du kannst hier auch noch Events für ein Leaderboard, Score-Anzeige oder ähnliches hinzufügen.
+  //   //   // displayFinalScore(character.score); // Beispielhafte Funktion.
+  // }
 
   stop() {
     // Intervalle stoppen
