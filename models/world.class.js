@@ -47,7 +47,6 @@ class World {
   run() {
     // Speichere die Interval-IDs, damit wir sie später clearen können
     this.intervalID1 = setInterval(() => {
-      // <-- neu
       this.checkCollisionCoins();
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
@@ -55,14 +54,18 @@ class World {
     }, 5);
 
     this.intervalID2 = setInterval(() => {
-      // <-- neu
       this.checkThrowObjects();
     }, 25);
   }
 
   checkThrowObjects() {
     //wird in run alle 25ms ausgeführt.
-    if (this.keyboard.D && this.collectedBottles > 0 && !this.throwCooldown) {
+    if (
+      !this.character.isDead() &&
+      this.keyboard.D &&
+      this.collectedBottles > 0 &&
+      !this.throwCooldown
+    ) {
       //Taste D gedrückt, Flaschen auch vorhanden, nicht zu viele Flaschen hintereinander werfen.
       let bottle = new ThrowableObject( //neue Instanz von throwableObject
         this.character.x + 100, //wird 100px neben dem x vom Character erstellt
@@ -314,40 +317,35 @@ class World {
       : '<img src="img/icons/volume_up.svg" alt="Volume Icon">';
   }
 
-  // Hier ist die neue stop() Methode
   stop() {
-    // <-- neu
     // Alle Sounds stoppen und zurücksetzen
-    this.backgroundMusic.pause(); // <-- neu
-    this.backgroundMusic.currentTime = 0; // <-- neu
+    this.backgroundMusic.pause();
+    this.backgroundMusic.currentTime = 0;
 
     // Charakter-Sounds stoppen
-    this.character.walking_sound.pause(); // <-- neu
-    this.character.walking_sound.currentTime = 0; // <-- neu
-    this.character.snoring_sound.pause(); // <-- neu
-    this.character.snoring_sound.currentTime = 0; // <-- neu
-    this.character.hurting_sound.pause(); // <-- neu
-    this.character.hurting_sound.currentTime = 0; // <-- neu
-    this.character.jumping_sound.pause(); // <-- neu
-    this.character.jumping_sound.currentTime = 0; // <-- neu
+    this.character.walking_sound.pause();
+    this.character.walking_sound.currentTime = 0;
+    this.character.snoring_sound.pause();
+    this.character.snoring_sound.currentTime = 0;
+    this.character.hurting_sound.pause();
+    this.character.hurting_sound.currentTime = 0;
+    this.character.jumping_sound.pause();
+    this.character.jumping_sound.currentTime = 0;
 
     // Coin-Sounds stoppen
     this.level.coins.forEach((coin) => {
-      // <-- neu
-      coin.collect_coin_sound.pause(); // <-- neu
-      coin.collect_coin_sound.currentTime = 0; // <-- neu
+      coin.collect_coin_sound.pause();
+      coin.collect_coin_sound.currentTime = 0;
     });
 
     // Bottle-Sounds stoppen
     this.level.bottles.forEach((bottle) => {
-      // <-- neu
-      bottle.collect_bottle_sound.pause(); // <-- neu
-      bottle.collect_bottle_sound.currentTime = 0; // <-- neu
+      bottle.collect_bottle_sound.pause();
+      bottle.collect_bottle_sound.currentTime = 0;
     });
 
     // Enemy-Sounds stoppen
     this.level.enemies.forEach((enemy) => {
-      // <-- neu
       if (enemy.walking_sound) {
         enemy.walking_sound.pause();
         enemy.walking_sound.currentTime = 0;
@@ -359,14 +357,14 @@ class World {
     });
 
     // Intervalle clearen
-    clearInterval(this.intervalID1); // <-- neu
-    clearInterval(this.intervalID2); // <-- neu
+    clearInterval(this.intervalID1);
+    clearInterval(this.intervalID2);
 
     // requestAnimationFrame stoppen
-    cancelAnimationFrame(this.frameId); // <-- neu
+    cancelAnimationFrame(this.frameId);
 
     // Canvas leeren
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // <-- neu
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.character.stop(); // <-- Hier rufst du jetzt auch den Charakter-Stop auf
   }
 }

@@ -220,22 +220,20 @@ class Character extends MovableObject {
   }
 
   stop() {
-    // <-- neu: Die neue stop() Methode
     // Intervalle stoppen
-    clearInterval(this.intervalID1); // <-- neu
-    clearInterval(this.intervalID2); // <-- neu
-
+    clearInterval(this.intervalID1);
+    clearInterval(this.intervalID2);
     // Sounds stoppen und zurücksetzen
-    this.walking_sound.pause(); // <-- neu
-    this.walking_sound.currentTime = 0; // <-- neu
+    this.walking_sound.pause();
+    this.walking_sound.currentTime = 0;
 
-    this.snoring_sound.pause(); // <-- neu
-    this.snoring_sound.currentTime = 0; // <-- neu
+    this.snoring_sound.pause();
+    this.snoring_sound.currentTime = 0;
 
-    this.hurting_sound.pause(); // <-- neu
-    this.hurting_sound.currentTime = 0; // <-- neu
+    this.hurting_sound.pause();
+    this.hurting_sound.currentTime = 0;
 
-    this.jumping_sound.pause(); // <-- neu
-    this.jumping_sound.currentTime = 0; // <-- neu
+    this.jumping_sound.pause();
+    this.jumping_sound.currentTime = 0;
   }
 }

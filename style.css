@@ -90,7 +90,7 @@ h1 {
 }
 
 .startScreen {
-  display: block;
+  display: block; /* offenbar nicht wirklich nötig.*/
 }
 .startScreen img {
   width: 100%;
