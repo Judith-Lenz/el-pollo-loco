@@ -225,8 +225,6 @@ class World {
     this.addToMap(this.statusBarBottle);
     let self = this; //this klappt hier nicht, daher das self=this
     this.frameId = requestAnimationFrame(function () {
-      // <-- neu
-
       self.draw();
     });
   }
@@ -285,6 +283,7 @@ class World {
     this.character.snoring_sound.muted = this.allSoundsMuted;
     this.character.hurting_sound.muted = this.allSoundsMuted;
     this.character.jumping_sound.muted = this.allSoundsMuted;
+    this.character.gameOver_sound.muted = this.allSoundsMuted;
   }
 
   toggleCoinSounds() {

@@ -195,10 +195,8 @@ class Character extends MovableObject {
   handleCharacterDeathEvents() {
     // Dead-Animation abspielen
     this.playAnimation(this.IMAGES_DEAD, 40, false);
-
     // Dauer der Dead-Animation berechnen
     const animationDuration = this.IMAGES_DEAD.length * 200; // Anzahl der Bilder * Frame-Dauer (100 ms bei Frame-Rate 10)
-
     // Aktionen nach der Animation ausführen
     setTimeout(() => {
       this.world.backgroundMusic.volume = 0; // Hintergrundmusik leise
