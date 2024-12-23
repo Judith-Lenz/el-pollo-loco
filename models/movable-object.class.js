@@ -123,7 +123,6 @@ class MovableObject extends DrawableObject {
     if (this.energy === 0) {
       return; // Wenn Energie bereits 0 ist, keine weiteren Treffer
     }
-
     const currentTime = new Date().getTime();
     // Holt die aktuelle Zeit in Millisekunden (Zeit seit dem 1. Januar 1970).
     if (currentTime - this.lastHit > 500) {

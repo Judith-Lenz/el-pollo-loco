@@ -2,6 +2,8 @@ class Endboss extends MovableObject {
   height = 450;
   width = 350;
   y = 0; //wo genau es eingefügt wird, also welche Höhe
+  // health = 100; // Startwert für Lebenspunkte
+
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
     "img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -52,6 +54,8 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+    this.animate();
+    // this.statusBar = statusBar; // Statusbar des Endbosses
     this.x = 2500; //wie weit rechts er eingefügt wird.
     // this.animate();
     //Hitbox spezifische für Endboss
@@ -62,10 +66,33 @@ class Endboss extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
+    this.walkingInterval = setInterval(() => {
+      if (!this.isDead) this.moveLeft(); // Bewegung nach links
+    }, 1000 / 60);
+    this.animationInterval = setInterval(() => {
+      if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Animation des laufens
     }, 200);
   }
+
+  // takeDamage(amount) {
+  //   if (!this.isDead) {
+  //     this.health -= amount;
+  //     if (this.health <= 0) {
+  //       this.health = 0;
+  //       this.die();
+  //     }
+  //     // Statusbar aktualisieren
+  //     this.statusBar.setPercentage((this.health / 100) * 100);
+  //   }
+  // }
+
+  // die() {
+  //   this.isDead = true;
+  //   clearInterval(this.walkingInterval);
+  //   clearInterval(this.animationInterval);
+  //   this.playAnimation(this.IMAGES_DEAD); // Abspielen der "Tot"-Animation
+  //   console.log("Endboss besiegt!");
+  // }
 
   deadEnemy() {
     this.isDead = true; // Setze den Status auf "tot"

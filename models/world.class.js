@@ -148,7 +148,7 @@ class World {
     console.log("Splash-Animation gestartet!");
     bottle.startSplashAnimation();
     // Gegner besiegen
-    enemy.deadEnemy();
+    enemy.deadEnemy(); //beim Endboss muss ich hier was anderes machen.
     // Flasche nach der Splash-Animation entfernen
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
