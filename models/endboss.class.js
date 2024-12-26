@@ -46,6 +46,7 @@ class Endboss extends MovableObject {
   ];
 
   isDead = false; // Neuer Zustand: Ist der Feind tot?
+  isHurt = false; // Hurt-Status des Endbosses
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
@@ -67,23 +68,33 @@ class Endboss extends MovableObject {
 
   animate() {
     this.walkingInterval = setInterval(() => {
-      if (!this.isDead) this.moveLeft(); // Bewegung nach links
-    }, 1000 / 60); //Geschwindigkeit, mit der sich Endboss nach links bewegt
+      if (!this.isDead && !this.isHurt) this.moveLeft(); // Nur bewegen, wenn nicht verletzt
+    }, 1000 / 60); //Geschwindigkeit mit der sich Boss nach links bewegt.
+    // Animationen
     this.animationInterval = setInterval(() => {
-      if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Animation des laufens
-    }, 400); //Geschwindigkeit der Animation, höher ist langsamer
+      if (!this.isDead) {
+        if (this.isHurt) {
+          this.playAnimation(this.IMAGES_HURT, 20); // Wenn verletzt, spiele Hurt-Animation
+        } else {
+          this.playAnimation(this.IMAGES_WALKING); // Ansonsten normale Geh-Animation
+        }
+      }
+    }, 400);
   }
 
   endbossHit() {
     console.log("Endboss getroffen!");
+    this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand
     this.playHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
-    this.stopMovement(); // Stoppe die Bewegung des Endbosses
-    this.stopWalkAnimation();
+    // Verzögerung für die Hurt-Animation
+    setTimeout(() => {
+      this.isHurt = false; // Setze den Zustand nach einiger Zeit zurück
+    }, this.IMAGES_HURT.length * 200); // Dauer der Hurt-Animation (1200ms pro Bild)
   }
 
   playHurtAnimation() {
     // Hier wird die Verletzungsanimation abgespielt
-    this.playAnimation(this.IMAGES_HURT, 20); // IMAGES_HURT enthält die Bilder für die verletzte Animation
+    this.playAnimation(this.IMAGES_HURT, 1); // IMAGES_HURT enthält die Bilder für die verletzte Animation
   }
 
   // takeDamage(amount) {
@@ -109,14 +120,14 @@ class Endboss extends MovableObject {
   deadEnemy() {
     this.isDead = true; // Setze den Status auf "tot", daher stoppt die animation.
     console.log("Endboss besiegt!");
+    stopAnimation();
+    this.playAnimation(this.IMAGES_DEAD); // Abspielen der "Tot"-Animation
     // Hier kannst du weitere Aktionen ergänzen, z. B. Animationen oder Sounds
   }
 
-  stopMovement() {
-    clearInterval(this.walkingInterval); // Stoppt das Intervall für die Bewegung
-  }
-
-  stopWalkAnimation() {
-    clearInterval(this.animationInterval); // Stoppt das Intervall für die Bewegung
+  // Methode, um die Animation zu stoppen, wenn der Endboss getroffen wird
+  stopAnimation() {
+    clearInterval(this.walkingInterval); // Stoppe das Intervall für die Bewegung
+    clearInterval(this.animationInterval); // Stoppe das Intervall für die Animation
   }
 }

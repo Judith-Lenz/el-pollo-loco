@@ -152,7 +152,7 @@ class World {
     } else {
       // Gegner besiegen
       enemy.deadEnemy();
-    } //beim Endboss muss ich hier was anderes machen.
+    }
     // Flasche nach der Splash-Animation entfernen
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
