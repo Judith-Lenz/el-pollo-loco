@@ -62,6 +62,7 @@ class ThrowableObject extends MovableObject {
   }
 
   startSplashAnimation() {
+    this.deactivateHitBox();
     this.stopCurrentAnimation(); // Fluganimation stoppen
     this.currentImage = 0; // Anfangsbild der Splash-Animation
     const splashInterval = setInterval(() => {
@@ -85,5 +86,12 @@ class ThrowableObject extends MovableObject {
     this.gravityEnabled = false; // Gravitation deaktivieren
     clearInterval(this.gravityInterval); // Beendet das Intervall
     this.speedY = 0; // Setzt die vertikale Geschwindigkeit auf 0
+  }
+
+  deactivateHitBox() {
+    this.collisionOffsetX = 0;
+    this.collisionOffsetY = 0;
+    this.collisionWidth = 0;
+    this.collisionHeight = 0;
   }
 }

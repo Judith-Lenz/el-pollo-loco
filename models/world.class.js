@@ -151,13 +151,13 @@ class World {
       enemy.endbossHit();
     } else {
       // Gegner besiegen
-      enemy.deadEnemy(); //beim Endboss muss ich hier was anderes machen.
-      // Flasche nach der Splash-Animation entfernen
-      setTimeout(() => {
-        this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
-        console.log("Flasche entfernt.");
-      }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
-    }
+      enemy.deadEnemy();
+    } //beim Endboss muss ich hier was anderes machen.
+    // Flasche nach der Splash-Animation entfernen
+    setTimeout(() => {
+      this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
+      console.log("Flasche entfernt.");
+    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
   }
 
   handleCoinCollision(coin) {
