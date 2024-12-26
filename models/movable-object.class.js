@@ -186,7 +186,7 @@ class MovableObject extends DrawableObject {
   }
 
   moveLeft() {
-    this.x -= this.speed;
+    this.x -= this.speed; //Ziehe Wert von speed von x ab.
   }
 
   jump() {

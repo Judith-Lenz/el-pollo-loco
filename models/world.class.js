@@ -93,7 +93,7 @@ class World {
   }
 
   checkCollisionBottles() {
-    //checkCollisions Bottle on Ground
+    //checkCollisions Bottle on Ground, einsammeln von Bottles durch character
     this.level.bottles.forEach((bottle) => {
       if (this.character.isColliding(bottle)) {
         this.handleBottleCollision(bottle);
@@ -102,7 +102,7 @@ class World {
   }
 
   checkCollisionEnemies() {
-    //checkCollisions Enemy
+    //checkCollisions Enemy jump oder hit
     this.level.enemies.forEach((enemy) => {
       // Prüfen, ob der Enemy nicht tot ist
       if (!enemy.isDead) {
@@ -147,13 +147,17 @@ class World {
     // Splash-Animation starten
     console.log("Splash-Animation gestartet!");
     bottle.startSplashAnimation();
-    // Gegner besiegen
-    enemy.deadEnemy(); //beim Endboss muss ich hier was anderes machen.
-    // Flasche nach der Splash-Animation entfernen
-    setTimeout(() => {
-      this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
-      console.log("Flasche entfernt.");
-    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
+    if (enemy.isEndboss) {
+      enemy.endbossHit();
+    } else {
+      // Gegner besiegen
+      enemy.deadEnemy(); //beim Endboss muss ich hier was anderes machen.
+      // Flasche nach der Splash-Animation entfernen
+      setTimeout(() => {
+        this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
+        console.log("Flasche entfernt.");
+      }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
+    }
   }
 
   handleCoinCollision(coin) {

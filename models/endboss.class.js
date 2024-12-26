@@ -49,6 +49,7 @@ class Endboss extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
+    this.isEndboss = true; // Spezielle Kennzeichnung für Endboss
     this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
@@ -57,7 +58,6 @@ class Endboss extends MovableObject {
     this.animate();
     // this.statusBar = statusBar; // Statusbar des Endbosses
     this.x = 2500; //wie weit rechts er eingefügt wird.
-    // this.animate();
     //Hitbox spezifische für Endboss
     this.collisionOffsetX = 40; // Etwas schmaler links/rechts, mehr =weiternachrechts
     this.collisionOffsetY = 70; // Oben etwas weniger, mehr=weiter runter
@@ -68,10 +68,22 @@ class Endboss extends MovableObject {
   animate() {
     this.walkingInterval = setInterval(() => {
       if (!this.isDead) this.moveLeft(); // Bewegung nach links
-    }, 1000 / 60);
+    }, 1000 / 60); //Geschwindigkeit, mit der sich Endboss nach links bewegt
     this.animationInterval = setInterval(() => {
       if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Animation des laufens
-    }, 200);
+    }, 400); //Geschwindigkeit der Animation, höher ist langsamer
+  }
+
+  endbossHit() {
+    console.log("Endboss getroffen!");
+    this.playHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
+    this.stopMovement(); // Stoppe die Bewegung des Endbosses
+    this.stopWalkAnimation();
+  }
+
+  playHurtAnimation() {
+    // Hier wird die Verletzungsanimation abgespielt
+    this.playAnimation(this.IMAGES_HURT, 20); // IMAGES_HURT enthält die Bilder für die verletzte Animation
   }
 
   // takeDamage(amount) {
@@ -95,8 +107,16 @@ class Endboss extends MovableObject {
   // }
 
   deadEnemy() {
-    this.isDead = true; // Setze den Status auf "tot"
+    this.isDead = true; // Setze den Status auf "tot", daher stoppt die animation.
     console.log("Endboss besiegt!");
     // Hier kannst du weitere Aktionen ergänzen, z. B. Animationen oder Sounds
+  }
+
+  stopMovement() {
+    clearInterval(this.walkingInterval); // Stoppt das Intervall für die Bewegung
+  }
+
+  stopWalkAnimation() {
+    clearInterval(this.animationInterval); // Stoppt das Intervall für die Bewegung
   }
 }
