@@ -63,7 +63,7 @@ class ThrowableObject extends MovableObject {
 
   startSplashAnimation() {
     this.deactivateHitBox();
-    this.stopCurrentAnimation(); // Fluganimation stoppen
+    //keine weiteren Kollisionen während Animation
     this.currentImage = 0; // Anfangsbild der Splash-Animation
     const splashInterval = setInterval(() => {
       if (this.currentImage < this.BOTTLE_SPLASH_IMAGES.length) {
@@ -73,7 +73,7 @@ class ThrowableObject extends MovableObject {
       } else {
         clearInterval(splashInterval); // Intervall beenden
       }
-    }, 100); // 100ms pro Bild
+    }, 100); // 100ms pro Bild, solange sollte die Verzögerung auch sein bis Flasche entfernt wird.
   }
 
   stopMovement() {

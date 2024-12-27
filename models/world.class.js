@@ -45,13 +45,13 @@ class World {
   }
 
   run() {
-    // Speichere die Interval-IDs, damit wir sie später clearen können
+    // Speichere die Interval-IDs in einer Variable, damit wir sie später clearen können
     this.intervalID1 = setInterval(() => {
       this.checkCollisionCoins();
       this.checkCollisionBottles();
       this.checkCollisionEnemies();
       this.checkCollisionBottlesWithEnemies();
-    }, 5);
+    }, 18); //Intervall von 5 ms
 
     this.intervalID2 = setInterval(() => {
       this.checkThrowObjects();
@@ -157,7 +157,7 @@ class World {
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
       console.log("Flasche entfernt.");
-    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation
+    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation warten bis sie entfernt wird.
   }
 
   handleCoinCollision(coin) {
