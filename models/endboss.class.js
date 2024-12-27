@@ -81,6 +81,9 @@ class Endboss extends MovableObject {
 
   endbossHit() {
     console.log("Endboss getroffen!");
+    console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
+    this.hit(); // Methode ausführen, die die Energie reduziert
+    console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
     this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand, dann stoppt er.
     this.startHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
   }

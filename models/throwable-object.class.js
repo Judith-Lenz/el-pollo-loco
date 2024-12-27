@@ -63,7 +63,7 @@ class ThrowableObject extends MovableObject {
 
   startSplashAnimation() {
     this.deactivateHitBox();
-    //keine weiteren Kollisionen während Animation
+
     this.currentImage = 0; // Anfangsbild der Splash-Animation
     const splashInterval = setInterval(() => {
       if (this.currentImage < this.BOTTLE_SPLASH_IMAGES.length) {

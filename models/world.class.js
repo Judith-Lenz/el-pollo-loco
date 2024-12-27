@@ -17,7 +17,6 @@ class World {
   totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
   collectedBottles = 0; // Anzahl der eingesammelten Flaschen
   totalBottles = 0; // Gesamtanzahl der Flaschen im Level
-
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
     this.ctx = canvas.getContext("2d");
@@ -150,7 +149,6 @@ class World {
     if (enemy.isEndboss) {
       enemy.endbossHit();
     } else {
-      // Gegner besiegen
       enemy.deadEnemy();
     }
     // Flasche nach der Splash-Animation entfernen

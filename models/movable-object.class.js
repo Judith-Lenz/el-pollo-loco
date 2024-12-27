@@ -120,6 +120,7 @@ class MovableObject extends DrawableObject {
 
   //Ändert Wert der Energie
   hit() {
+    console.log("Die Methode hit() wurde ausgeführt!");
     if (this.energy === 0) {
       return; // Wenn Energie bereits 0 ist, keine weiteren Treffer
     }
