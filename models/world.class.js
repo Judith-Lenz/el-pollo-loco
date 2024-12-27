@@ -17,6 +17,7 @@ class World {
   totalCoins = 0; // Neue Eigenschaft für die ursprüngliche Anzahl Münzen
   collectedBottles = 0; // Anzahl der eingesammelten Flaschen
   totalBottles = 0; // Gesamtanzahl der Flaschen im Level
+
   constructor(canvas, keyboard) {
     //geben die Variable canvas zu world, damit die da existiert.
     this.ctx = canvas.getContext("2d");
@@ -148,6 +149,7 @@ class World {
     bottle.startSplashAnimation();
     if (enemy.isEndboss) {
       enemy.endbossHit();
+      this.statusBarEndboss.setPercentage(enemy.energy);
     } else {
       enemy.deadEnemy();
     }
@@ -155,7 +157,7 @@ class World {
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1); // Flasche aus der Liste entfernen
       console.log("Flasche entfernt.");
-    }, bottle.BOTTLE_SPLASH_IMAGES.length * 100); // Zeit für die Splash-Animation warten bis sie entfernt wird.
+    }, bottle.BOTTLE_SPLASH_IMAGES.length * 80); // Zeit für die Splash-Animation warten bis sie entfernt wird.
   }
 
   handleCoinCollision(coin) {

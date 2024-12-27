@@ -1,9 +1,9 @@
 class StatusBarEndboss extends DrawableObject {
   IMAGES_STATUSENDBOSS = [
-    "img/7_statusbars/2_statusbar_endboss/green/green0.png", // 0
-    "img/7_statusbars/2_statusbar_endboss/green/green20.png",
-    "img/7_statusbars/2_statusbar_endboss/green/green40.png",
-    "img/7_statusbars/2_statusbar_endboss/green/green60.png",
+    "img/7_statusbars/2_statusbar_endboss/orange/orange0.png", // 0
+    "img/7_statusbars/2_statusbar_endboss/orange/orange20.png",
+    "img/7_statusbars/2_statusbar_endboss/blue/blue40.png",
+    "img/7_statusbars/2_statusbar_endboss/blue/blue60.png",
     "img/7_statusbars/2_statusbar_endboss/green/green80.png",
     "img/7_statusbars/2_statusbar_endboss/green/green100.png", // 5
   ];
