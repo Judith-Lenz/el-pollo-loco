@@ -87,6 +87,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.applyGravity();
+    this.idleStartTime = null; // Dynamischer Zustand, der sich ändern wird
     this.animate();
     // Hitbox spezifisch für den Character
     this.collisionOffsetX = 18; // Etwas schmaler links/rechts, mehr =weiternachrechts
@@ -98,18 +99,14 @@ class Character extends MovableObject {
   //Bilder sollen immer ausgetauscht werden, die Funktion muss regelmäßig ausgeführt werden.
   // Sobald Character existiert, wird das hier jede Sekunde ausgeführt
   animate() {
-    let idleStartTime = null; // Startzeit für die Idle-Animation
+    // Startzeit für die Idle-Animation
     const idleThreshold = 50000; // Zeit einstellen, bis er schnarcht
-    // Speichere die Interval IDs, um sie später clearen zu können // <-- neu
+    // Speichere die Interval IDs, um sie später clearen zu können
     this.intervalID1 = setInterval(() => {
-      // <-- neu
-
       this.walking_sound.pause(); // kein Sound, wenn er steht
-
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
         this.otherDirection = false;
-
         // Walking-Sound nur abspielen, wenn der Charakter am Boden ist
         if (!this.isAboveGround()) {
           if (this.walking_sound.paused) {
@@ -118,13 +115,11 @@ class Character extends MovableObject {
         } else {
           this.walking_sound.pause();
         }
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
-
       if (this.world.keyboard.LEFT && this.x >= -100) {
         this.moveLeft();
         this.otherDirection = true;
-
         // Walking-Sound nur abspielen, wenn der Charakter am Boden ist
         if (!this.isAboveGround()) {
           if (this.walking_sound.paused) {
@@ -133,23 +128,20 @@ class Character extends MovableObject {
         } else {
           this.walking_sound.pause();
         }
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
-
       if (this.world.keyboard.SPACE && !this.isAboveGround()) {
         this.jump(); // Springen
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       }
-
       this.world.camera_x = -this.x + 100; // Kamera-Bewegung
     }, 1000 / 60);
-
     this.intervalID2 = setInterval(() => {
       this.snoring_sound.pause();
 
       if (this.isDead()) {
         this.handleCharacterDeathEvents();
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
         return; // Beende die weitere Animation, wenn Charakter tot ist
       } else if (this.isHurt()) {
         const currentTime = new Date().getTime();
@@ -160,22 +152,22 @@ class Character extends MovableObject {
           this.lastHurtSoundTime = currentTime; // Zeitpunkt des letzten Sounds speichern
         }
         this.playAnimation(this.IMAGES_HURT);
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.isAboveGround()) {
         if (this.speedY > 0) {
           this.playAnimation(this.IMAGES_JUMPING_UP, 4);
         } else {
           this.playAnimation(this.IMAGES_JUMPING_DOWN, 10);
         }
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
-        idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
+        this.idleStartTime = null; // Zurücksetzen, da Charakter nicht mehr idle ist
       } else {
         // Wenn der Charakter stillsteht (idle)
-        if (!idleStartTime) {
-          idleStartTime = Date.now(); // Idle-Zeit starten
-        } else if (Date.now() - idleStartTime >= idleThreshold) {
+        if (!this.idleStartTime) {
+          this.idleStartTime = Date.now(); // Idle-Zeit starten
+        } else if (Date.now() - this.idleStartTime >= idleThreshold) {
           // Idle-Zeit erreicht
           this.playAnimation(this.IMAGES_LONG_IDLE, 4);
           this.snoring_sound.play();

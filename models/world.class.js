@@ -75,7 +75,7 @@ class World {
       this.collectedBottles--; // Anzahl der gesammelten Flaschen reduzieren
       this.updateBottleStatusBar(); // StatusBar aktualisieren
       console.log(`Flasche geworfen. Verbleibend: ${this.collectedBottles}`);
-
+      this.character.idleStartTime = null; // Idle-Zustand zurücksetzen
       this.throwCooldown = true; // Cooldown aktivieren
       setTimeout(() => {
         this.throwCooldown = false; // Cooldown deaktivieren nach 300 ms

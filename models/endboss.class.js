@@ -86,7 +86,6 @@ class Endboss extends MovableObject {
     console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
     this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand, dann stoppt er.
     this.startHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
-    // this.statusBarEndboss.setPercentage(this.energy);
   }
 
   startHurtAnimation() {
