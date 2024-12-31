@@ -105,7 +105,7 @@ class World {
     //checkCollisions Enemy jump oder hit
     this.level.enemies.forEach((enemy) => {
       // Prüfen, ob der Enemy nicht tot ist
-      if (!enemy.isDead) {
+      if (!enemy.isDead()) {
         // Prüfen, ob Charakter in der Luft ist und mit dem Feind kollidiert
         if (
           this.character.isAboveGround() &&
@@ -130,9 +130,18 @@ class World {
   checkCollisionBottlesWithEnemies() {
     this.throwableObjects.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
-        if (!enemy.isDead && bottle.isColliding(enemy)) {
-          console.log("Flasche trifft Gegner!");
-          this.handleBottleEnemyCollision(bottle, bottleIndex, enemy);
+        if (bottle.isColliding(enemy)) {
+          if (enemy instanceof Endboss) {
+            // Behandlung für den Endboss
+            if (!enemy.isDead()) {
+              console.log("Flasche trifft Endboss!");
+              this.handleBottleEnemyCollision(bottle, bottleIndex, enemy);
+            }
+          } else if (!enemy.isDead()) {
+            // Behandlung für andere Gegner (z. B. Chickens)
+            console.log("Flasche trifft Chicken!");
+            this.handleBottleEnemyCollision(bottle, bottleIndex, enemy);
+          }
         }
       });
     });

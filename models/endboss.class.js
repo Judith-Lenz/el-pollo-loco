@@ -48,8 +48,8 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  isDead = false; // Neuer Zustand: Ist der Feind tot?
-  isHurt = false; // Hurt-Status des Endbosses
+  // isDead = false; // Neuer Zustand: Ist der Feind tot?
+  // isHurt = false; // Hurt-Status des Endbosses
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
@@ -70,13 +70,25 @@ class Endboss extends MovableObject {
   }
 
   animate() {
+    // Bewegung des Bosses
     this.walkingInterval = setInterval(() => {
-      if (!this.isDead && !this.isHurt) this.moveLeft(); // Nur bewegen, wenn nicht verletzt
-    }, 1000 / 60); //Geschwindigkeit mit der sich Boss nach links bewegt.
+      if (!this.isDead() && !this.isHurt()) {
+        this.moveLeft(); // Nur bewegen, wenn nicht verletzt oder tot
+      }
+    }, 1000 / 60); // 60 FPS für Bewegung
 
+    // Geh-Animation des Bosses
     this.animationInterval = setInterval(() => {
-      if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Ansonsten normale Geh-Animation
-    }, 400);
+      if (!this.isDead()) {
+        this.playAnimation(this.IMAGES_WALKING); // Geh-Animation abspielen
+      }
+    }, 400); // Animation alle 400ms
+
+    // Sterbe-Animation des Bosses
+
+    if (this.isDead()) {
+      this.deadEnemy(); // Sterbe-Animation abspielen
+    }
   }
 
   endbossHit() {
@@ -84,7 +96,7 @@ class Endboss extends MovableObject {
     console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
     this.hit(); // Methode ausführen, die die Energie reduziert
     console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
-    this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand, dann stoppt er.
+    // this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand, dann stoppt er.
     this.startHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
   }
 
@@ -103,7 +115,6 @@ class Endboss extends MovableObject {
   }
 
   deadEnemy() {
-    this.isDead = true; // Setze den Status auf "tot", daher stoppt die animation.
     console.log("Endboss besiegt!");
     stopAnimation();
     startDeadAnimation();

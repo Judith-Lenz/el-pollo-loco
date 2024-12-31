@@ -12,16 +12,6 @@ class MovableObject extends DrawableObject {
   collisionWidth = this.width; // Breite der Hitbox
   collisionHeight = this.height; // Höhe der Hitbox
 
-  //Lässt Objekt fallen, wenn in der Luft.
-  // applyGravity() {
-  //   setInterval(() => {
-  //     if (this.isAboveGround() || this.speedY > 0) {
-  //       this.y -= this.speedY; //Character wird nach unten bewegt.
-  //       this.speedY -= this.acceleration; //Geschwindigkeit nimmt ab.
-  //     }
-  //   }, 1000 / 25);
-  // }
-
   //solange isAboveGround() oder this.speedY > 0 wahr sind, läuft die Funktion weiter.
   applyGravity() {
     setInterval(() => {
@@ -81,16 +71,6 @@ class MovableObject extends DrawableObject {
     //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
     //die Flaschen sollen nicht auf dem Boden aufkommen und liegen bleiben, daher die if Abfrage.
   }
-
-  //z.B. character.isColliding(chicken), Formel gibt true oder false zurück ALT
-  // isColliding(obj) {
-  //   return (
-  //     this.x + this.width >= obj.x &&
-  //     this.x <= obj.x + obj.width &&
-  //     this.y + this.height >= obj.y &&
-  //     this.y <= obj.y + obj.height
-  //   );
-  // }
 
   // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
@@ -176,7 +156,6 @@ class MovableObject extends DrawableObject {
       let path = images[i];
       this.img = this.imageCache[path];
     }
-
     if (loop || this.currentImage / frameRate < images.length - 1) {
       this.currentImage++; // Bildposition hochzählen
     }

@@ -11,11 +11,13 @@ class ChickenSmall extends MovableObject {
   IMAGE_DEAD = "img/3_enemies_chicken/chicken_small/2_dead/dead.png";
 
   dead_enemy_sound = new Audio("audio/chicken_dead.mp3");
-  isDead = false; // Neuer Zustand: Ist der Feind tot?
+  // isDead = false; // Neuer Zustand: Ist der Feind tot?
 
   constructor(x) {
     super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
     this.loadImages(this.IMAGES_WALKING);
+    this.energy = null; // Chickens haben keine Energie
+    this.isDeadFlag = false; // Standard: Chicken lebt
     this.x = x; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
     this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
     this.animate();
@@ -25,18 +27,22 @@ class ChickenSmall extends MovableObject {
     this.collisionHeight = 47;
   }
 
+  isDead() {
+    return this.isDeadFlag; // Chickens nutzen ein Flag für isDead
+  }
+
   animate() {
     this.walkingInterval = setInterval(() => {
-      if (!this.isDead) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
+      if (!this.isDead()) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
     }, 1000 / 60);
 
     this.animationInterval = setInterval(() => {
-      if (!this.isDead) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot
+      if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot
     }, 200);
   }
 
   deadEnemy() {
-    this.isDead = true; // Zustand auf "tot" setzen
+    this.isDeadFlag = true; // Chicken ist tot
     this.playDeadEnemySound();
     this.startDeadEnemyAnimation();
     // Stoppe alle Bewegungen und Animationen
