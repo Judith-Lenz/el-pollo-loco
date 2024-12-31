@@ -62,6 +62,7 @@ class Endboss extends MovableObject {
     this.animate();
     // this.statusBar = statusBar; // Statusbar des Endbosses
     this.x = 2500; //wie weit rechts er eingefügt wird.
+    this.direction = -1; // -1 = nach links, 1 = nach rechts
     //Hitbox spezifische für Endboss
     this.collisionOffsetX = 40; // Etwas schmaler links/rechts, mehr =weiternachrechts
     this.collisionOffsetY = 70; // Oben etwas weniger, mehr=weiter runter
@@ -70,12 +71,28 @@ class Endboss extends MovableObject {
   }
 
   animate() {
-    // Bewegung des Bosses
+    const minX = 2400; // Linke Grenze
+    const maxX = 2600; // Rechte Grenze
+    // Bewegung des Bosses, läuft von rechts nach links.
     this.walkingInterval = setInterval(() => {
       if (!this.isDead() && !this.isHurt()) {
-        this.moveLeft(); // Nur bewegen, wenn nicht verletzt oder tot
+        // Bewegung nach links oder rechts
+        if (this.direction === -1) {
+          this.moveLeft(); // Nach links bewegen
+          this.otherDirection = false; // Spiegeln aktivieren
+        } else {
+          this.moveRight(); // Nach rechts bewegen
+          this.otherDirection = true; // Spiegeln deaktivieren
+        }
+
+        // Richtung wechseln, wenn Grenzen erreicht
+        if (this.x <= minX) {
+          this.direction = 1; // Richtung nach rechts ändern
+        } else if (this.x >= maxX) {
+          this.direction = -1; // Richtung nach links ändern
+        }
       }
-    }, 1000 / 60); // 60 FPS für Bewegung
+    }, 1000 / 60); // Bewegung alle 60 FPS
 
     // Geh-Animation des Bosses
     this.animationInterval = setInterval(() => {
