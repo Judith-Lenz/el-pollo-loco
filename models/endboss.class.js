@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-    this.animate();
+
     // this.statusBar = statusBar; // Statusbar des Endbosses
     this.x = 2500; //wie weit rechts er eingefügt wird.
     this.direction = -1; // -1 = nach links, 1 = nach rechts
@@ -71,17 +71,17 @@ class Endboss extends MovableObject {
   }
 
   animate() {
-    const minX = 2400; // Linke Grenze
+    const minX = 2200; // Linke Grenze
     const maxX = 2600; // Rechte Grenze
     // Bewegung des Bosses, läuft von rechts nach links.
     this.walkingInterval = setInterval(() => {
       if (!this.isDead() && !this.isHurt()) {
         // Bewegung nach links oder rechts
         if (this.direction === -1) {
-          this.moveLeft(); // Nach links bewegen
+          this.moveLeft();
           this.otherDirection = false; // Spiegeln aktivieren
         } else {
-          this.moveRight(); // Nach rechts bewegen
+          this.moveRight();
           this.otherDirection = true; // Spiegeln deaktivieren
         }
 
@@ -94,6 +94,16 @@ class Endboss extends MovableObject {
       }
     }, 1000 / 60); // Bewegung alle 60 FPS
 
+    if (this.isCharacterClose() && !this.isAlert) {
+      this.isAlert = true; // Alert-Zustand aktivieren
+      console.log("Endboss alarmiert!");
+      this.playAnimation(this.IMAGES_ALERT); // Alert-Animation abspielen
+      this.playAlertSound(); // Sound abspielen (optional)
+      setTimeout(() => {
+        this.startAttack(); // Nach Alert in den Angriffsmodus wechseln
+      }, 2000); // 2 Sekunden warten
+    }
+
     // Geh-Animation des Bosses
     this.animationInterval = setInterval(() => {
       if (!this.isDead()) {
@@ -102,10 +112,19 @@ class Endboss extends MovableObject {
     }, 400); // Animation alle 400ms
 
     // Sterbe-Animation des Bosses
-
     if (this.isDead()) {
       this.deadEnemy(); // Sterbe-Animation abspielen
     }
+  }
+
+  isCharacterClose() {
+    console.log("Character:", this.character);
+    console.log("Endboss Position (x):", this.x);
+    if (!this.character || typeof this.character.x === "undefined") {
+      console.warn("Character oder seine Position ist nicht definiert!");
+      return false; // Keine Nähe berechnen, wenn Character nicht existiert
+    }
+    return Math.abs(this.character.x - this.x) < 300;
   }
 
   endbossHit() {

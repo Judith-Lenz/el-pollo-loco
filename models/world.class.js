@@ -36,12 +36,22 @@ class World {
     this.draw();
     this.setWorld();
     this.run(); //intervall, das regelmäßig ausgeführt wird.
-    // Alle Sounds direkt stumm schalten
   }
 
   //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
   setWorld() {
-    this.character.world = this;
+    this.character.world = this; // Charakter erhält Zugriff auf die World
+
+    // Charakter dem Endboss zuweisen und Animation starten
+    this.level.enemies.forEach((enemy) => {
+      if (enemy instanceof Endboss) {
+        enemy.character = this.character; // Endboss erhält Zugriff auf den Charakter
+        console.log("Character dem Endboss zugewiesen:", enemy.character);
+
+        // Animation des Endbosses starten
+        enemy.animate();
+      }
+    });
   }
 
   run() {
@@ -228,8 +238,9 @@ class World {
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.throwableObjects);
-    this.addToMap(this.character);
     this.addObjectsToMap(this.level.enemies);
+    this.addToMap(this.character);
+
     this.addToMap(this.statusBarEndboss);
     this.ctx.translate(-this.camera_x, 0); //Ausschnitt nach links verschieben, je nachdem wie viel oben drin steht, z.B. 100px
     //---- Space for fixed objects (die also immer mitlaufen mit der Kamera) -----------
@@ -377,6 +388,6 @@ class World {
 
     // Canvas leeren
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.character.stop(); // <-- Hier rufst du jetzt auch den Charakter-Stop auf
+    this.character.stop(); // <-- Hier jetzt auch den Charakter-Stop aufrufen
   }
 }
