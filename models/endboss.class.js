@@ -48,12 +48,12 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  // isDead = false; // Neuer Zustand: Ist der Feind tot?
-  // isHurt = false; // Hurt-Status des Endbosses
+  alert_sound = new Audio("audio/rooster2.mp3"); //Audio Objekt
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
     this.isEndboss = true; // Spezielle Kennzeichnung für Endboss
+    this.isAlert = false; // Standardmäßig nicht im Alert-Zustand
     this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
@@ -73,19 +73,29 @@ class Endboss extends MovableObject {
   animate() {
     const minX = 2200; // Linke Grenze
     const maxX = 2600; // Rechte Grenze
-
+    if (this.isAlertAnimationPlaying || this.isDeadAnimationPlaying) {
+      return; // Keine andere Animation starten, solange Alert oder Dead läuft
+    }
     // Sterbe-Animation des Bosses
     this.checkDeadInterval = setInterval(() => {
       if (this.isDead()) {
         this.deadEnemy(); // Sterbe-Animation starten
+        this.stopAnimation(); // Stoppe alle laufenden Animationen
         clearInterval(this.checkDeadInterval); // Überprüfung stoppen, da der Boss tot ist
         return;
       }
     }, 100); // Überprüfung alle 100ms
+    // Überprüfung des Alert-Zustands
+    this.alertInterval = setInterval(() => {
+      if (this.isCharacterClose() && !this.isAlert && !this.isDead()) {
+        console.log("Alert wird aktiviert!");
+        this.activateAlert(); // Aktiviere den Alert-Zustand
+      }
+    }, 200); // Überprüfung alle 200ms
 
     // Bewegung des Bosses, läuft von rechts nach links.
     this.walkingInterval = setInterval(() => {
-      if (!this.isDead() && !this.isHurt()) {
+      if (!this.isDead() && !this.isHurt() && !this.isAlertAnimationPlaying) {
         // Bewegung nach links oder rechts
         if (this.direction === -1) {
           this.moveLeft();
@@ -104,16 +114,6 @@ class Endboss extends MovableObject {
       }
     }, 1000 / 60); // Bewegung alle 60 FPS
 
-    if (this.isCharacterClose() && !this.isAlert) {
-      this.isAlert = true; // Alert-Zustand aktivieren
-      console.log("Endboss alarmiert!");
-      this.playAnimation(this.IMAGES_ALERT); // Alert-Animation abspielen
-      this.playAlertSound(); // Sound abspielen (optional)
-      setTimeout(() => {
-        this.startAttack(); // Nach Alert in den Angriffsmodus wechseln
-      }, 2000); // 2 Sekunden warten
-    }
-
     // Geh-Animation des Bosses
     this.animationInterval = setInterval(() => {
       if (!this.isDead()) {
@@ -129,9 +129,40 @@ class Endboss extends MovableObject {
       console.warn("Character oder seine Position ist nicht definiert!");
       return false; // Keine Nähe berechnen, wenn Character nicht existiert
     }
+    const distance = Math.abs(this.character.x - this.x);
+    console.log("Abstand zum Endboss:", distance);
     return Math.abs(this.character.x - this.x) < 300;
   }
 
+  activateAlert() {
+    console.log("Endboss ist alarmiert!");
+    this.isAlert = true; // Setze den Alert-Zustand auf aktiv
+    this.stopAnimation(); // Stoppe andere Animationen
+    this.startAlertAnimation(); // Starte die Alert-Animation
+    this.alert_sound.play(); // Spiele den Alert-Sound ab
+  }
+
+  startAlertAnimation() {
+    if (this.isAlertAnimationPlaying) return; // Verhindert doppelten Start
+    this.isAlertAnimationPlaying = true; // Setzt den Status auf "läuft"
+    console.log("Alert-Animation gestartet");
+
+    this.currentImage = 0; // Start bei Bild 0
+    const alertInterval = setInterval(() => {
+      console.log("Zeige Alert-Bild:", this.currentImage); // Debugging
+      if (this.currentImage < this.IMAGES_ALERT.length) {
+        this.img = this.imageCache[this.IMAGES_ALERT[this.currentImage]];
+        this.currentImage++;
+      } else {
+        console.log("Alert-Animation beendet");
+        clearInterval(alertInterval); // Stoppt das Intervall
+        this.isAlertAnimationPlaying = false; // Setzt Status zurück
+        this.isAlert = false; // Alert-Zustand deaktivieren
+      }
+    }, 150); // Zeitintervall für jedes Bild
+  }
+
+  //Behalten, wenn Energie genauso abgezogen werden soll, wie beim Character (also 5 Pt.)
   // endbossHit() {
   //   console.log("Endboss getroffen!");
   //   console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
@@ -145,6 +176,7 @@ class Endboss extends MovableObject {
   //   this.startHurtAnimation(); // Abspielen der Hurt-Animation
   // }
 
+  //nur zum Testen, damit schneller Energy abgezogen wird.
   endbossHit() {
     console.log("Endboss getroffen!");
     console.log("EndbossEnergie vor dem Treffer:", this.energy);
@@ -234,6 +266,7 @@ class Endboss extends MovableObject {
     clearInterval(this.walkingInterval); // Stoppe das Intervall für die Bewegung
     clearInterval(this.animationInterval); // Stoppe das Intervall für die Animation
     clearInterval(this.hurtInterval); // Hurt-Animation stoppen
+    clearInterval(this.alertInterval);
     console.log("Alle laufenden Animationen gestoppt");
   }
 }

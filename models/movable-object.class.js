@@ -154,6 +154,7 @@ class MovableObject extends DrawableObject {
         i = i % images.length;
       }
       let path = images[i];
+
       this.img = this.imageCache[path];
     }
     if (loop || this.currentImage / frameRate < images.length - 1) {
