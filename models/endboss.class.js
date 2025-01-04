@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-
+    this.isDeadAnimationPlaying = false; // Standard: Animation läuft nicht
     // this.statusBar = statusBar; // Statusbar des Endbosses
     this.x = 2500; //wie weit rechts er eingefügt wird.
     this.direction = -1; // -1 = nach links, 1 = nach rechts
@@ -73,6 +73,16 @@ class Endboss extends MovableObject {
   animate() {
     const minX = 2200; // Linke Grenze
     const maxX = 2600; // Rechte Grenze
+
+    // Sterbe-Animation des Bosses
+    this.checkDeadInterval = setInterval(() => {
+      if (this.isDead()) {
+        this.deadEnemy(); // Sterbe-Animation starten
+        clearInterval(this.checkDeadInterval); // Überprüfung stoppen, da der Boss tot ist
+        return;
+      }
+    }, 100); // Überprüfung alle 100ms
+
     // Bewegung des Bosses, läuft von rechts nach links.
     this.walkingInterval = setInterval(() => {
       if (!this.isDead() && !this.isHurt()) {
@@ -110,11 +120,6 @@ class Endboss extends MovableObject {
         this.playAnimation(this.IMAGES_WALKING); // Geh-Animation abspielen
       }
     }, 400); // Animation alle 400ms
-
-    // Sterbe-Animation des Bosses
-    if (this.isDead()) {
-      this.deadEnemy(); // Sterbe-Animation abspielen
-    }
   }
 
   isCharacterClose() {
@@ -127,13 +132,43 @@ class Endboss extends MovableObject {
     return Math.abs(this.character.x - this.x) < 300;
   }
 
+  // endbossHit() {
+  //   console.log("Endboss getroffen!");
+  //   console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
+  //   this.hit(); // Methode ausführen, die die Energie reduziert
+  //   console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
+
+  //   if (this.isDead()) {
+  //     console.log("Endboss ist tot, keine Hurt-Animation!");
+  //     return; // Beende die Methode, wenn der Boss tot ist
+  //   }
+  //   this.startHurtAnimation(); // Abspielen der Hurt-Animation
+  // }
+
   endbossHit() {
     console.log("Endboss getroffen!");
-    console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
-    this.hit(); // Methode ausführen, die die Energie reduziert
-    console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
-    // this.isHurt = true; // Setze den Endboss in den "Hurt"-Zustand, dann stoppt er.
-    this.startHurtAnimation(); // Neue Methode zum Abspielen der Hurt-Animation
+    console.log("EndbossEnergie vor dem Treffer:", this.energy);
+
+    if (this.energy === 0) {
+      console.log("Endboss ist bereits tot!");
+      return; // Keine weiteren Treffer, wenn der Endboss tot ist
+    }
+
+    const currentTime = new Date().getTime();
+    if (currentTime - this.lastHit > 500) {
+      // Zeit zwischen Treffern
+      this.energy -= 20; // Ziehe 20 Lebenspunkte ab
+      console.log("EndbossEnergie nach dem Treffer:", this.energy);
+
+      if (this.energy <= 0) {
+        this.energy = 0;
+        console.log("Endboss ist tot, keine Hurt-Animation!");
+        this.deadEnemy(); // Starte Sterbeanimation
+      } else {
+        this.lastHit = currentTime; // Aktualisiere den letzten Trefferzeitpunkt
+        this.startHurtAnimation(); // Starte Hurt-Animation
+      }
+    }
   }
 
   startHurtAnimation() {
@@ -151,29 +186,54 @@ class Endboss extends MovableObject {
   }
 
   deadEnemy() {
-    console.log("Endboss besiegt!");
-    stopAnimation();
-    startDeadAnimation();
-    // Hier kannst du weitere Aktionen ergänzen, z. B. Animationen oder Sounds
+    console.log("deadEnemy() wird aufgerufen");
+    this.stopAnimation(); // Stoppe alle laufenden Animationen
+    this.isHurt = false; // Deaktiviere den Hurt-Zustand
+    this.startDeadAnimation(); // Starte die Sterbeanimation
   }
 
   startDeadAnimation() {
+    if (this.isDeadAnimationPlaying) return; // Verhindert doppelten Start
+    this.isDeadAnimationPlaying = true; // Setzt den Status auf "läuft"
+    console.log("Sterbebilder:", this.IMAGES_DEAD);
+    this.IMAGES_DEAD.forEach((image) => {
+      console.log(
+        `Bild geladen? ${image}:`,
+        this.imageCache[image] ? "Ja" : "Nein"
+      );
+    });
+    console.log("Sterbeanimation gestartet");
     this.currentImage = 0; // Start bei Bild 0
     const deadInterval = setInterval(() => {
+      console.log("Zeige Sterbebild:", this.currentImage); // Debugging
       if (this.currentImage < this.IMAGES_DEAD.length) {
-        // Nächstes Bild aus dem Array laden
         this.img = this.imageCache[this.IMAGES_DEAD[this.currentImage]];
         this.currentImage++;
       } else {
-        // Intervall stoppen, wenn alle Bilder durchlaufen sind
-        clearInterval(deadInterval);
+        console.log("Sterbeanimation beendet");
+        clearInterval(deadInterval); // Stoppt das Intervall
+        this.isDeadAnimationPlaying = false; // Setzt Status zurück (optional, falls wiederverwendbar)
+        this.fallDown();
       }
-    }, 150); // Zeitintervall pro Bild (z. B. 100ms)
+    }, 150); // Zeitintervall für jedes Bild
+  }
+
+  fallDown() {
+    const fallInterval = setInterval(() => {
+      this.y += 5; // Endboss bewegt sich nach unten
+      if (this.y > 720) {
+        // Stoppe die Bewegung, wenn er aus dem Bild ist (z. B. Bildschirmhöhe 720px)
+        clearInterval(fallInterval);
+        console.log("Endboss ist aus dem Bild geflogen");
+      }
+    }, 50); // Bewegung alle 50ms
   }
 
   // Methode, um die Animation zu stoppen, wenn der Endboss getroffen wird
   stopAnimation() {
     clearInterval(this.walkingInterval); // Stoppe das Intervall für die Bewegung
     clearInterval(this.animationInterval); // Stoppe das Intervall für die Animation
+    clearInterval(this.hurtInterval); // Hurt-Animation stoppen
+    console.log("Alle laufenden Animationen gestoppt");
   }
 }
