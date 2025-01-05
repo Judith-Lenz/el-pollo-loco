@@ -41,13 +41,12 @@ class World {
   //zur Verknüpfung, also Referenz auf world. aktuelle Instanz von world.
   setWorld() {
     this.character.world = this; // Charakter erhält Zugriff auf die World
-
     // Charakter dem Endboss zuweisen und Animation starten
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Endboss) {
         enemy.character = this.character; // Endboss erhält Zugriff auf den Charakter
+        enemy.world = this;
         console.log("Character dem Endboss zugewiesen:", enemy.character);
-
         // Animation des Endbosses starten
         enemy.animate();
       }

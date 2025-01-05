@@ -76,6 +76,28 @@ h1 {
   z-index: 2; /* Stellt sicher, dass es über dem Canvas liegt */
 }
 
+.winningScreen {
+  background-image: url("img/9_intro_outro_screens/win/win_2.png");
+  background-size: cover; /* Skaliert proportional und füllt den Container */
+  background-position: center; /* Zentriert das Bild */
+  background-repeat: no-repeat; /* Verhindert Wiederholungen */
+  border-radius: 20px; /* Rundungen wie zuvor */
+  border-radius: 20px;
+  border-color: aqua;
+  border-width: 10px;
+
+  position: absolute; /* Überlappt andere Elemente im Container */
+  top: 0;
+  left: 0;
+  width: 100%; /* Füllt die Breite des canvasContainer */
+  height: 100%; /* Füllt die Höhe des canvasContainer */
+  display: flex;
+
+  justify-content: center; /* Zentriert das Bild horizontal */
+  align-items: center; /* Zentriert das Bild vertikal */
+  z-index: 2; /* Stellt sicher, dass es über dem Canvas liegt */
+}
+
 .muteDiv {
   height: 40px;
   vertical-align: middle;
@@ -135,6 +157,12 @@ h1 {
   }
 
   .gameOverScreen {
+    width: 100%;
+    height: auto; /* Höhe passt sich dynamisch an */
+    aspect-ratio: 3 / 2; /* Beibehaltung des Seitenverhältnisses */
+  }
+
+  .winningScreen {
     width: 100%;
     height: auto; /* Höhe passt sich dynamisch an */
     aspect-ratio: 3 / 2; /* Beibehaltung des Seitenverhältnisses */

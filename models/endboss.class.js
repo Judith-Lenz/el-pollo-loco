@@ -54,6 +54,7 @@ class Endboss extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1]);
+    this.world = world;
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
@@ -223,13 +224,9 @@ class Endboss extends MovableObject {
         this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]];
         this.currentImageIndex++;
       } else {
-        // Prüfen, ob Sound schon gespielt wurde:
-        if (!this.hasPlayedWinningSound) {
-          this.winning_sound.play();
-          this.hasPlayedWinningSound = true; // Für die Zukunft verhindern
-        }
         this.fallDown();
-        this.currentState = "final";
+
+        this.manageEndbossDefeat();
       }
     }
   }
@@ -322,6 +319,31 @@ class Endboss extends MovableObject {
    */
   isDead() {
     return this.energy <= 0;
+  }
+
+  manageEndbossDefeat() {
+    // 1) Hintergrundmusik stoppen, alles stoppen.
+    // if (window.world && window.world.backgroundMusic) {
+    //   window.world.backgroundMusic.pause();
+    //   window.world.backgroundMusic.currentTime = 0;
+    // }
+
+    // 2) Winning-Sound abspielen (sofern nicht schon passiert)
+    if (!this.hasPlayedWinningSound) {
+      this.winning_sound.play();
+      this.hasPlayedWinningSound = true;
+    }
+
+    // 3) Winning-Screen einblenden
+    const winnerScreen = document.getElementById("winningScreen");
+    if (winnerScreen) {
+      winnerScreen.classList.remove("d-none");
+    }
+    this.character.stop();
+    // 4) Endboss-Animationen stoppen und State auf final setzen
+    this.stopAnimation();
+    this.world.backgroundMusic.volume = 0; // Hintergrundmusik leise
+    this.currentState = "final";
   }
 
   /**

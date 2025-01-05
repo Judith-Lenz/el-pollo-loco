@@ -52,7 +52,7 @@ function initLevel() {
       new ChickenSmall(1000),
       new ChickenSmall(1500),
       new ChickenSmall(1700),
-      new Endboss(),
+      new Endboss(this),
     ],
     [
       new Cloud("img/5_background/layers/4_clouds/1.png", 0, 50),
