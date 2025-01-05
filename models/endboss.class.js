@@ -127,14 +127,14 @@ class Endboss extends MovableObject {
   }
 
   isCharacterClose() {
-    console.log("Character:", this.character);
-    console.log("Endboss Position (x):", this.x);
+    // console.log("Character:", this.character);
+    // console.log("Endboss Position (x):", this.x);
     if (!this.character || typeof this.character.x === "undefined") {
       console.warn("Character oder seine Position ist nicht definiert!");
       return false; // Keine Nähe berechnen, wenn Character nicht existiert
     }
     const distance = Math.abs(this.character.x - this.x);
-    console.log("Abstand zum Endboss:", distance);
+    // console.log("Abstand zum Endboss:", distance);
     return Math.abs(this.character.x - this.x) < 300;
   }
 
@@ -170,7 +170,7 @@ class Endboss extends MovableObject {
 
   deactivateAlert() {
     console.log(
-      "Alert-Zustand deaktiviert. Normales Verhalten wird fortgesetzt."
+      "Alert-Zustand deaktiviert. Normales Verhalten wird fortgesetzt.---------------------------------------"
     );
     this.isAlert = false; // Alert-Zustand deaktivieren
     this.isAlertAnimationPlaying = false; // Status zurücksetzen
@@ -180,7 +180,6 @@ class Endboss extends MovableObject {
   startAttack() {
     if (this.isAttacking) return; // Angriff nicht doppelt starten
     console.log("ATTACKE!!!");
-
     this.isAttacking = true; // Angriff aktivieren
     this.currentImage = 0; // Anfang der Attack-Animation
 
