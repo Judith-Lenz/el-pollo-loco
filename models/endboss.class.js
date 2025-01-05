@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-
+    this.hasPlayedWinningSound = false;
     this.isEndboss = true;
     this.x = 2500;
     this.direction = -1;
@@ -223,6 +223,11 @@ class Endboss extends MovableObject {
         this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]];
         this.currentImageIndex++;
       } else {
+        // Prüfen, ob Sound schon gespielt wurde:
+        if (!this.hasPlayedWinningSound) {
+          this.winning_sound.play();
+          this.hasPlayedWinningSound = true; // Für die Zukunft verhindern
+        }
         this.fallDown();
         this.currentState = "final";
       }
