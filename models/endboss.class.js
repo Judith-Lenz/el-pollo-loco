@@ -1,8 +1,8 @@
 class Endboss extends MovableObject {
   height = 450;
   width = 350;
-  y = 0; //wo genau es eingefügt wird, also welche Höhe
-  // health = 100; // Startwert für Lebenspunkte
+  y = 0;
+  speed = 1;
 
   IMAGES_WALKING = [
     "img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -48,273 +48,313 @@ class Endboss extends MovableObject {
     "img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  alert_sound = new Audio("audio/rooster2.mp3"); //Audio Objekt
+  alert_sound = new Audio("audio/rooster2.mp3");
 
   constructor() {
-    super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
-    this.isEndboss = true; // Spezielle Kennzeichnung für Endboss
-    this.isAlert = false; // Standardmäßig nicht im Alert-Zustand
-    this.isAttacking = false; // Neues Flag für den Angriffsmodus
-    this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
+    super().loadImage(this.IMAGES_WALKING[1]);
+    this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
-    this.isDeadAnimationPlaying = false; // Standard: Animation läuft nicht
-    // this.statusBar = statusBar; // Statusbar des Endbosses
-    this.x = 2500; //wie weit rechts er eingefügt wird.
-    this.direction = -1; // -1 = nach links, 1 = nach rechts
-    //Hitbox spezifische für Endboss
-    this.collisionOffsetX = 40; // Etwas schmaler links/rechts, mehr =weiternachrechts
-    this.collisionOffsetY = 70; // Oben etwas weniger, mehr=weiter runter
-    this.collisionWidth = 295; // Breite der Hitbox
-    this.collisionHeight = 360; // Höhe der Hitbox
+
+    this.isEndboss = true;
+    this.x = 2500;
+    this.direction = -1;
+
+    // Neue State-Variable
+    this.currentState = "idle"; // weitere States: "alert", "attack", "hurt", "dead"
+    this.currentImageIndex = 0; // für Animationen
+
+    this.frameCounterAlert = 0; // Für Alert
+    this.frameCounterAttack = 0; // Für Attack
+    this.frameCounterIdle = 0; // Für Idle
+    this.frameCounterHurt = 0; // Für Hurt
+    this.frameCounterDead = 0; // Für Dead
+    this.frameCounterWalk = 0; // Für Walk
+    // Hitbox
+    this.collisionOffsetX = 40;
+    this.collisionOffsetY = 70;
+    this.collisionWidth = 295;
+    this.collisionHeight = 360;
+
+    this.lastHit = 0; // für Treffer-Logik
   }
 
+  /**
+   * Hier in `animate()` gibt es nur noch ein zentrales Intervall,
+   * das alle Zustände im Auge behält.
+   */
   animate() {
-    const minX = 2200; // Linke Grenze
-    const maxX = 2600; // Rechte Grenze
-    if (this.isAlertAnimationPlaying || this.isDeadAnimationPlaying) {
-      return; // Keine andere Animation starten, solange Alert oder Dead läuft
-    }
+    const minX = 2200;
+    const maxX = 2600;
+
+    // Check, ob Boss tot ist (damit wir sein Dead-Verhalten regeln können)
     this.checkDeadInterval = setInterval(() => {
-      if (this.isDead() && !this.isDeadAnimationPlaying) {
-        console.log("Endboss ist tot. Starte Sterbeanimation.");
-        this.deadEnemy(); // Sterbe-Animation starten
-        clearInterval(this.checkDeadInterval); // Stoppe die Überprüfung endgültig
+      if (this.isDead() && this.currentState !== "dead") {
+        this.currentState = "dead";
       }
-    }, 100); // Überprüfung alle 100ms
+    }, 100);
 
-    this.alertInterval = setInterval(() => {
-      if (this.isCharacterClose() && !this.isAlert && !this.isDead()) {
-        console.log("Alert wird aktiviert!");
-        this.activateAlert(); // Aktiviere den Alert-Zustand
-      } else if (!this.isCharacterClose() && this.isAlert && !this.isDead()) {
-        console.log(
-          "Charakter ist nicht mehr in der Nähe. Alert wird deaktiviert."
-        );
-        this.deactivateAlert(); // Deaktiviere den Alert-Zustand
-      }
-    }, 200); // Überprüfung alle 200ms
-
-    // Bewegung des Bosses, läuft von rechts nach links.
-    this.walkingInterval = setInterval(() => {
-      if (!this.isDead() && !this.isHurt() && !this.isAlertAnimationPlaying) {
-        // Bewegung nach links oder rechts
-        if (this.direction === -1) {
-          this.moveLeft();
-          this.otherDirection = false; // Spiegeln aktivieren
-        } else {
-          this.moveRight();
-          this.otherDirection = true; // Spiegeln deaktivieren
-        }
-
-        // Richtung wechseln, wenn Grenzen erreicht
-        if (this.x <= minX) {
-          this.direction = 1; // Richtung nach rechts ändern
-        } else if (this.x >= maxX) {
-          this.direction = -1; // Richtung nach links ändern
-        }
-      }
-    }, 1000 / 60); // Bewegung alle 60 FPS
-
-    // Geh-Animation des Bosses
-    this.animationInterval = setInterval(() => {
-      if (!this.isDead()) {
-        this.playAnimation(this.IMAGES_WALKING); // Geh-Animation abspielen
-      }
-    }, 400); // Animation alle 400ms
+    // Zentrales State-Intervall
+    this.stateMachineInterval = setInterval(() => {
+      this.evaluateState(minX, maxX);
+    }, 16);
   }
 
+  /**
+   * In `evaluateState` entscheidest du je nach `this.currentState`,
+   * was als Nächstes passieren soll.
+   */
+  evaluateState(minX, maxX) {
+    switch (this.currentState) {
+      case "idle":
+        this.handleIdle(minX, maxX);
+        break;
+
+      case "alert":
+        this.handleAlert();
+        break;
+
+      case "attack":
+        this.handleAttack();
+        break;
+
+      case "hurt":
+        this.handleHurt();
+        break;
+
+      case "dead":
+        this.handleDead();
+        break;
+
+      default:
+        console.warn("Unbekannter State:", this.currentState);
+    }
+  }
+
+  /**
+   * State: Idle (bzw. "Normalzustand")
+   */
+  handleIdle(minX, maxX) {
+    this.frameCounterWalk++; // Zähle bei jedem evaluateState()-Aufruf hoch
+    const FRAMES_TO_SKIP = 15; // z.B. 3 -> jedes 3. Mal Bilderwechsel
+    if (this.frameCounterWalk >= FRAMES_TO_SKIP) {
+      this.frameCounterWalk = 0;
+      // Zuerst die Geh-Animation
+      this.playAnimation(this.IMAGES_WALKING);
+
+      // Bewegung nach links oder rechts
+      this.moveBoss(minX, maxX);
+
+      // Check, ob Character nahe ist
+      if (this.isCharacterClose() && !this.isDead()) {
+        // Dann gehen wir in den Alert-Zustand
+        this.currentState = "alert";
+        this.currentImageIndex = 0;
+        this.alert_sound.play();
+      }
+    }
+  }
+
+  /**
+   * State: Alert
+   */
+  handleAlert() {
+    this.frameCounterAlert++; // Zähle bei jedem evaluateState()-Aufruf hoch
+    const FRAMES_TO_SKIP = 13; // z.B. 3 -> jedes 3. Mal Bilderwechsel
+    if (this.frameCounterAlert >= FRAMES_TO_SKIP) {
+      this.frameCounterAlert = 0;
+      // Alert-Animation
+      if (this.currentImageIndex < this.IMAGES_ALERT.length) {
+        this.img = this.imageCache[this.IMAGES_ALERT[this.currentImageIndex]];
+        this.currentImageIndex++;
+      } else {
+        // Fertig mit Alert-Animation -> Angriff starten
+        this.currentState = "attack";
+        this.currentImageIndex = 0;
+      }
+    }
+
+    // Falls der Character NICHT mehr nah ist, gehen wir zurück zu "idle"
+    if (!this.isCharacterClose() && !this.isDead()) {
+      this.currentState = "idle";
+      this.currentImageIndex = 0;
+    }
+  }
+
+  /**
+   * State: Attack
+   */
+  handleAttack() {
+    this.frameCounterAttack++; // Zähle bei jedem evaluateState()-Aufruf hoch
+    const FRAMES_TO_SKIP = 12; // z.B. 3 -> jedes 3. Mal Bilderwechsel
+    if (this.frameCounterAttack >= FRAMES_TO_SKIP) {
+      this.frameCounterAttack = 0;
+      if (this.currentImageIndex < this.IMAGES_ATTACK.length) {
+        this.img = this.imageCache[this.IMAGES_ATTACK[this.currentImageIndex]];
+        this.currentImageIndex++;
+      } else {
+        // Angriff abgeschlossen
+        // Falls Character immer noch nah -> wieder Alert
+        if (this.isCharacterClose() && !this.isDead()) {
+          this.currentState = "alert";
+        } else {
+          this.currentState = "idle";
+        }
+        this.currentImageIndex = 0;
+      }
+    }
+  }
+
+  /**
+   * State: Hurt
+   */
+  handleHurt() {
+    this.frameCounterHurt++; // Zähle bei jedem evaluateState()-Aufruf hoch
+    const FRAMES_TO_SKIP = 11; // z.B. 3 -> jedes 3. Mal Bilderwechsel
+    if (this.frameCounterHurt >= FRAMES_TO_SKIP) {
+      this.frameCounterHurt = 0;
+      // Hurt-Animation
+      if (this.currentImageIndex < this.IMAGES_HURT.length) {
+        this.img = this.imageCache[this.IMAGES_HURT[this.currentImageIndex]];
+        this.currentImageIndex++;
+      } else {
+        // Nach "Hurt" wieder gucken, ob Character nah ist
+        if (this.isCharacterClose() && !this.isDead()) {
+          this.currentState = "alert";
+        } else {
+          this.currentState = "idle";
+        }
+        this.currentImageIndex = 0;
+      }
+    }
+  }
+
+  /**
+   * State: Dead
+   */
+  handleDead() {
+    this.frameCounterDead++; // Zähle bei jedem evaluateState()-Aufruf hoch
+    const FRAMES_TO_SKIP = 5; // z.B. 3 -> jedes 3. Mal Bilderwechsel
+    if (this.frameCounterDead >= FRAMES_TO_SKIP) {
+      this.frameCounterDead = 0;
+      // Wenn Sterbeanimation noch nicht abgeschlossen ist
+      if (this.currentImageIndex < this.IMAGES_DEAD.length) {
+        this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]];
+        this.currentImageIndex++;
+      } else {
+        // Wenn durch mit der Animation -> fallen lassen
+        this.fallDown();
+      }
+    }
+  }
+
+  /**
+   * Diese Methode übernehmen wir größtenteils aus deinem Code.
+   * Bewegung: von rechts nach links, bzw. Richtungswechsel an Grenzen.
+   */
+  moveBoss(minX, maxX) {
+    // Nur wenn Boss nicht tot und nicht hurt
+    if (!this.isDead() && this.currentState !== "hurt") {
+      if (this.direction === -1) {
+        this.moveLeft();
+        this.otherDirection = false;
+      } else {
+        this.moveRight();
+        this.otherDirection = true;
+      }
+      // Richtung wechseln
+      if (this.x <= minX) {
+        this.direction = 1;
+      } else if (this.x >= maxX) {
+        this.direction = -1;
+      }
+    }
+  }
+
+  /**
+   * isCharacterClose() bleibt unverändert
+   */
   isCharacterClose() {
-    // console.log("Character:", this.character);
-    // console.log("Endboss Position (x):", this.x);
     if (!this.character || typeof this.character.x === "undefined") {
-      console.warn("Character oder seine Position ist nicht definiert!");
-      return false; // Keine Nähe berechnen, wenn Character nicht existiert
+      console.warn("Character oder Position nicht definiert!");
+      return false;
     }
     const distance = Math.abs(this.character.x - this.x);
-    // console.log("Abstand zum Endboss:", distance);
-    return Math.abs(this.character.x - this.x) < 300;
+    return distance < 300;
   }
 
-  activateAlert() {
-    console.log("Endboss ist alarmiert!");
-    this.isAlert = true; // Setze den Alert-Zustand auf aktiv
-    this.otherDirection = false; // Blickrichtung nach links setzen
-    clearInterval(this.walkingInterval); // Nur Gehbewegung stoppen
-    clearInterval(this.animationInterval); // Nur Geh-Animation stoppen
-    this.startAlertAnimation(); // Starte die Alert-Animation
-    this.alert_sound.play(); // Spiele den Alert-Sound ab
-  }
-
-  startAlertAnimation() {
-    if (this.isAlertAnimationPlaying || this.isAttacking) return; // Keine doppelten Animationen
-
-    this.isAlertAnimationPlaying = true;
-    this.currentImage = 0;
-
-    const alertInterval = setInterval(() => {
-      if (this.currentImage < this.IMAGES_ALERT.length) {
-        this.img = this.imageCache[this.IMAGES_ALERT[this.currentImage]];
-        this.currentImage++;
-      } else {
-        clearInterval(alertInterval); // Alert-Animation beenden
-        this.isAlertAnimationPlaying = false;
-
-        console.log("Alert abgeschlossen. Angriff wird gestartet.");
-        this.startAttack(); // Angriff nach Alert starten
-      }
-    }, 150); // Zeitintervall für jedes Bild
-  }
-
-  deactivateAlert() {
-    console.log(
-      "Alert-Zustand deaktiviert. Normales Verhalten wird fortgesetzt.---------------------------------------"
-    );
-    this.isAlert = false; // Alert-Zustand deaktivieren
-    this.isAlertAnimationPlaying = false; // Status zurücksetzen
-    this.animate(); // Normales Verhalten (Bewegung/Animation) wieder starten
-  }
-
-  startAttack() {
-    if (this.isAttacking) return; // Angriff nicht doppelt starten
-    console.log("ATTACKE!!!");
-    this.isAttacking = true; // Angriff aktivieren
-    this.currentImage = 0; // Anfang der Attack-Animation
-
-    const attackInterval = setInterval(() => {
-      if (this.currentImage < this.IMAGES_ATTACK.length) {
-        this.img = this.imageCache[this.IMAGES_ATTACK[this.currentImage]];
-        this.currentImage++;
-      } else {
-        clearInterval(attackInterval); // Angriff beendet
-        console.log("Angriff abgeschlossen.");
-        this.isAttacking = false; // Angriff beenden
-      }
-    }, 350); // Zeitintervall für jedes Bild
-  }
-
-  //Behalten, wenn Energie genauso abgezogen werden soll, wie beim Character (also 5 Pt.)
-  // endbossHit() {
-  //   console.log("Endboss getroffen!");
-  //   console.log("EndbossEnergie vor dem Treffer:", this.energy); // Energie vor dem Treffer ausgeben
-  //   this.hit(); // Methode ausführen, die die Energie reduziert
-  //   console.log("EndbossEnergie nach dem Treffer:", this.energy); // Energie nach dem Treffer ausgeben
-
-  //   if (this.isDead()) {
-  //     console.log("Endboss ist tot, keine Hurt-Animation!");
-  //     return; // Beende die Methode, wenn der Boss tot ist
-  //   }
-  //   this.startHurtAnimation(); // Abspielen der Hurt-Animation
-  // }
-
-  //nur zum Testen, damit schneller Energy abgezogen wird.
+  /**
+   * Hit-Logik bleibt ähnlich,
+   * ABER wir setzen am Ende den State auf "hurt".
+   */
   endbossHit() {
-    if (this.isAttacking) {
+    if (this.currentState === "attack") {
       console.log("Endboss ist im Angriff. Treffer ignoriert.");
-      return; // Keine Treffer während des Angriffs
+      return;
     }
     console.log("Endboss getroffen!");
     console.log("EndbossEnergie vor dem Treffer:", this.energy);
 
     if (this.energy === 0) {
       console.log("Endboss ist bereits tot!");
-      return; // Keine weiteren Treffer, wenn der Endboss tot ist
+      return;
     }
 
     const currentTime = new Date().getTime();
     if (currentTime - this.lastHit > 500) {
-      // Zeit zwischen Treffern
-      this.energy -= 20; // Ziehe 20 Lebenspunkte ab
+      this.energy -= 20;
       console.log("EndbossEnergie nach dem Treffer:", this.energy);
 
       if (this.energy <= 0) {
         this.energy = 0;
-        console.log("Endboss ist tot, keine Hurt-Animation!");
-        this.deadEnemy(); // Starte Sterbeanimation
+        this.currentImageIndex = 0;
+        this.frameCounterDead = 0;
+        this.currentState = "dead";
       } else {
-        this.lastHit = currentTime; // Aktualisiere den letzten Trefferzeitpunkt
-        this.startHurtAnimation(); // Starte Hurt-Animation
+        this.lastHit = currentTime;
+        // State auf "hurt" wechseln
+        this.currentState = "hurt";
+        this.currentImageIndex = 0;
       }
     }
   }
 
-  startHurtAnimation() {
-    this.currentImage = 0;
-    const hurtInterval = setInterval(() => {
-      if (this.currentImage < this.IMAGES_HURT.length) {
-        this.img = this.imageCache[this.IMAGES_HURT[this.currentImage]];
-        this.currentImage++;
-      } else {
-        clearInterval(hurtInterval);
-        // Prüfen, ob Alert aktiv ist
-        if (this.isAlert) {
-          this.startAlertAnimation();
-        }
-      }
-    }, 150);
-  }
-
-  deadEnemy() {
-    if (this.isDeadAnimationPlaying) {
-      console.log("Sterbeanimation läuft bereits. Abbruch.");
-      return; // Abbruch, wenn die Animation bereits läuft
-    }
-    console.log("deadEnemy() wird aufgerufen");
-
-    // Deaktiviere den Alert-Zustand, falls er aktiv ist
-    this.isAlert = false;
-    this.isAlertAnimationPlaying = false;
-
-    // Stoppe alle anderen Animationen und Bewegungen
-    this.stopAnimation();
-
-    // Starte die Sterbeanimation
-    this.startDeadAnimation();
-
-    // Markiere die Sterbeanimation als aktiv
-    this.isDeadAnimationPlaying = true;
-  }
-
-  startDeadAnimation() {
-    console.log("Sterbeanimation gestartet");
-
-    // Stelle sicher, dass keine Alert-Animation läuft
-    this.isAlert = false;
-    this.isAlertAnimationPlaying = false;
-
-    this.currentImage = 0; // Starte bei Bild 0
-    const deadInterval = setInterval(() => {
-      if (this.currentImage < this.IMAGES_DEAD.length) {
-        this.img = this.imageCache[this.IMAGES_DEAD[this.currentImage]];
-        this.currentImage++;
-      } else {
-        console.log("Sterbeanimation beendet");
-        clearInterval(deadInterval); // Stoppe das Sterbeanimation-Intervall
-        this.fallDown(); // Starte das Fallen
-      }
-    }, 150); // Zeitintervall für jedes Bild
-  }
-
+  /**
+   * Deine Fall-Logik (nach dead)
+   */
   fallDown() {
-    const fallInterval = setInterval(() => {
-      this.y += 5; // Endboss bewegt sich nach unten
+    if (this.hasFallen) {
+      return; // Abbruch, wenn wir schon gefallen sind
+    }
+    this.hasFallen = true;
+
+    let fallInterval = setInterval(() => {
+      this.y += 5;
       if (this.y > 720) {
-        // Stoppe die Bewegung, wenn er aus dem Bild ist (z. B. Bildschirmhöhe 720px)
         clearInterval(fallInterval);
         console.log("Endboss ist aus dem Bild geflogen");
       }
-    }, 50); // Bewegung alle 50ms
+    }, 50);
   }
 
-  // Methode, um die Animation zu stoppen, wenn der Endboss getroffen wird
+  /**
+   * isDead() kannst du so lassen wie bisher,
+   * oder du sagst: "dead" wenn energy == 0
+   */
+  isDead() {
+    return this.energy <= 0;
+  }
+
+  /**
+   * Stoppe ggf. alle alten Intervalle beim Tod,
+   * falls du da etwas aufräumen willst.
+   * Oder du verwendest nur noch das `stateMachineInterval`.
+   */
   stopAnimation() {
-    clearInterval(this.walkingInterval);
-    clearInterval(this.animationInterval);
-    clearInterval(this.hurtInterval);
-    clearInterval(this.alertInterval); // Stoppe den Alert-Prozess
-    clearInterval(this.checkDeadInterval); // Stoppe den Todes-Check
+    clearInterval(this.stateMachineInterval);
+    clearInterval(this.checkDeadInterval);
     console.log("Alle laufenden Animationen und Intervalle gestoppt");
   }
 }
