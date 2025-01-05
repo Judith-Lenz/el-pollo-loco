@@ -137,6 +137,7 @@ class Endboss extends MovableObject {
   activateAlert() {
     console.log("Endboss ist alarmiert!");
     this.isAlert = true; // Setze den Alert-Zustand auf aktiv
+    this.otherDirection = false; // Blickrichtung nach links setzen
     this.stopAnimation(); // Stoppe andere Animationen
     this.startAlertAnimation(); // Starte die Alert-Animation
     this.alert_sound.play(); // Spiele den Alert-Sound ab
