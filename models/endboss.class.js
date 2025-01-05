@@ -76,20 +76,23 @@ class Endboss extends MovableObject {
     if (this.isAlertAnimationPlaying || this.isDeadAnimationPlaying) {
       return; // Keine andere Animation starten, solange Alert oder Dead läuft
     }
-    // Sterbe-Animation des Bosses
     this.checkDeadInterval = setInterval(() => {
-      if (this.isDead()) {
+      if (this.isDead() && !this.isDeadAnimationPlaying) {
+        console.log("Endboss ist tot. Starte Sterbeanimation.");
         this.deadEnemy(); // Sterbe-Animation starten
-        this.stopAnimation(); // Stoppe alle laufenden Animationen
-        clearInterval(this.checkDeadInterval); // Überprüfung stoppen, da der Boss tot ist
-        return;
+        clearInterval(this.checkDeadInterval); // Stoppe die Überprüfung endgültig
       }
     }, 100); // Überprüfung alle 100ms
-    // Überprüfung des Alert-Zustands
+
     this.alertInterval = setInterval(() => {
       if (this.isCharacterClose() && !this.isAlert && !this.isDead()) {
         console.log("Alert wird aktiviert!");
         this.activateAlert(); // Aktiviere den Alert-Zustand
+      } else if (!this.isCharacterClose() && this.isAlert && !this.isDead()) {
+        console.log(
+          "Charakter ist nicht mehr in der Nähe. Alert wird deaktiviert."
+        );
+        this.deactivateAlert(); // Deaktiviere den Alert-Zustand
       }
     }, 200); // Überprüfung alle 200ms
 
@@ -138,7 +141,8 @@ class Endboss extends MovableObject {
     console.log("Endboss ist alarmiert!");
     this.isAlert = true; // Setze den Alert-Zustand auf aktiv
     this.otherDirection = false; // Blickrichtung nach links setzen
-    this.stopAnimation(); // Stoppe andere Animationen
+    clearInterval(this.walkingInterval); // Nur Gehbewegung stoppen
+    clearInterval(this.animationInterval); // Nur Geh-Animation stoppen
     this.startAlertAnimation(); // Starte die Alert-Animation
     this.alert_sound.play(); // Spiele den Alert-Sound ab
   }
@@ -147,10 +151,10 @@ class Endboss extends MovableObject {
     if (this.isAlertAnimationPlaying) return; // Verhindert doppelten Start
     this.isAlertAnimationPlaying = true; // Setzt den Status auf "läuft"
     console.log("Alert-Animation gestartet");
-
     this.currentImage = 0; // Start bei Bild 0
+
     const alertInterval = setInterval(() => {
-      console.log("Zeige Alert-Bild:", this.currentImage); // Debugging
+      console.log("Zeige Alert-Bild:", this.currentImage);
       if (this.currentImage < this.IMAGES_ALERT.length) {
         this.img = this.imageCache[this.IMAGES_ALERT[this.currentImage]];
         this.currentImage++;
@@ -158,9 +162,18 @@ class Endboss extends MovableObject {
         console.log("Alert-Animation beendet");
         clearInterval(alertInterval); // Stoppt das Intervall
         this.isAlertAnimationPlaying = false; // Setzt Status zurück
-        this.isAlert = false; // Alert-Zustand deaktivieren
+        // Der Alert-Zustand bleibt bestehen, bis `alertInterval` dies beendet
       }
     }, 150); // Zeitintervall für jedes Bild
+  }
+
+  deactivateAlert() {
+    console.log(
+      "Alert-Zustand deaktiviert. Normales Verhalten wird fortgesetzt."
+    );
+    this.isAlert = false; // Alert-Zustand deaktivieren
+    this.isAlertAnimationPlaying = false; // Status zurücksetzen
+    this.animate(); // Normales Verhalten (Bewegung/Animation) wieder starten
   }
 
   //Behalten, wenn Energie genauso abgezogen werden soll, wie beim Character (also 5 Pt.)
@@ -219,34 +232,42 @@ class Endboss extends MovableObject {
   }
 
   deadEnemy() {
+    if (this.isDeadAnimationPlaying) {
+      console.log("Sterbeanimation läuft bereits. Abbruch.");
+      return; // Abbruch, wenn die Animation bereits läuft
+    }
     console.log("deadEnemy() wird aufgerufen");
-    this.stopAnimation(); // Stoppe alle laufenden Animationen
-    this.isHurt = false; // Deaktiviere den Hurt-Zustand
-    this.startDeadAnimation(); // Starte die Sterbeanimation
+
+    // Deaktiviere den Alert-Zustand, falls er aktiv ist
+    this.isAlert = false;
+    this.isAlertAnimationPlaying = false;
+
+    // Stoppe alle anderen Animationen und Bewegungen
+    this.stopAnimation();
+
+    // Starte die Sterbeanimation
+    this.startDeadAnimation();
+
+    // Markiere die Sterbeanimation als aktiv
+    this.isDeadAnimationPlaying = true;
   }
 
   startDeadAnimation() {
-    if (this.isDeadAnimationPlaying) return; // Verhindert doppelten Start
-    this.isDeadAnimationPlaying = true; // Setzt den Status auf "läuft"
-    console.log("Sterbebilder:", this.IMAGES_DEAD);
-    this.IMAGES_DEAD.forEach((image) => {
-      console.log(
-        `Bild geladen? ${image}:`,
-        this.imageCache[image] ? "Ja" : "Nein"
-      );
-    });
     console.log("Sterbeanimation gestartet");
-    this.currentImage = 0; // Start bei Bild 0
+
+    // Stelle sicher, dass keine Alert-Animation läuft
+    this.isAlert = false;
+    this.isAlertAnimationPlaying = false;
+
+    this.currentImage = 0; // Starte bei Bild 0
     const deadInterval = setInterval(() => {
-      console.log("Zeige Sterbebild:", this.currentImage); // Debugging
       if (this.currentImage < this.IMAGES_DEAD.length) {
         this.img = this.imageCache[this.IMAGES_DEAD[this.currentImage]];
         this.currentImage++;
       } else {
         console.log("Sterbeanimation beendet");
-        clearInterval(deadInterval); // Stoppt das Intervall
-        this.isDeadAnimationPlaying = false; // Setzt Status zurück (optional, falls wiederverwendbar)
-        this.fallDown();
+        clearInterval(deadInterval); // Stoppe das Sterbeanimation-Intervall
+        this.fallDown(); // Starte das Fallen
       }
     }, 150); // Zeitintervall für jedes Bild
   }
@@ -264,10 +285,11 @@ class Endboss extends MovableObject {
 
   // Methode, um die Animation zu stoppen, wenn der Endboss getroffen wird
   stopAnimation() {
-    clearInterval(this.walkingInterval); // Stoppe das Intervall für die Bewegung
-    clearInterval(this.animationInterval); // Stoppe das Intervall für die Animation
-    clearInterval(this.hurtInterval); // Hurt-Animation stoppen
-    clearInterval(this.alertInterval);
-    console.log("Alle laufenden Animationen gestoppt");
+    clearInterval(this.walkingInterval);
+    clearInterval(this.animationInterval);
+    clearInterval(this.hurtInterval);
+    clearInterval(this.alertInterval); // Stoppe den Alert-Prozess
+    clearInterval(this.checkDeadInterval); // Stoppe den Todes-Check
+    console.log("Alle laufenden Animationen und Intervalle gestoppt");
   }
 }
