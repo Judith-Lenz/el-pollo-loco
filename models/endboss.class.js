@@ -54,6 +54,7 @@ class Endboss extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[1]); //Startbild laden, brauchen wir evtl. gar nicht
     this.isEndboss = true; // Spezielle Kennzeichnung für Endboss
     this.isAlert = false; // Standardmäßig nicht im Alert-Zustand
+    this.isAttacking = false; // Neues Flag für den Angriffsmodus
     this.loadImages(this.IMAGES_WALKING); //alle anderen Bilder laden.
     this.loadImages(this.IMAGES_ALERT);
     this.loadImages(this.IMAGES_ATTACK);
@@ -148,21 +149,21 @@ class Endboss extends MovableObject {
   }
 
   startAlertAnimation() {
-    if (this.isAlertAnimationPlaying) return; // Verhindert doppelten Start
-    this.isAlertAnimationPlaying = true; // Setzt den Status auf "läuft"
-    console.log("Alert-Animation gestartet");
-    this.currentImage = 0; // Start bei Bild 0
+    if (this.isAlertAnimationPlaying || this.isAttacking) return; // Keine doppelten Animationen
+
+    this.isAlertAnimationPlaying = true;
+    this.currentImage = 0;
 
     const alertInterval = setInterval(() => {
-      console.log("Zeige Alert-Bild:", this.currentImage);
       if (this.currentImage < this.IMAGES_ALERT.length) {
         this.img = this.imageCache[this.IMAGES_ALERT[this.currentImage]];
         this.currentImage++;
       } else {
-        console.log("Alert-Animation beendet");
-        clearInterval(alertInterval); // Stoppt das Intervall
-        this.isAlertAnimationPlaying = false; // Setzt Status zurück
-        // Der Alert-Zustand bleibt bestehen, bis `alertInterval` dies beendet
+        clearInterval(alertInterval); // Alert-Animation beenden
+        this.isAlertAnimationPlaying = false;
+
+        console.log("Alert abgeschlossen. Angriff wird gestartet.");
+        this.startAttack(); // Angriff nach Alert starten
       }
     }, 150); // Zeitintervall für jedes Bild
   }
@@ -174,6 +175,25 @@ class Endboss extends MovableObject {
     this.isAlert = false; // Alert-Zustand deaktivieren
     this.isAlertAnimationPlaying = false; // Status zurücksetzen
     this.animate(); // Normales Verhalten (Bewegung/Animation) wieder starten
+  }
+
+  startAttack() {
+    if (this.isAttacking) return; // Angriff nicht doppelt starten
+    console.log("ATTACKE!!!");
+
+    this.isAttacking = true; // Angriff aktivieren
+    this.currentImage = 0; // Anfang der Attack-Animation
+
+    const attackInterval = setInterval(() => {
+      if (this.currentImage < this.IMAGES_ATTACK.length) {
+        this.img = this.imageCache[this.IMAGES_ATTACK[this.currentImage]];
+        this.currentImage++;
+      } else {
+        clearInterval(attackInterval); // Angriff beendet
+        console.log("Angriff abgeschlossen.");
+        this.isAttacking = false; // Angriff beenden
+      }
+    }, 350); // Zeitintervall für jedes Bild
   }
 
   //Behalten, wenn Energie genauso abgezogen werden soll, wie beim Character (also 5 Pt.)
@@ -192,6 +212,10 @@ class Endboss extends MovableObject {
 
   //nur zum Testen, damit schneller Energy abgezogen wird.
   endbossHit() {
+    if (this.isAttacking) {
+      console.log("Endboss ist im Angriff. Treffer ignoriert.");
+      return; // Keine Treffer während des Angriffs
+    }
     console.log("Endboss getroffen!");
     console.log("EndbossEnergie vor dem Treffer:", this.energy);
 
@@ -218,17 +242,19 @@ class Endboss extends MovableObject {
   }
 
   startHurtAnimation() {
-    this.currentImage = 0; // Start bei Bild 0
+    this.currentImage = 0;
     const hurtInterval = setInterval(() => {
       if (this.currentImage < this.IMAGES_HURT.length) {
-        // Nächstes Bild aus dem Array laden
         this.img = this.imageCache[this.IMAGES_HURT[this.currentImage]];
         this.currentImage++;
       } else {
-        // Intervall stoppen, wenn alle Bilder durchlaufen sind
         clearInterval(hurtInterval);
+        // Prüfen, ob Alert aktiv ist
+        if (this.isAlert) {
+          this.startAlertAnimation();
+        }
       }
-    }, 150); // Zeitintervall pro Bild (z. B. 100ms)
+    }, 150);
   }
 
   deadEnemy() {
