@@ -1,0 +1,15 @@
+{ 
+  // Mache Prettier zum Standard-Formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Automatisch beim Speichern formatieren
+  "editor.formatOnSave": true,
+
+  // Prettier-spezifische Einstellungen
+  "prettier.printWidth": 120,
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+
+  // Nur wenn du KEINE .editorconfig verwenden willst
+  "prettier.useEditorConfig": false
+}

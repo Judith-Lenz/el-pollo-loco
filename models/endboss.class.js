@@ -1,86 +1,83 @@
 class Endboss extends MovableObject {
-  height = 450;
-  width = 350;
-  y = 0;
-  speed = 1;
+  height = 450
+  width = 350
+  y = 0
+  speed = 5
 
   IMAGES_WALKING = [
-    "img/4_enemie_boss_chicken/1_walk/G1.png",
-    "img/4_enemie_boss_chicken/1_walk/G2.png",
-    "img/4_enemie_boss_chicken/1_walk/G3.png",
-    "img/4_enemie_boss_chicken/1_walk/G4.png",
-  ];
+    'img/4_enemie_boss_chicken/1_walk/G1.png',
+    'img/4_enemie_boss_chicken/1_walk/G2.png',
+    'img/4_enemie_boss_chicken/1_walk/G3.png',
+    'img/4_enemie_boss_chicken/1_walk/G4.png',
+  ]
 
   IMAGES_ALERT = [
-    "img/4_enemie_boss_chicken/2_alert/G5.png",
-    "img/4_enemie_boss_chicken/2_alert/G6.png",
-    "img/4_enemie_boss_chicken/2_alert/G7.png",
-    "img/4_enemie_boss_chicken/2_alert/G8.png",
-    "img/4_enemie_boss_chicken/2_alert/G9.png",
-    "img/4_enemie_boss_chicken/2_alert/G10.png",
-    "img/4_enemie_boss_chicken/2_alert/G11.png",
-    "img/4_enemie_boss_chicken/2_alert/G12.png",
-  ];
+    'img/4_enemie_boss_chicken/2_alert/G5.png',
+    'img/4_enemie_boss_chicken/2_alert/G6.png',
+    'img/4_enemie_boss_chicken/2_alert/G7.png',
+    'img/4_enemie_boss_chicken/2_alert/G8.png',
+    'img/4_enemie_boss_chicken/2_alert/G9.png',
+    'img/4_enemie_boss_chicken/2_alert/G10.png',
+    'img/4_enemie_boss_chicken/2_alert/G11.png',
+    'img/4_enemie_boss_chicken/2_alert/G12.png',
+  ]
 
   IMAGES_ATTACK = [
-    "img/4_enemie_boss_chicken/3_attack/G13.png",
-    "img/4_enemie_boss_chicken/3_attack/G14.png",
-    "img/4_enemie_boss_chicken/3_attack/G15.png",
-    "img/4_enemie_boss_chicken/3_attack/G16.png",
-    "img/4_enemie_boss_chicken/3_attack/G17.png",
-    "img/4_enemie_boss_chicken/3_attack/G18.png",
-    "img/4_enemie_boss_chicken/3_attack/G19.png",
-    "img/4_enemie_boss_chicken/3_attack/G20.png",
-  ];
+    'img/4_enemie_boss_chicken/3_attack/G13.png',
+    'img/4_enemie_boss_chicken/3_attack/G14.png',
+    'img/4_enemie_boss_chicken/3_attack/G15.png',
+    'img/4_enemie_boss_chicken/3_attack/G16.png',
+    'img/4_enemie_boss_chicken/3_attack/G17.png',
+    'img/4_enemie_boss_chicken/3_attack/G18.png',
+    'img/4_enemie_boss_chicken/3_attack/G19.png',
+    'img/4_enemie_boss_chicken/3_attack/G20.png',
+  ]
 
   IMAGES_HURT = [
-    "img/4_enemie_boss_chicken/4_hurt/G21.png",
-    "img/4_enemie_boss_chicken/4_hurt/G22.png",
-    "img/4_enemie_boss_chicken/4_hurt/G23.png",
-    "img/4_enemie_boss_chicken/4_hurt/G21.png",
-    "img/4_enemie_boss_chicken/4_hurt/G22.png",
-    "img/4_enemie_boss_chicken/4_hurt/G23.png",
-  ];
+    'img/4_enemie_boss_chicken/4_hurt/G21.png',
+    'img/4_enemie_boss_chicken/4_hurt/G22.png',
+    'img/4_enemie_boss_chicken/4_hurt/G23.png',
+    'img/4_enemie_boss_chicken/4_hurt/G21.png',
+    'img/4_enemie_boss_chicken/4_hurt/G22.png',
+    'img/4_enemie_boss_chicken/4_hurt/G23.png',
+  ]
 
   IMAGES_DEAD = [
-    "img/4_enemie_boss_chicken/5_dead/G24.png",
-    "img/4_enemie_boss_chicken/5_dead/G25.png",
-    "img/4_enemie_boss_chicken/5_dead/G26.png",
-  ];
+    'img/4_enemie_boss_chicken/5_dead/G24.png',
+    'img/4_enemie_boss_chicken/5_dead/G25.png',
+    'img/4_enemie_boss_chicken/5_dead/G26.png',
+  ]
 
-  alert_sound = new Audio("audio/rooster2.mp3");
-  hurt_sound = new Audio("audio/chicken_hurt.mp3");
-  winning_sound = new Audio("audio/arriba.mp3");
+  alert_sound = new Audio('audio/rooster2.mp3')
+  hurt_sound = new Audio('audio/chicken_hurt.mp3')
+  winning_sound = new Audio('audio/arriba.mp3')
+  dying_sound = new Audio('audio/dying_endboss.mp3')
 
   constructor() {
-    super().loadImage(this.IMAGES_WALKING[1]);
-    this.world = world;
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_ALERT);
-    this.loadImages(this.IMAGES_ATTACK);
-    this.loadImages(this.IMAGES_HURT);
-    this.loadImages(this.IMAGES_DEAD);
-    this.hasPlayedWinningSound = false;
-    this.isEndboss = true;
-    this.x = 2500;
-    this.direction = -1;
-
-    this.currentState = "idle";
-    this.currentImageIndex = 0;
-
-    this.frameCounterAlert = 0;
-    this.frameCounterAttack = 0;
-    this.frameCounterIdle = 0;
-    this.frameCounterHurt = 0;
-    this.frameCounterDead = 0;
-    this.frameCounterWalk = 0;
-
-    this.collisionOffsetX = 40;
-    this.collisionOffsetY = 70;
-    this.collisionWidth = 295;
-    this.collisionHeight = 360;
-
-    this.lastHit = 0;
+    super().loadImage(this.IMAGES_WALKING[1])
+    this.world = world
+    this.loadImages(this.IMAGES_WALKING)
+    this.loadImages(this.IMAGES_ALERT)
+    this.loadImages(this.IMAGES_ATTACK)
+    this.loadImages(this.IMAGES_HURT)
+    this.loadImages(this.IMAGES_DEAD)
+    this.hasPlayedWinningSound = false
+    this.isEndboss = true
+    this.x = 2500
+    this.direction = -1
+    this.currentState = 'idle'
+    this.currentImageIndex = 0
+    this.frameCounterAlert = 0
+    this.frameCounterAttack = 0
+    this.frameCounterIdle = 0
+    this.frameCounterHurt = 0
+    this.frameCounterDead = 0
+    this.frameCounterWalk = 0
+    this.collisionOffsetX = 40
+    this.collisionOffsetY = 70
+    this.collisionWidth = 295
+    this.collisionHeight = 360
+    this.lastHit = 0
   }
 
   /**
@@ -88,16 +85,16 @@ class Endboss extends MovableObject {
    * das alle Zustände im Auge behält.
    */
   animate() {
-    const minX = 2200;
-    const maxX = 2600;
+    const minX = 2200
+    const maxX = 2600
     this.checkDeadInterval = setInterval(() => {
-      if (this.isDead() && this.currentState !== "dead") {
-        this.currentState = "dead";
+      if (this.isDead() && this.currentState !== 'dead') {
+        this.currentState = 'dead'
       }
-    }, 100);
+    }, 100)
     this.stateMachineInterval = setInterval(() => {
-      this.evaluateState(minX, maxX);
-    }, 16);
+      this.evaluateState(minX, maxX)
+    }, 16)
   }
 
   /**
@@ -106,25 +103,25 @@ class Endboss extends MovableObject {
    */
   evaluateState(minX, maxX) {
     switch (this.currentState) {
-      case "idle":
-        this.handleIdle(minX, maxX);
-        break;
-      case "alert":
-        this.handleAlert();
-        break;
-      case "attack":
-        this.handleAttack();
-        break;
-      case "hurt":
-        this.handleHurt();
-        break;
-      case "dead":
-        this.handleDead();
-        break;
-      case "final":
-        break;
+      case 'idle':
+        this.handleIdle(minX, maxX)
+        break
+      case 'alert':
+        this.handleAlert()
+        break
+      case 'attack':
+        this.handleAttack()
+        break
+      case 'hurt':
+        this.handleHurt()
+        break
+      case 'dead':
+        this.handleDead()
+        break
+      case 'final':
+        break
       default:
-        console.warn("Unbekannter State:", this.currentState);
+        console.warn('Unbekannter State:', this.currentState)
     }
   }
 
@@ -132,16 +129,16 @@ class Endboss extends MovableObject {
    * State: Idle (bzw. "Normalzustand")
    */
   handleIdle(minX, maxX) {
-    this.frameCounterWalk++;
-    const FRAMES_TO_SKIP = 15;
+    this.frameCounterWalk++
+    const FRAMES_TO_SKIP = 11
     if (this.frameCounterWalk >= FRAMES_TO_SKIP) {
-      this.frameCounterWalk = 0;
-      this.playAnimation(this.IMAGES_WALKING);
-      this.moveBoss(minX, maxX);
+      this.frameCounterWalk = 0
+      this.playAnimation(this.IMAGES_WALKING)
+      this.moveBoss(minX, maxX)
       if (this.isCharacterClose() && !this.isDead()) {
-        this.currentState = "alert";
-        this.currentImageIndex = 0;
-        this.alert_sound.play();
+        this.currentState = 'alert'
+        this.currentImageIndex = 0
+        this.alert_sound.play()
       }
     }
   }
@@ -150,21 +147,34 @@ class Endboss extends MovableObject {
    * State: Alert
    */
   handleAlert() {
-    this.frameCounterAlert++;
-    const FRAMES_TO_SKIP = 13;
+    this.incrementAlertFrame()
+    this.handleAlertAnimation()
+    this.handleAlertIdleCheck()
+  }
+
+  incrementAlertFrame() {
+    this.frameCounterAlert++
+  }
+
+  handleAlertAnimation() {
+    const FRAMES_TO_SKIP = 13
+    this.otherDirection = false //schaut nach links
     if (this.frameCounterAlert >= FRAMES_TO_SKIP) {
-      this.frameCounterAlert = 0;
+      this.frameCounterAlert = 0
       if (this.currentImageIndex < this.IMAGES_ALERT.length) {
-        this.img = this.imageCache[this.IMAGES_ALERT[this.currentImageIndex]];
-        this.currentImageIndex++;
+        this.img = this.imageCache[this.IMAGES_ALERT[this.currentImageIndex]]
+        this.currentImageIndex++
       } else {
-        this.currentState = "attack";
-        this.currentImageIndex = 0;
+        this.currentState = 'attack'
+        this.currentImageIndex = 0
       }
     }
+  }
+
+  handleAlertIdleCheck() {
     if (!this.isCharacterClose() && !this.isDead()) {
-      this.currentState = "idle";
-      this.currentImageIndex = 0;
+      this.currentState = 'idle'
+      this.currentImageIndex = 0
     }
   }
 
@@ -172,20 +182,29 @@ class Endboss extends MovableObject {
    * State: Attack
    */
   handleAttack() {
-    this.frameCounterAttack++;
-    const FRAMES_TO_SKIP = 12;
+    this.incrementAttackFrame()
+    this.handleAttackAnimation()
+  }
+
+  incrementAttackFrame() {
+    this.frameCounterAttack++
+  }
+
+  handleAttackAnimation() {
+    const FRAMES_TO_SKIP = 12
+    this.otherDirection = false
     if (this.frameCounterAttack >= FRAMES_TO_SKIP) {
-      this.frameCounterAttack = 0;
+      this.frameCounterAttack = 0
       if (this.currentImageIndex < this.IMAGES_ATTACK.length) {
-        this.img = this.imageCache[this.IMAGES_ATTACK[this.currentImageIndex]];
-        this.currentImageIndex++;
+        this.img = this.imageCache[this.IMAGES_ATTACK[this.currentImageIndex]]
+        this.currentImageIndex++
       } else {
         if (this.isCharacterClose() && !this.isDead()) {
-          this.currentState = "alert";
+          this.currentState = 'alert'
         } else {
-          this.currentState = "idle";
+          this.currentState = 'idle'
         }
-        this.currentImageIndex = 0;
+        this.currentImageIndex = 0
       }
     }
   }
@@ -194,20 +213,20 @@ class Endboss extends MovableObject {
    * State: Hurt
    */
   handleHurt() {
-    this.frameCounterHurt++;
-    const FRAMES_TO_SKIP = 11;
+    this.frameCounterHurt++
+    const FRAMES_TO_SKIP = 11
     if (this.frameCounterHurt >= FRAMES_TO_SKIP) {
-      this.frameCounterHurt = 0;
+      this.frameCounterHurt = 0
       if (this.currentImageIndex < this.IMAGES_HURT.length) {
-        this.img = this.imageCache[this.IMAGES_HURT[this.currentImageIndex]];
-        this.currentImageIndex++;
+        this.img = this.imageCache[this.IMAGES_HURT[this.currentImageIndex]]
+        this.currentImageIndex++
       } else {
         if (this.isCharacterClose() && !this.isDead()) {
-          this.currentState = "alert";
+          this.currentState = 'alert'
         } else {
-          this.currentState = "idle";
+          this.currentState = 'idle'
         }
-        this.currentImageIndex = 0;
+        this.currentImageIndex = 0
       }
     }
   }
@@ -216,18 +235,55 @@ class Endboss extends MovableObject {
    * State: Dead
    */
   handleDead() {
-    this.frameCounterDead++;
-    const FRAMES_TO_SKIP = 5;
-    if (this.frameCounterDead >= FRAMES_TO_SKIP) {
-      this.frameCounterDead = 0;
-      if (this.currentImageIndex < this.IMAGES_DEAD.length) {
-        this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]];
-        this.currentImageIndex++;
-      } else {
-        this.fallDown();
+    this.incrementDeadFrames()
+    if (!this.showDeadAnimation()) {
+      this.fallDown()
+      this.playDyingSoundThenDefeat()
+    }
+  }
 
-        this.manageEndbossDefeat();
-      }
+  /**
+   * Erhöht den frameCounterDead und prüft, ob wir den Frame wechseln.
+   */
+  incrementDeadFrames() {
+    this.frameCounterDead++
+    const FRAMES_TO_SKIP = 5
+    if (this.frameCounterDead >= FRAMES_TO_SKIP) {
+      this.frameCounterDead = 0
+      // Wir haben genug Frames gesammelt, um ein Bild weiterzuspringen
+      return true
+    }
+    return false
+  }
+
+  /**
+   * Zeigt die Dead-Animation. Returnt **true**, solange es noch Bilder zu zeigen gibt,
+   * und **false**, wenn wir schon fertig sind.
+   */
+  showDeadAnimation() {
+    // Noch nicht alle Dead-Frames durch
+    if (this.currentImageIndex < this.IMAGES_DEAD.length) {
+      this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]]
+      this.currentImageIndex++
+      return true
+    }
+    // Wir sind mit der Death-Animation fertig
+    return false
+  }
+
+  /**
+   * Startet den "dying_sound" und wartet z.B. 2 Sekunden.
+   * Danach ruft sie "manageEndbossDefeat" auf.
+   */
+  playDyingSoundThenDefeat() {
+    if (!this.hasPlayedDyingSound) {
+      this.hasPlayedDyingSound = true
+      this.dying_sound.play()
+
+      // Warte 2 Sekunden, damit der dying_sound zu Ende gespielt wird
+      setTimeout(() => {
+        this.manageEndbossDefeat()
+      }, 1800)
     }
   }
 
@@ -236,18 +292,18 @@ class Endboss extends MovableObject {
    * Bewegung: von rechts nach links, bzw. Richtungswechsel an Grenzen.
    */
   moveBoss(minX, maxX) {
-    if (!this.isDead() && this.currentState !== "hurt") {
+    if (!this.isDead() && this.currentState !== 'hurt') {
       if (this.direction === -1) {
-        this.moveLeft();
-        this.otherDirection = false;
+        this.moveLeft()
+        this.otherDirection = false
       } else {
-        this.moveRight();
-        this.otherDirection = true;
+        this.moveRight()
+        this.otherDirection = true
       }
       if (this.x <= minX) {
-        this.direction = 1;
+        this.direction = 1
       } else if (this.x >= maxX) {
-        this.direction = -1;
+        this.direction = -1
       }
     }
   }
@@ -256,12 +312,12 @@ class Endboss extends MovableObject {
    * isCharacterClose() bleibt unverändert
    */
   isCharacterClose() {
-    if (!this.character || typeof this.character.x === "undefined") {
-      console.warn("Character oder Position nicht definiert!");
-      return false;
+    if (!this.character || typeof this.character.x === 'undefined') {
+      console.warn('Character oder Position nicht definiert!')
+      return false
     }
-    const distance = Math.abs(this.character.x - this.x);
-    return distance < 300;
+    const distance = Math.abs(this.character.x - this.x)
+    return distance < 300
   }
 
   /**
@@ -269,31 +325,64 @@ class Endboss extends MovableObject {
    * ABER wir setzen am Ende den State auf "hurt".
    */
   endbossHit() {
-    if (this.currentState === "attack") {
-      return;
+    if (this.preventHitDuringAttack()) {
+      return
     }
-    console.log("Endboss getroffen!");
-    console.log("EndbossEnergie vor dem Treffer:", this.energy);
+
+    this.logHitInformation()
+
+    if (this.isAlreadyDead()) {
+      return
+    }
+
+    this.checkAndApplyHit()
+  }
+
+  preventHitDuringAttack() {
+    if (this.currentState === 'attack') {
+      return true // Wenn gerade Attack-State, beenden wir sofort
+    }
+    return false
+  }
+
+  logHitInformation() {
+    console.log('Endboss getroffen!')
+    console.log('EndbossEnergie vor dem Treffer:', this.energy)
+  }
+
+  isAlreadyDead() {
     if (this.energy === 0) {
-      console.log("Endboss ist bereits tot!");
-      return;
+      console.log('Endboss ist bereits tot!')
+      return true
     }
-    const currentTime = new Date().getTime();
+    return false
+  }
+
+  checkAndApplyHit() {
+    const currentTime = new Date().getTime()
     if (currentTime - this.lastHit > 500) {
-      this.energy -= 20;
-      console.log("EndbossEnergie nach dem Treffer:", this.energy);
+      this.energy -= 20
+      console.log('EndbossEnergie nach dem Treffer:', this.energy)
       if (this.energy <= 0) {
-        this.energy = 0;
-        this.currentImageIndex = 0;
-        this.frameCounterDead = 0;
-        this.currentState = "dead";
+        this.setDeadState()
       } else {
-        this.lastHit = currentTime;
-        this.hurt_sound.play();
-        this.currentState = "hurt";
-        this.currentImageIndex = 0;
+        this.setHurtState(currentTime)
       }
     }
+  }
+
+  setDeadState() {
+    this.energy = 0
+    this.currentImageIndex = 0
+    this.frameCounterDead = 0
+    this.currentState = 'dead'
+  }
+
+  setHurtState(currentTime) {
+    this.lastHit = currentTime
+    this.hurt_sound.play()
+    this.currentState = 'hurt'
+    this.currentImageIndex = 0
   }
 
   /**
@@ -301,16 +390,16 @@ class Endboss extends MovableObject {
    */
   fallDown() {
     if (this.hasFallen) {
-      return;
+      return
     }
-    this.hasFallen = true;
+    this.hasFallen = true
     let fallInterval = setInterval(() => {
-      this.y += 5;
+      this.y += 5
       if (this.y > 720) {
-        clearInterval(fallInterval);
-        console.log("Endboss ist aus dem Bild geflogen");
+        clearInterval(fallInterval)
+        console.log('Endboss ist aus dem Bild geflogen')
       }
-    }, 50);
+    }, 50)
   }
 
   /**
@@ -318,32 +407,22 @@ class Endboss extends MovableObject {
    * oder du sagst: "dead" wenn energy == 0
    */
   isDead() {
-    return this.energy <= 0;
+    return this.energy <= 0
   }
 
   manageEndbossDefeat() {
-    // 1) Hintergrundmusik stoppen, alles stoppen.
-    // if (window.world && window.world.backgroundMusic) {
-    //   window.world.backgroundMusic.pause();
-    //   window.world.backgroundMusic.currentTime = 0;
-    // }
-
-    // 2) Winning-Sound abspielen (sofern nicht schon passiert)
     if (!this.hasPlayedWinningSound) {
-      this.winning_sound.play();
-      this.hasPlayedWinningSound = true;
+      this.winning_sound.play()
+      this.hasPlayedWinningSound = true
     }
-
-    // 3) Winning-Screen einblenden
-    const winnerScreen = document.getElementById("winningScreen");
+    const winnerScreen = document.getElementById('winningScreen')
     if (winnerScreen) {
-      winnerScreen.classList.remove("d-none");
+      winnerScreen.classList.remove('d-none')
     }
-    this.character.stop();
-    // 4) Endboss-Animationen stoppen und State auf final setzen
-    this.stopAnimation();
-    this.world.backgroundMusic.volume = 0; // Hintergrundmusik leise
-    this.currentState = "final";
+    this.character.stop()
+    this.stopAnimation()
+    this.world.backgroundMusic.volume = 0
+    this.currentState = 'final'
   }
 
   /**
@@ -352,8 +431,8 @@ class Endboss extends MovableObject {
    * Oder du verwendest nur noch das `stateMachineInterval`.
    */
   stopAnimation() {
-    clearInterval(this.stateMachineInterval);
-    clearInterval(this.checkDeadInterval);
-    console.log("Alle laufenden Animationen und Intervalle gestoppt");
+    clearInterval(this.stateMachineInterval)
+    clearInterval(this.checkDeadInterval)
+    console.log('Alle laufenden Animationen und Intervalle gestoppt')
   }
 }

@@ -1,49 +1,49 @@
 class MovableObject extends DrawableObject {
-  speed = 0.15; //standard, wird jeweils evtl. überschrieben
-  otherDirection = false;
-  speedY = 0;
-  acceleration = 2.5; //so schnell fällt das Objekt, 2.5
-  energy = 100; //100%
-  lastHit = 0;
-  lastHurtSoundTime = 0; // Zeitpunkt des letzten abgespielten Sounds
+  speed = 0.15 //standard, wird jeweils evtl. überschrieben
+  otherDirection = false
+  speedY = 0
+  acceleration = 2.5 //so schnell fällt das Objekt, 2.5
+  energy = 100 //100%
+  lastHit = 0
+  lastHurtSoundTime = 0 // Zeitpunkt des letzten abgespielten Sounds
   // Eigenschaften für die Hitbox
-  collisionOffsetX = 0; // Abstand zur linken Kante
-  collisionOffsetY = 0; // Abstand zur oberen Kante
-  collisionWidth = this.width; // Breite der Hitbox
-  collisionHeight = this.height; // Höhe der Hitbox
+  collisionOffsetX = 0 // Abstand zur linken Kante
+  collisionOffsetY = 0 // Abstand zur oberen Kante
+  collisionWidth = this.width // Breite der Hitbox
+  collisionHeight = this.height // Höhe der Hitbox
 
   //solange isAboveGround() oder this.speedY > 0 wahr sind, läuft die Funktion weiter.
   applyGravity() {
     setInterval(() => {
-      this.applyGravityStep(); // Gravitation auf das Objekt anwenden
+      this.applyGravityStep() // Gravitation auf das Objekt anwenden
       if (this instanceof ThrowableObject) {
-        this.limitBottleFall(); // Begrenzung der Flaschenhöhe
+        this.limitBottleFall() // Begrenzung der Flaschenhöhe
       } else {
-        this.resetCharacterToGround(); // Charakter auf Bodenhöhe zurücksetzen
+        this.resetCharacterToGround() // Charakter auf Bodenhöhe zurücksetzen
       }
-    }, 1000 / 60);
+    }, 1000 / 60)
   }
 
   // Schwerkraft auf das Objekt anwenden
   applyGravityStep() {
     if (this instanceof ThrowableObject && !this.gravityEnabled) {
-      return; // Gravitation deaktivieren nur für Flaschen
+      return // Gravitation deaktivieren nur für Flaschen
     }
 
     if (this.isAboveGround() || this.speedY > 0) {
-      this.y -= this.speedY;
-      this.speedY -= this.acceleration;
+      this.y -= this.speedY
+      this.speedY -= this.acceleration
     }
   }
 
   // Begrenzung für Flaschen
   limitBottleFall() {
     if (!this.gravityEnabled) {
-      return; // Keine Aktion, wenn Gravitation deaktiviert ist
+      return // Keine Aktion, wenn Gravitation deaktiviert ist
     }
     if (this.y > 1000) {
-      this.y = 600; // Begrenze die Y-Position
-      this.speedY = 0; // Stoppe die Gravitation
+      this.y = 600 // Begrenze die Y-Position
+      this.speedY = 0 // Stoppe die Gravitation
     }
   }
 
@@ -51,8 +51,8 @@ class MovableObject extends DrawableObject {
   resetCharacterToGround() {
     if (this.y > 120) {
       // Beispielbodenhöhe 120
-      this.y = 120;
-      this.speedY = 0; // Stoppe die Bewegung
+      this.y = 120
+      this.speedY = 0 // Stoppe die Bewegung
     }
   }
 
@@ -62,10 +62,10 @@ class MovableObject extends DrawableObject {
     if (this instanceof ThrowableObject) {
       //wenn es eine Instanz ist von ThrowableObject, hört sie nicht auf zu fallen
       //Bottles sollen immer weiter fallen.
-      return true;
+      return true
     } else {
       // console.log("ist in der Luft");
-      return this.y < 120;
+      return this.y < 120
     }
     //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
     //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
@@ -74,8 +74,8 @@ class MovableObject extends DrawableObject {
 
   // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
-    const thisBox = this.getCollisionBox(); //das Objekt, das die Methode aufgerufen hat, z.B. player
-    const otherBox = obj.getCollisionBox(); //übergebenes Objekt mit dem kollidiert wird, z.B. enemy. Also z.B. player.isColliding(enemy)
+    const thisBox = this.getCollisionBox() //das Objekt, das die Methode aufgerufen hat, z.B. player
+    const otherBox = obj.getCollisionBox() //übergebenes Objekt mit dem kollidiert wird, z.B. enemy. Also z.B. player.isColliding(enemy)
     // Prüfen, ob Kollision stattfindet und ob der Charakter in der Luft ist
     return (
       //prüft, ob Kollision statt findet, wenn alle ja, dann true
@@ -85,7 +85,7 @@ class MovableObject extends DrawableObject {
       thisBox.y <= otherBox.y + otherBox.height
       //&& thisBox.isAboveGround()  //dann werden bottles nur im Sprung eingesammelt.
       // Zusätzliche Bedingung: Der Charakter muss in der Luft sein, nicht hier einbauen!
-    );
+    )
   }
 
   // Methode zum Berechnen der tatsächlichen Hitbox
@@ -95,29 +95,29 @@ class MovableObject extends DrawableObject {
       y: this.y + this.collisionOffsetY,
       width: this.collisionWidth,
       height: this.collisionHeight,
-    };
+    }
   }
 
   //Ändert Wert der Energie
   hit() {
-    console.log("Die Methode hit() wurde ausgeführt!");
+    console.log('Die Methode hit() wurde ausgeführt!')
     if (this.energy === 0) {
-      return; // Wenn Energie bereits 0 ist, keine weiteren Treffer
+      return // Wenn Energie bereits 0 ist, keine weiteren Treffer
     }
-    const currentTime = new Date().getTime();
+    const currentTime = new Date().getTime()
     // Holt die aktuelle Zeit in Millisekunden (Zeit seit dem 1. Januar 1970).
     if (currentTime - this.lastHit > 500) {
       // Prüft, ob seit dem letzten Treffer mehr als 500 Millisekunden vergangen sind.
       // Wenn ja, darf der Charakter erneut Energie verlieren.
-      this.energy -= 5;
+      this.energy -= 5
       // Reduziert die Energie des Charakters um 5 Punkte.
       if (this.energy < 0) {
         // Falls die Energie unter 0 fällt:
-        this.energy = 0;
+        this.energy = 0
         // Setze die Energie auf 0, da negative Energie keinen Sinn ergibt.
       } else {
         // Wenn die Energie noch über 0 liegt:
-        this.lastHit = currentTime;
+        this.lastHit = currentTime
         // Speichere die aktuelle Zeit als `lastHit`, um die nächste Trefferzeit zu berechnen.
       }
     }
@@ -125,17 +125,17 @@ class MovableObject extends DrawableObject {
 
   isHurt() {
     if (this.energy === 0) {
-      return false; // Wenn Energie 0 ist, kann der Charakter nicht mehr "hurt" sein
+      return false // Wenn Energie 0 ist, kann der Charakter nicht mehr "hurt" sein
     }
-    let timepassed = new Date().getTime() - this.lastHit; //Zeit seit letztem Treffer,Differenz in MilliSekunden.
-    timepassed = timepassed / 1000; //Millisekunden durch 1000, dann haben wir die Sekunden.
-    return timepassed < 1; //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
+    let timepassed = new Date().getTime() - this.lastHit //Zeit seit letztem Treffer,Differenz in MilliSekunden.
+    timepassed = timepassed / 1000 //Millisekunden durch 1000, dann haben wir die Sekunden.
+    return timepassed < 1 //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
     //dann wird die Animation mit den HurtBildern 1 Sekunde angezeigt.
   }
 
   //ist Objekt tot oder nicht, also true/false
   isDead() {
-    return this.energy == 0;
+    return this.energy == 0
   }
 
   // playAnimation(images) {
@@ -147,30 +147,30 @@ class MovableObject extends DrawableObject {
 
   playAnimation(images, frameRate = 1, loop = true) {
     if (this.currentImage % frameRate === 0) {
-      let i = Math.floor(this.currentImage / frameRate);
+      let i = Math.floor(this.currentImage / frameRate)
       if (!loop && i >= images.length - 1) {
-        i = images.length - 1; // Bleibt auf dem letzten Bild stehen, wenn keine Schleife
+        i = images.length - 1 // Bleibt auf dem letzten Bild stehen, wenn keine Schleife
       } else {
-        i = i % images.length;
+        i = i % images.length
       }
-      let path = images[i];
+      let path = images[i]
 
-      this.img = this.imageCache[path];
+      this.img = this.imageCache[path]
     }
     if (loop || this.currentImage / frameRate < images.length - 1) {
-      this.currentImage++; // Bildposition hochzählen
+      this.currentImage++ // Bildposition hochzählen
     }
   }
 
   moveRight() {
-    this.x += this.speed;
+    this.x += this.speed
   }
 
   moveLeft() {
-    this.x -= this.speed; //Ziehe Wert von speed von x ab.
+    this.x -= this.speed //Ziehe Wert von speed von x ab.
   }
 
   jump() {
-    this.speedY = 30;
+    this.speedY = 30
   }
 }
