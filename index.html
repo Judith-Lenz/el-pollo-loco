@@ -33,24 +33,42 @@
 
     <div id="startScreen" class="startScreen">
       <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start-Screen" />
+
+      <div id="controls" class="dialog-overlay">
+        <div class="dialog-box">
+          <h2>Controls</h2>
+          <p>Dies ist die erste Nachricht.</p>
+          <div onclick="closeDialog('controls')">Schließen</div>
+        </div>
+      </div>
+
+      <div id="imprint" class="dialog-overlay">
+        <div class="dialog-box">
+          <h2>Imprint</h2>
+          <p>Dies ist die 2. Nachricht.</p>
+          <div onclick="closeDialog('imprint')">Schließen</div>
+        </div>
+      </div>
+
       <div class="buttonContainer">
-        <div id="btnStartGame" class="startBtn" onclick="">Home</div>
+        <div id="btnStartGame" class="startBtn" onclick="location.reload();">Home</div>
         <div id="btnStartGame" class="startBtn" onclick="startGame()">New Game</div>
-        <div class="startBtn" onclick="openDialog('dialog1')">Controls</div>
-        <div class="startBtn" onclick="openDialog('dialog2')">Imprint</div>
+        <div class="startBtn" onclick="openDialog('controls')">Controls</div>
+        <div class="startBtn" onclick="openDialog('imprint')">Imprint</div>
       </div>
     </div>
 
     <div class="canvasContainer">
       <div id="gameOverScreen" class="gameOverScreen d-none"></div>
       <div id="winningScreen" class="winningScreen d-none"></div>
-      <canvas id="canvas" width="740" height="480" class="d-none"></canvas>
+      <div class="canvasOverlay">Canvas Overlay mit responsive Buttons und sound Icon</div>
+      <canvas id="canvas" width="740" height="480" class="d-none">
+        <div></div>
+      </canvas>
     </div>
 
     <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
       <img src="img/icons/volume_up.svg" alt="Mute Icon" />
     </div>
-
-    <!-- Dialog 2 -->
   </body>
 </html>
