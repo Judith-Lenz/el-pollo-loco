@@ -68,7 +68,6 @@
       </div>
 
       <div class="buttonContainer">
-        <div id="btnStartGame" class="startBtn" onclick="location.reload();">Home</div>
         <div id="btnStartGame" class="startBtn" onclick="startGame()">New Game</div>
         <div class="startBtn" onclick="openDialog('controls')">Controls</div>
         <div class="startBtn" onclick="openDialog('imprint')">Imprint</div>
@@ -78,14 +77,16 @@
     <div class="canvasContainer">
       <div id="gameOverScreen" class="gameOverScreen d-none"></div>
       <div id="winningScreen" class="winningScreen d-none"></div>
-      <div class="canvasOverlay">Canvas Overlay mit responsive Buttons und sound Icon</div>
+      <div class="canvasOverlay">
+        Canvas Overlay mit responsive Buttons und sound Icon
+        <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
+          <img src="img/icons/volume_up.svg" alt="Mute Icon" />
+        </div>
+        <div id="btnStartGame" class="startBtn" onclick="location.reload();">Home</div>
+      </div>
       <canvas id="canvas" width="740" height="480" class="d-none">
         <div></div>
       </canvas>
-    </div>
-
-    <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
-      <img src="img/icons/volume_up.svg" alt="Mute Icon" />
     </div>
   </body>
 </html>
