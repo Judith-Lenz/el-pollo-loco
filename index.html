@@ -29,7 +29,7 @@
     <script src="js/game.js"></script>
   </head>
   <body onload="init()">
-    <h1>El pollo loco</h1>
+    <!-- <h1>El pollo loco</h1> -->
 
     <div id="startScreen" class="startScreen">
       <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start-Screen" />
@@ -37,8 +37,13 @@
       <div id="controls" class="dialog-overlay">
         <div class="dialog-box">
           <h2>Controls</h2>
-          <p>Dies ist die erste Nachricht.</p>
-          <div onclick="closeDialog('controls')">Schließen</div>
+          <p><img src="img/icons/arrow_left.svg" alt="Arrow Left Icon" />Move Left</p>
+          <p><img src="img/icons/arrow_right.svg" alt="Arrow Right Icon" />Move Right</p>
+          <p><img src="img/icons/space_bar.svg" alt="Space Bar Icon" />Jump</p>
+          <p>D Throw Salsa Bottles</p>
+          <div class="closeBtn" onclick="closeDialog('controls')">
+            <img src="img/icons/close_overlay.svg" alt="close Button" />
+          </div>
         </div>
       </div>
 
@@ -56,7 +61,9 @@
             <br />
             E-Mail: <a href="mailto:judith.lenz@outlook.de">judith.lenz@outlook.de</a>
           </p>
-          <div onclick="closeDialog('imprint')">Schließen</div>
+          <div class="closeBtn" onclick="closeDialog('imprint')">
+            <img src="img/icons/close_overlay.svg" alt="close Button" />
+          </div>
         </div>
       </div>
 

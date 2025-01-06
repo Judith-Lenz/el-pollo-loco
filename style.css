@@ -222,6 +222,18 @@ h1 {
   transform: scale(1);
 }
 
+.closeBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeBtn img {
+  width: auto;
+  height: 27px;
+  cursor: pointer;
+}
+
 @keyframes fadeOut {
   from {
     opacity: 1; /* Start: Voll sichtbar */
