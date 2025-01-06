@@ -72,23 +72,17 @@ class MovableObject extends DrawableObject {
     //die Flaschen sollen nicht auf dem Boden aufkommen und liegen bleiben, daher die if Abfrage.
   }
 
-  // Kollisionsprüfung mit der Hitbox NEU, gibt true oder false zurück
   isColliding(obj) {
-    const thisBox = this.getCollisionBox() //das Objekt, das die Methode aufgerufen hat, z.B. player
-    const otherBox = obj.getCollisionBox() //übergebenes Objekt mit dem kollidiert wird, z.B. enemy. Also z.B. player.isColliding(enemy)
-    // Prüfen, ob Kollision stattfindet und ob der Charakter in der Luft ist
+    const thisBox = this.getCollisionBox()
+    const otherBox = obj.getCollisionBox()
     return (
-      //prüft, ob Kollision statt findet, wenn alle ja, dann true
       thisBox.x + thisBox.width >= otherBox.x &&
       thisBox.x <= otherBox.x + otherBox.width &&
       thisBox.y + thisBox.height >= otherBox.y &&
       thisBox.y <= otherBox.y + otherBox.height
-      //&& thisBox.isAboveGround()  //dann werden bottles nur im Sprung eingesammelt.
-      // Zusätzliche Bedingung: Der Charakter muss in der Luft sein, nicht hier einbauen!
     )
   }
 
-  // Methode zum Berechnen der tatsächlichen Hitbox
   getCollisionBox() {
     return {
       x: this.x + this.collisionOffsetX,
@@ -98,67 +92,48 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  //Ändert Wert der Energie
   hit() {
     console.log('Die Methode hit() wurde ausgeführt!')
     if (this.energy === 0) {
-      return // Wenn Energie bereits 0 ist, keine weiteren Treffer
+      return
     }
     const currentTime = new Date().getTime()
-    // Holt die aktuelle Zeit in Millisekunden (Zeit seit dem 1. Januar 1970).
     if (currentTime - this.lastHit > 500) {
-      // Prüft, ob seit dem letzten Treffer mehr als 500 Millisekunden vergangen sind.
-      // Wenn ja, darf der Charakter erneut Energie verlieren.
       this.energy -= 5
-      // Reduziert die Energie des Charakters um 5 Punkte.
       if (this.energy < 0) {
-        // Falls die Energie unter 0 fällt:
         this.energy = 0
-        // Setze die Energie auf 0, da negative Energie keinen Sinn ergibt.
       } else {
-        // Wenn die Energie noch über 0 liegt:
         this.lastHit = currentTime
-        // Speichere die aktuelle Zeit als `lastHit`, um die nächste Trefferzeit zu berechnen.
       }
     }
   }
 
   isHurt() {
     if (this.energy === 0) {
-      return false // Wenn Energie 0 ist, kann der Charakter nicht mehr "hurt" sein
+      return false
     }
-    let timepassed = new Date().getTime() - this.lastHit //Zeit seit letztem Treffer,Differenz in MilliSekunden.
-    timepassed = timepassed / 1000 //Millisekunden durch 1000, dann haben wir die Sekunden.
-    return timepassed < 1 //d.h. wir wurden innerhalb der dieser Zeitspanne gehittet, dann true.
-    //dann wird die Animation mit den HurtBildern 1 Sekunde angezeigt.
+    let timepassed = new Date().getTime() - this.lastHit
+    timepassed = timepassed / 1000
+    return timepassed < 1
   }
 
-  //ist Objekt tot oder nicht, also true/false
   isDead() {
     return this.energy == 0
   }
-
-  // playAnimation(images) {
-  //   let i = this.currentImage % images.length; // Index berechnen
-  //   let path = images[i]; // Aktuelles Bild holen
-  //   this.img = this.imageCache[path]; // Bild aktualisieren
-  //   this.currentImage++; // Nächste Bildposition vorbereiten
-  // }
 
   playAnimation(images, frameRate = 1, loop = true) {
     if (this.currentImage % frameRate === 0) {
       let i = Math.floor(this.currentImage / frameRate)
       if (!loop && i >= images.length - 1) {
-        i = images.length - 1 // Bleibt auf dem letzten Bild stehen, wenn keine Schleife
+        i = images.length - 1
       } else {
         i = i % images.length
       }
       let path = images[i]
-
       this.img = this.imageCache[path]
     }
     if (loop || this.currentImage / frameRate < images.length - 1) {
-      this.currentImage++ // Bildposition hochzählen
+      this.currentImage++
     }
   }
 
@@ -167,7 +142,7 @@ class MovableObject extends DrawableObject {
   }
 
   moveLeft() {
-    this.x -= this.speed //Ziehe Wert von speed von x ab.
+    this.x -= this.speed
   }
 
   jump() {

@@ -1,17 +1,17 @@
 @font-face {
-  font-family: "zabras";
-  src: url("fonts/zabars.ttf") format("truetype"); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+  font-family: 'zabras';
+  src: url('fonts/zabars.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
 }
 
 body {
-  font-family: "zabras", Arial, Helvetica, sans-serif;
+  font-family: 'zabras', Arial, Helvetica, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   min-height: 100vh;
   margin: 0;
-  background-image: url("img/background/desert9.webp");
+  background-image: url('img/background/desert9.webp');
   /* background-image: none; */
   background-repeat: no-repeat; /* Verhindert das Wiederholen */
   background-size: cover; /* Füllt den gesamten Hintergrund aus */
@@ -23,7 +23,6 @@ canvas {
   display: block; /*sehr wichtig das hier für responsive design */
   background-color: black;
   border-radius: 20px;
-  border-color: aqua;
   border-width: 10px;
   opacity: 0; /* Start: Unsichtbar */
   transition: opacity 0.3s ease-in; /* Sanftes Einblenden */
@@ -55,7 +54,7 @@ h1 {
 }
 
 .gameOverScreen {
-  background-image: url("img/9_intro_outro_screens/game_over/game over.png");
+  background-image: url('img/9_intro_outro_screens/game_over/game over.png');
   background-size: cover; /* Skaliert proportional und füllt den Container */
   background-position: center; /* Zentriert das Bild */
   background-repeat: no-repeat; /* Verhindert Wiederholungen */
@@ -77,7 +76,7 @@ h1 {
 }
 
 .winningScreen {
-  background-image: url("img/9_intro_outro_screens/win/win_2.png");
+  background-image: url('img/9_intro_outro_screens/win/win_2.png');
   background-size: cover; /* Skaliert proportional und füllt den Container */
   background-position: center; /* Zentriert das Bild */
   background-repeat: no-repeat; /* Verhindert Wiederholungen */
@@ -98,6 +97,16 @@ h1 {
   z-index: 2; /* Stellt sicher, dass es über dem Canvas liegt */
 }
 
+.buttonContainer {
+  position: absolute;
+  bottom: 12px; /* Abstand zum unteren Rand */
+  left: 50%; /* Horizontale Ausrichtung: in die Mitte verschieben */
+  transform: translateX(-50%); /* Korrigiert den "Ankerpunkt" zurück auf die Mitte */
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
 .muteDiv {
   height: 40px;
   vertical-align: middle;
@@ -113,6 +122,7 @@ h1 {
 
 .startScreen {
   display: block; /* offenbar nicht wirklich nötig.*/
+  position: relative;
 }
 .startScreen img {
   width: 100%;
@@ -124,17 +134,56 @@ h1 {
   justify-content: center;
   align-items: center;
   display: flex;
-  background-color: white;
+  background-color: #ffc400;
   font-size: 20px;
-  height: 55px;
+  height: 30px;
   width: 80px;
   cursor: pointer;
   border-radius: 30px;
   border-color: black;
 }
 
+.startBtn:hover {
+  background-color: #b48d16;
+}
+
 .fade-out {
   animation: fadeOut 0.1s forwards; /* 0.3s für den Fade-Out */
+}
+
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dialog-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dialog-box {
+  background-color: #ffc400;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.dialog-overlay.active .dialog-box {
+  transform: scale(1);
 }
 
 @keyframes fadeOut {

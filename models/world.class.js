@@ -318,6 +318,7 @@ class World {
         enemy.alert_sound.muted = this.allSoundsMuted
         enemy.hurt_sound.muted = this.allSoundsMuted
         enemy.winning_sound.muted = this.allSoundsMuted
+        enemy.dying_sound.muted = this.allSoundsMuted
       }
     })
   }

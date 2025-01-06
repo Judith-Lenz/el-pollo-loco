@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="img/favicon/cactus.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <title>El Pollo Loco</title>
+    <script src="js/startpage.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/background-object.class.js"></script>
@@ -32,6 +33,12 @@
 
     <div id="startScreen" class="startScreen">
       <img src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start-Screen" />
+      <div class="buttonContainer">
+        <div id="btnStartGame" class="startBtn" onclick="">Home</div>
+        <div id="btnStartGame" class="startBtn" onclick="startGame()">New Game</div>
+        <div class="startBtn" onclick="openDialog('dialog1')">Controls</div>
+        <div class="startBtn" onclick="openDialog('dialog2')">Imprint</div>
+      </div>
     </div>
 
     <div class="canvasContainer">
@@ -39,12 +46,11 @@
       <div id="winningScreen" class="winningScreen d-none"></div>
       <canvas id="canvas" width="740" height="480" class="d-none"></canvas>
     </div>
-    <div id="muteDiv" class="muteDiv" onclick="world.toggleMuteAllSounds()">
+
+    <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
       <img src="img/icons/volume_up.svg" alt="Mute Icon" />
     </div>
 
-    <div>
-      <div id="btnStartGame" class="startBtn" onclick="startGame()">Start Game</div>
-    </div>
+    <!-- Dialog 2 -->
   </body>
 </html>
