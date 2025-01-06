@@ -197,12 +197,25 @@ h1 {
 
 .dialog-box {
   background-color: #ffc400;
-  padding: 16px;
+  padding: 12px;
+  font-size: 18px;
   border-radius: 20px;
-  width: 300px;
+  width: 70%;
+  height: 70%;
+  overflow: auto;
   text-align: center;
   transform: scale(0.9);
   transition: transform 0.3s ease;
+}
+
+.dialog-box a {
+  text-decoration: none;
+  color: black;
+  cursor: auto;
+}
+
+.dialog-box::-webkit-scrollbar {
+  display: none;
 }
 
 .dialog-overlay.active .dialog-box {
