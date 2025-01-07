@@ -176,6 +176,8 @@ class Character extends MovableObject {
       this.world.backgroundMusic.volume = 0
       this.gameOver_sound.play()
       document.getElementById('gameOverScreen').classList.remove('d-none')
+      document.getElementById('home').classList.remove('d-none')
+      document.getElementById('btnNewGame').classList.remove('d-none')
       this.stop()
     }, animationDuration)
   }

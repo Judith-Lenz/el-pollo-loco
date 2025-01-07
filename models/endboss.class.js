@@ -418,6 +418,8 @@ class Endboss extends MovableObject {
     const winnerScreen = document.getElementById('winningScreen')
     if (winnerScreen) {
       winnerScreen.classList.remove('d-none')
+      document.getElementById('home').classList.remove('d-none')
+      document.getElementById('btnNewGame').classList.remove('d-none')
     }
     this.character.stop()
     this.stopAnimation()

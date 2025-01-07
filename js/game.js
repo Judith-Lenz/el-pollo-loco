@@ -14,6 +14,9 @@ function startGame() {
   // resetGame();
   // Blende den StartScreen langsam aus
   document.getElementById('startScreen').classList.add('fade-out')
+  document.getElementById('home').classList.add('d-none')
+  document.getElementById('btnNewGame').classList.add('d-none')
+
   // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
     document.getElementById('startScreen').classList.add('d-none') // Verstecke den StartScreen endgültig

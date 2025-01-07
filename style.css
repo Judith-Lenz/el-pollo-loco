@@ -74,7 +74,7 @@ h2 {
   display: flex;
 
   justify-content: center; /* Zentriert das Bild horizontal */
-  align-items: center; /* Zentriert das Bild vertikal */
+  align-items: end; /* Zentriert das Bild vertikal */
   z-index: 2; /* Stellt sicher, dass es über dem Canvas liegt */
 }
 
@@ -124,7 +124,7 @@ h2 {
 
 .buttonContainer {
   position: absolute;
-  bottom: 12px; /* Abstand zum unteren Rand */
+  bottom: 0;
   left: 50%; /* Horizontale Ausrichtung: in die Mitte verschieben */
   transform: translateX(-50%); /* Korrigiert den "Ankerpunkt" zurück auf die Mitte */
   display: flex;
@@ -138,7 +138,7 @@ h2 {
 }
 
 .muteDiv img {
-  height: 40px;
+  height: 24px;
 }
 
 .muteDiv :hover {
@@ -157,6 +157,9 @@ h2 {
 }
 
 .startBtn {
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
   justify-content: center;
   align-items: center;
   display: flex;
