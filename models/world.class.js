@@ -217,8 +217,8 @@ class World {
     this.addObjectsToMap(this.level.clouds) //Iteriert durch die Wolken aus level1 und ruft für jede addToMap() auf.
     this.addObjectsToMap(this.level.bottles)
     this.addObjectsToMap(this.level.coins)
-    this.addObjectsToMap(this.throwableObjects)
     this.addObjectsToMap(this.level.enemies)
+    this.addObjectsToMap(this.throwableObjects)
     this.addToMap(this.character)
 
     this.addToMap(this.statusBarEndboss)

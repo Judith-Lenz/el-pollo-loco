@@ -73,10 +73,10 @@ class Endboss extends MovableObject {
     this.frameCounterHurt = 0
     this.frameCounterDead = 0
     this.frameCounterWalk = 0
-    this.collisionOffsetX = 40
-    this.collisionOffsetY = 70
-    this.collisionWidth = 295
-    this.collisionHeight = 360
+    this.collisionOffsetX = 80
+    this.collisionOffsetY = 80
+    this.collisionWidth = 220
+    this.collisionHeight = 300
     this.lastHit = 0
   }
 
