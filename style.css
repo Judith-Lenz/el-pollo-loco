@@ -42,6 +42,10 @@ h1 {
   text-shadow: 2px 2px 8px rgb(0, 0, 0, 0.5);
 }
 
+h2 {
+  margin-bottom: 12px;
+}
+
 .canvasContainer {
   align-items: center;
   justify-content: center;
@@ -214,8 +218,31 @@ h1 {
   cursor: auto;
 }
 
+.dialog-box img {
+  width: 51px;
+  height: auto;
+}
+
 .dialog-box::-webkit-scrollbar {
   display: none;
+}
+
+.controlLines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.key {
+  width: 120px;
+  height: auto;
+}
+
+.arial {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .dialog-overlay.active .dialog-box {
@@ -223,6 +250,7 @@ h1 {
 }
 
 .closeBtn {
+  padding-top: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
