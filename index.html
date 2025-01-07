@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="img/favicon/cactus.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style_mobileBtns.css" />
     <title>El Pollo Loco</title>
     <script src="js/startpage.js"></script>
     <script src="models/drawable-object.class.js"></script>
@@ -94,15 +95,25 @@
       <div id="gameOverScreen" class="gameOverScreen d-none"></div>
       <div id="winningScreen" class="winningScreen d-none"></div>
       <div class="canvasOverlay">
+        <!-- <div class="mobileTouchBtn d-none">left</div>
+        <div class="mobileTouchBtn d-none">right</div> -->
         <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
           <img src="img/icons/volume_up.svg" alt="Mute Icon" />
         </div>
         <div id="home" class="startBtn" onclick="location.reload();">Home</div>
         <div id="btnNewGame" class="startBtn" onclick="startGame()">New Game</div>
       </div>
+      <!-- <div class="mobileTouchBtn d-none">jump</div>
+      <div class="mobileTouchBtn d-none">throw</div> -->
       <canvas id="canvas" width="740" height="480" class="d-none">
         <div></div>
       </canvas>
+      <div class="orientation-hint">
+        <p>
+          Please rotate your device to <br />landscape mode <br />
+          a better viewing experience.
+        </p>
+      </div>
     </div>
   </body>
 </html>
