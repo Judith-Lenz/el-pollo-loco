@@ -16,7 +16,7 @@ function startGame() {
   document.getElementById('startScreen').classList.add('fade-out')
   document.getElementById('home').classList.add('d-none')
   document.getElementById('btnNewGame').classList.add('d-none')
-
+  document.getElementById('muteDiv').classList.remove('d-none')
   // Einblendung der Touch-Buttons prüfen
   toggleMobileButtons()
   bindMobileButtonEvents()

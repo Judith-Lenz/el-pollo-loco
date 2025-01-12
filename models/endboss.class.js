@@ -420,6 +420,7 @@ class Endboss extends MovableObject {
       winnerScreen.classList.remove('d-none')
       document.getElementById('home').classList.remove('d-none')
       document.getElementById('btnNewGame').classList.remove('d-none')
+      document.getElementById('muteDiv').classList.add('d-none')
     }
     this.character.stop()
     this.stopAnimation()

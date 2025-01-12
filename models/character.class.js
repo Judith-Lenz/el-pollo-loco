@@ -178,6 +178,7 @@ class Character extends MovableObject {
       document.getElementById('gameOverScreen').classList.remove('d-none')
       document.getElementById('home').classList.remove('d-none')
       document.getElementById('btnNewGame').classList.remove('d-none')
+      document.getElementById('muteDiv').classList.add('d-none')
       this.stop()
     }, animationDuration)
   }
