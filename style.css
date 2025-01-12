@@ -136,7 +136,14 @@ h2 {
 }
 
 .muteDiv {
-  height: 40px;
+  width: 35px; /* Breite des Buttons */
+  background-color: transparent; /* Hintergrundfarbe */
+  display: flex; /* Für zentrierten Inhalt */
+  align-items: center; /* Zentrierung vertikal */
+  justify-content: center; /* Zentrierung horizontal */
+  margin-left: 12px;
+  margin-right: 12px;
+  height: 32px;
   vertical-align: middle;
 }
 

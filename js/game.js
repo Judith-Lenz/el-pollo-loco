@@ -19,6 +19,7 @@ function startGame() {
 
   // Einblendung der Touch-Buttons prüfen
   toggleMobileButtons()
+  bindMobileButtonEvents()
   // Event-Listener für Änderungen der Bildschirmgröße oder Orientierung
   window.addEventListener('resize', toggleMobileButtons)
   // Warte 300ms, um den Fade-Out abzuschließen
@@ -101,3 +102,81 @@ window.addEventListener('keyup', (e) => {
   // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.
   // console.log("KeyCode der gedrückten Taste:", e.keyCode); //Code als Zahl,ist veraltet, klappt aber trotzdem noch.
 })
+
+function bindMobileButtonEvents() {
+  // Touch-Button Links
+  document.getElementById('mblTouchBtnLeft').addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault()
+      keyboard.LEFT = true
+    },
+    { passive: false }
+  )
+
+  document.getElementById('mblTouchBtnLeft').addEventListener(
+    'touchend',
+    (e) => {
+      e.preventDefault()
+      keyboard.LEFT = false
+    },
+    { passive: false }
+  )
+
+  // Touch-Button Rechts
+  document.getElementById('mblTouchBtnRight').addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault()
+      keyboard.RIGHT = true
+    },
+    { passive: false }
+  )
+
+  document.getElementById('mblTouchBtnRight').addEventListener(
+    'touchend',
+    (e) => {
+      e.preventDefault()
+      keyboard.RIGHT = false
+    },
+    { passive: false }
+  )
+
+  // Touch-Button Springen
+  document.getElementById('mblTouchBtnJump').addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault()
+      keyboard.SPACE = true
+    },
+    { passive: false }
+  )
+
+  document.getElementById('mblTouchBtnJump').addEventListener(
+    'touchend',
+    (e) => {
+      e.preventDefault()
+      keyboard.SPACE = false
+    },
+    { passive: false }
+  )
+
+  // Touch-Button Werfen
+  document.getElementById('mblTouchBtnThrow').addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault()
+      keyboard.D = true
+    },
+    { passive: false }
+  )
+
+  document.getElementById('mblTouchBtnThrow').addEventListener(
+    'touchend',
+    (e) => {
+      e.preventDefault()
+      keyboard.D = false
+    },
+    { passive: false }
+  )
+}
