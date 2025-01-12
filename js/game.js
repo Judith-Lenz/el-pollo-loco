@@ -11,12 +11,16 @@ function startGame() {
     // <-- Prüfe, ob es schon eine Welt gibt
     world.stop() // <-- neu: Alte Welt stoppen, bevor neue erstellt wird
   }
-  // resetGame();
+
   // Blende den StartScreen langsam aus
   document.getElementById('startScreen').classList.add('fade-out')
   document.getElementById('home').classList.add('d-none')
   document.getElementById('btnNewGame').classList.add('d-none')
 
+  // Einblendung der Touch-Buttons prüfen
+  toggleMobileButtons()
+  // Event-Listener für Änderungen der Bildschirmgröße oder Orientierung
+  window.addEventListener('resize', toggleMobileButtons)
   // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
     document.getElementById('startScreen').classList.add('d-none') // Verstecke den StartScreen endgültig
@@ -25,10 +29,25 @@ function startGame() {
     const canvasElement = document.getElementById('canvas')
     canvasElement.classList.remove('d-none') // Zeige das Canvas
     canvasElement.classList.add('show') // Sanftes Einblenden des Canvas
-    // Initialisiere das Level und die Spielwelt, immer zuerst level erstellen und dann erst die Welt, sonst wird mit der welt noch ein altes level erstellt.
-    initLevel() //damit sind alle Gegenstände wieder am ursprünglichen Platz
+
+    // Initialisiere das Level und die Spielwelt
+    initLevel() // Alle Gegenstände wieder am ursprünglichen Platz
     world = new World(canvas, keyboard)
   }, 300) // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
+}
+
+function toggleMobileButtons() {
+  const isMobile = window.innerWidth <= 768 || window.matchMedia('(orientation: portrait)').matches
+  const btnLeft = document.getElementById('mblTouchBtnArrows')
+  const btnRight = document.getElementById('mblTouchBtnAction')
+
+  if (isMobile) {
+    btnLeft.classList.remove('d-none')
+    btnRight.classList.remove('d-none')
+  } else {
+    btnLeft.classList.add('d-none')
+    btnRight.classList.add('d-none')
+  }
 }
 
 window.addEventListener('keydown', (e) => {

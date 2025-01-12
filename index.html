@@ -95,16 +95,31 @@
       <div id="gameOverScreen" class="gameOverScreen d-none"></div>
       <div id="winningScreen" class="winningScreen d-none"></div>
       <div class="canvasOverlay">
-        <!-- <div class="mobileTouchBtn d-none">left</div>
-        <div class="mobileTouchBtn d-none">right</div> -->
-        <div id="muteDiv" class="startBtn muteDiv" onclick="world.toggleMuteAllSounds()">
+        <div id="mblTouchBtnArrows" class="flex d-none">
+          <div id="mblTouchBtnLeft" class="mobileTouchBtn">
+            <img src="img/icons/arrow_left.svg" alt="Arrow Left Icon" />
+          </div>
+          <div id="mblTouchBtnRight" class="mobileTouchBtn">
+            <img src="img/icons/arrow_right.svg" alt="Arrow Right Icon" />
+          </div>
+        </div>
+
+        <div id="muteDiv" class="mobileTouchBtn muteDiv" onclick="world.toggleMuteAllSounds()">
           <img src="img/icons/volume_up.svg" alt="Mute Icon" />
         </div>
+        <div id="mblTouchBtnAction" class="flex d-none">
+          <div id="mblTouchBtnJump" class="mobileTouchBtn">
+            <img src="img/icons/arrow_up.svg" alt="Arrow Up Icon" />
+          </div>
+          <div id="mblTouchBtnThrow" class="mobileTouchBtn">
+            <img src="img/icons/arrow_throw.svg" alt="Arrow Throw Icon" />
+          </div>
+        </div>
+
         <div id="home" class="startBtn" onclick="location.reload();">Home</div>
         <div id="btnNewGame" class="startBtn" onclick="startGame()">New Game</div>
       </div>
-      <!-- <div class="mobileTouchBtn d-none">jump</div>
-      <div class="mobileTouchBtn d-none">throw</div> -->
+
       <canvas id="canvas" width="740" height="480" class="d-none">
         <div></div>
       </canvas>

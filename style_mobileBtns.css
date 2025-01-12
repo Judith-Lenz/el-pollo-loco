@@ -1,0 +1,22 @@
+.mobileTouchBtn {
+  height: 35px;
+  vertical-align: middle;
+  width: 35px; /* Breite des Buttons */
+  border: 3px solid black; /* Schwarzer Rand */
+  border-radius: 50%; /* Kreisform */
+  background-color: transparent; /* Hintergrundfarbe */
+  display: flex; /* Für zentrierten Inhalt */
+  align-items: center; /* Zentrierung vertikal */
+  justify-content: center; /* Zentrierung horizontal */
+  margin-left: 12px;
+  margin-right: 12px;
+  margin-bottom: 5px;
+}
+
+.mobileTouchBtn img {
+  height: 30px;
+}
+
+.flex {
+  display: flex;
+}
