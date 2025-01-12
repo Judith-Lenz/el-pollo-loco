@@ -38,15 +38,15 @@ function startGame() {
 
 function toggleMobileButtons() {
   const isMobile = window.innerWidth <= 768 || window.matchMedia('(orientation: portrait)').matches
-  const btnLeft = document.getElementById('mblTouchBtnArrows')
-  const btnRight = document.getElementById('mblTouchBtnAction')
+  const btnArrows = document.getElementById('mblTouchBtnArrows')
+  const btnAction = document.getElementById('mblTouchBtnAction')
 
   if (isMobile) {
-    btnLeft.classList.remove('d-none')
-    btnRight.classList.remove('d-none')
+    btnArrows.classList.remove('d-none')
+    btnAction.classList.remove('d-none')
   } else {
-    btnLeft.classList.add('d-none')
-    btnRight.classList.add('d-none')
+    btnArrows.classList.add('d-none')
+    btnAction.classList.add('d-none')
   }
 }
 

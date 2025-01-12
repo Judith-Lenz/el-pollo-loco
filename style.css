@@ -277,7 +277,7 @@ h2 {
 }
 
 .d-none {
-  display: none;
+  display: none !important; /* Überschreibt display von flex */
 }
 
 .orientation-hint {
