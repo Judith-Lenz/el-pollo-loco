@@ -1,36 +1,29 @@
-//definiert wie viele Objekte auftauchen
-//diese Objekte werden über die level Klasse an die World übergeben.
-let level1; // globale Variable wird zunächst nur deklariert, damit z.B. world darauf zugreifen kann
+let level1
 
 function initLevel() {
   level1 = new Level(
     [
-      new Bottle(200),
-      new Bottle(300),
-      new Bottle(400),
+      new Bottle(100),
+      new Bottle(150),
+      new Bottle(190),
       new Bottle(550),
-      new Bottle(700),
-      new Bottle(900),
+      new Bottle(600),
+      new Bottle(800),
       new Bottle(1050),
+      new Bottle(1100),
+      new Bottle(1200),
+      new Bottle(1300),
+      new Bottle(1400),
+      new Bottle(1500),
+      new Bottle(1550),
+      new Bottle(1650),
+      new Bottle(1700),
+      new Bottle(1750),
+      new Bottle(1800),
+      new Bottle(1900),
       new Bottle(2000),
-      new Bottle(2000 + 10),
-      new Bottle(2000 + 20),
-      new Bottle(2000 + 30),
-      new Bottle(2000 + 40),
-      new Bottle(2000 + 50),
-      new Bottle(2000 + 60),
-      new Bottle(2000 + 70),
-      new Bottle(2000 + 80),
-      new Bottle(2000 + 90),
-      new Bottle(2000 + 100),
-      new Bottle(2000 + 110),
-      new Bottle(2000 + 80),
-      new Bottle(2000 + 80),
-      new Bottle(2000 + 80),
-      new Bottle(2000 + 80),
-      new Bottle(2000 + 115),
-      new Bottle(2000 + 120),
-    ], //in die Klammer bei Bedarf die genaue Position einfügen
+      new Bottle(2050),
+    ],
     [
       new Coin(250, 150),
       new Coin(400, 50),
@@ -44,70 +37,63 @@ function initLevel() {
       new Coin(1950, 60),
     ],
     [
-      //enemies Parameter
-      new ChickenNormal(1050),
       new ChickenNormal(550),
       new ChickenNormal(750),
-      new ChickenNormal(950),
+      new ChickenNormal(2000),
+      new ChickenNormal(1050),
+      new ChickenNormal(1150),
+      new ChickenNormal(2600),
+      new ChickenNormal(2850),
       new ChickenSmall(1000),
       new ChickenSmall(1500),
+      new ChickenSmall(900),
+      new ChickenSmall(1900),
       new ChickenSmall(1700),
+      new ChickenSmall(4000),
+      new ChickenSmall(4400),
+      new ChickenSmall(3500),
+      new ChickenSmall(3800),
+      new ChickenSmall(2800),
+      new ChickenSmall(2900),
+      new ChickenSmall(3100),
+      new ChickenSmall(3900),
+      new ChickenSmall(5000),
+      new ChickenSmall(5500),
       new Endboss(this),
     ],
     [
-      new Cloud("img/5_background/layers/4_clouds/1.png", 0, 50),
-      new Cloud("img/5_background/layers/4_clouds/2.png", 500, 45),
-      new Cloud("img/5_background/layers/4_clouds/1.png", 1100, 55),
-      new Cloud("img/5_background/layers/4_clouds/2.png", 1650, 60),
-      new Cloud("img/5_background/layers/4_clouds/1.png", 2200, 48),
-      new Cloud("img/5_background/layers/4_clouds/2.png", 2800, 63),
+      new Cloud('img/5_background/layers/4_clouds/1.png', 0, 50),
+      new Cloud('img/5_background/layers/4_clouds/2.png', 500, 45),
+      new Cloud('img/5_background/layers/4_clouds/1.png', 1100, 55),
+      new Cloud('img/5_background/layers/4_clouds/2.png', 1650, 60),
+      new Cloud('img/5_background/layers/4_clouds/1.png', 2200, 48),
+      new Cloud('img/5_background/layers/4_clouds/2.png', 2800, 63),
     ],
     [
-      new BackgroundObject("img/5_background/layers/air.png", -739),
-      new BackgroundObject("img/5_background/layers/3_third_layer/2.png", -739),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/2.png",
-        -739
-      ),
-      new BackgroundObject("img/5_background/layers/1_first_layer/2.png", -739),
+      new BackgroundObject('img/5_background/layers/air.png', -739),
+      new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -739),
+      new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -739),
+      new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -739),
 
-      new BackgroundObject("img/5_background/layers/air.png", 0),
-      new BackgroundObject("img/5_background/layers/3_third_layer/1.png", 0),
-      new BackgroundObject("img/5_background/layers/2_second_layer/1.png", 0),
-      new BackgroundObject("img/5_background/layers/1_first_layer/1.png", 0),
+      new BackgroundObject('img/5_background/layers/air.png', 0),
+      new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+      new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+      new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
 
-      new BackgroundObject("img/5_background/layers/air.png", 739),
-      new BackgroundObject("img/5_background/layers/3_third_layer/2.png", 739),
-      new BackgroundObject("img/5_background/layers/2_second_layer/2.png", 739),
-      new BackgroundObject("img/5_background/layers/1_first_layer/2.png", 739),
+      new BackgroundObject('img/5_background/layers/air.png', 739),
+      new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 739),
+      new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 739),
+      new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 739),
 
-      new BackgroundObject("img/5_background/layers/air.png", 739 * 2),
-      new BackgroundObject(
-        "img/5_background/layers/3_third_layer/1.png",
-        739 * 2
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/1.png",
-        739 * 2
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/1_first_layer/1.png",
-        739 * 2
-      ),
+      new BackgroundObject('img/5_background/layers/air.png', 739 * 2),
+      new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 739 * 2),
+      new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 739 * 2),
+      new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 739 * 2),
 
-      new BackgroundObject("img/5_background/layers/air.png", 739 * 3),
-      new BackgroundObject(
-        "img/5_background/layers/3_third_layer/2.png",
-        739 * 3
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/2_second_layer/2.png",
-        739 * 3
-      ),
-      new BackgroundObject(
-        "img/5_background/layers/1_first_layer/2.png",
-        739 * 3
-      ),
+      new BackgroundObject('img/5_background/layers/air.png', 739 * 3),
+      new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 739 * 3),
+      new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 739 * 3),
+      new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 739 * 3),
     ]
-  );
+  )
 }

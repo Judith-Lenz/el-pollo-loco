@@ -1,5 +1,5 @@
-let canvas //brauch ich hier außerhalb, weil ich woanders auch noch benutzen möchte.
-let world // Globale Variable für die World-Instanz
+let canvas
+let world
 let keyboard = new Keyboard()
 
 function init() {
@@ -8,33 +8,25 @@ function init() {
 
 function startGame() {
   if (world) {
-    // <-- Prüfe, ob es schon eine Welt gibt
-    world.stop() // <-- neu: Alte Welt stoppen, bevor neue erstellt wird
+    world.stop()
   }
-
-  // Blende den StartScreen langsam aus
   document.getElementById('startScreen').classList.add('fade-out')
   document.getElementById('home').classList.add('d-none')
   document.getElementById('btnNewGame').classList.add('d-none')
   document.getElementById('muteDiv').classList.remove('d-none')
-  // Einblendung der Touch-Buttons prüfen
   toggleMobileButtons()
   bindMobileButtonEvents()
-  // Event-Listener für Änderungen der Bildschirmgröße oder Orientierung
   window.addEventListener('resize', toggleMobileButtons)
-  // Warte 300ms, um den Fade-Out abzuschließen
   setTimeout(() => {
-    document.getElementById('startScreen').classList.add('d-none') // Verstecke den StartScreen endgültig
+    document.getElementById('startScreen').classList.add('d-none')
     document.getElementById('gameOverScreen').classList.add('d-none')
     document.getElementById('winningScreen').classList.add('d-none')
     const canvasElement = document.getElementById('canvas')
-    canvasElement.classList.remove('d-none') // Zeige das Canvas
-    canvasElement.classList.add('show') // Sanftes Einblenden des Canvas
-
-    // Initialisiere das Level und die Spielwelt
-    initLevel() // Alle Gegenstände wieder am ursprünglichen Platz
+    canvasElement.classList.remove('d-none')
+    canvasElement.classList.add('show')
+    initLevel()
     world = new World(canvas, keyboard)
-  }, 300) // Die 300ms sollten mit dem CSS-Fade-Out synchronisiert sein
+  }, 300)
 }
 
 function toggleMobileButtons() {
@@ -72,9 +64,6 @@ window.addEventListener('keydown', (e) => {
       keyboard.D = true
       break
   }
-  // console.log(e.key); // Zeigt die Taste
-  // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.
-  // console.log("KeyCode der gedrückten Taste:", e.keyCode); //Code als Zahl,ist veraltet, klappt aber trotzdem noch.
 })
 
 window.addEventListener('keyup', (e) => {
@@ -98,13 +87,9 @@ window.addEventListener('keyup', (e) => {
       keyboard.D = false
       break
   }
-  // console.log(e.key); // Zeigt die Taste
-  // console.log("Tastencode:", e.code); // Zeigt den Tastencode in Sprache an, ist wohl moderner.
-  // console.log("KeyCode der gedrückten Taste:", e.keyCode); //Code als Zahl,ist veraltet, klappt aber trotzdem noch.
 })
 
 function bindMobileButtonEvents() {
-  // Touch-Button Links
   document.getElementById('mblTouchBtnLeft').addEventListener(
     'touchstart',
     (e) => {
@@ -113,7 +98,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
   document.getElementById('mblTouchBtnLeft').addEventListener(
     'touchend',
     (e) => {
@@ -122,8 +106,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
-  // Touch-Button Rechts
   document.getElementById('mblTouchBtnRight').addEventListener(
     'touchstart',
     (e) => {
@@ -132,7 +114,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
   document.getElementById('mblTouchBtnRight').addEventListener(
     'touchend',
     (e) => {
@@ -141,8 +122,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
-  // Touch-Button Springen
   document.getElementById('mblTouchBtnJump').addEventListener(
     'touchstart',
     (e) => {
@@ -151,7 +130,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
   document.getElementById('mblTouchBtnJump').addEventListener(
     'touchend',
     (e) => {
@@ -160,8 +138,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
-  // Touch-Button Werfen
   document.getElementById('mblTouchBtnThrow').addEventListener(
     'touchstart',
     (e) => {
@@ -170,7 +146,6 @@ function bindMobileButtonEvents() {
     },
     { passive: false }
   )
-
   document.getElementById('mblTouchBtnThrow').addEventListener(
     'touchend',
     (e) => {

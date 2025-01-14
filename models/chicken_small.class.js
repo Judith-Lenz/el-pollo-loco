@@ -1,88 +1,114 @@
+/**
+ * Class representing a small chicken enemy.
+ * Inherits from MovableObject and includes animations and sounds.
+ */
 class ChickenSmall extends MovableObject {
-  y = 365; //Höhe plazieren. Mehr ist dann weiter unten, erst Größe, dann Plazierung!
-  height = 50;
-  width = 50;
+  y = 365
+  height = 50
+  width = 50
   IMAGES_WALKING = [
-    "img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
-    "img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
-    "img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
-  ];
+    'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+    'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+    'img/3_enemies_chicken/chicken_small/1_walk/3_w.png',
+  ]
 
-  IMAGE_DEAD = "img/3_enemies_chicken/chicken_small/2_dead/dead.png";
+  IMAGE_DEAD = 'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
 
-  dead_enemy_sound = new Audio("audio/chicken_dead.mp3");
-  // isDead = false; // Neuer Zustand: Ist der Feind tot?
+  dead_enemy_sound = new Audio('audio/chicken_dead.mp3')
 
+  /**
+   * Creates a ChickenSmall object.
+   * @param {number} x - The initial x-coordinate of the small chicken.
+   */
   constructor(x) {
-    super().loadImage("img/3_enemies_chicken/chicken_small/1_walk/2_w.png");
-    this.loadImages(this.IMAGES_WALKING);
-    this.energy = null; // Chickens haben keine Energie
-    this.isDeadFlag = false; // Standard: Chicken lebt
-    this.x = x; //die Hühnchen starten bei 200px plus zufällige Zahl für jedes Hühnchen.
-    this.speed = 0.15 + Math.random() * 0.5; //zufällige Geschwindigkeit zwischen und
-    this.animate();
-    this.collisionOffsetX = 1;
-    this.collisionOffsetY = 1;
-    this.collisionWidth = 47;
-    this.collisionHeight = 47;
+    super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/2_w.png')
+    this.loadImages(this.IMAGES_WALKING)
+    this.energy = null
+    this.isDeadFlag = false
+    this.x = x
+    this.speed = 0.7 + Math.random() * 0.5
+    this.animate()
+    this.collisionOffsetX = 1
+    this.collisionOffsetY = 1
+    this.collisionWidth = 47
+    this.collisionHeight = 47
   }
 
+  /**
+   * Checks if the small chicken is dead.
+   * @returns {boolean} True if the chicken is dead, false otherwise.
+   */
   isDead() {
-    return this.isDeadFlag; // Chickens nutzen ein Flag für isDead
+    return this.isDeadFlag
   }
 
+  /**
+   * Animates the small chicken's walking and updates its position.
+   */
   animate() {
     this.walkingInterval = setInterval(() => {
-      if (!this.isDead()) this.moveLeft(); // Nur bewegen, wenn der Feind nicht tot ist
-    }, 1000 / 60);
+      if (!this.isDead()) this.moveLeft()
+    }, 1000 / 60)
 
     this.animationInterval = setInterval(() => {
-      if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING); // Nur animieren, wenn nicht tot
-    }, 200);
+      if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING)
+    }, 200)
   }
 
+  /**
+   * Handles the small chicken's death, including animation, sound, and removal.
+   */
   deadEnemy() {
-    this.isDeadFlag = true; // Chicken ist tot
-    this.playDeadEnemySound();
-    this.startDeadEnemyAnimation();
-    // Stoppe alle Bewegungen und Animationen
-    this.stopAnimation();
-    this.deactivateHitBox();
-    // Entferne den Enemy nach 5 Sekunden (5000ms)
+    this.isDeadFlag = true
+    this.playDeadEnemySound()
+    this.startDeadEnemyAnimation()
+    this.stopAnimation()
+    this.deactivateHitBox()
     setTimeout(() => {
-      this.removeDeadEnemyFromWorld();
-    }, 5000); // 5 Sekunden
+      this.removeDeadEnemyFromWorld()
+    }, 5000)
   }
 
+  /**
+   * Plays the sound effect for a dead small chicken.
+   */
   playDeadEnemySound() {
-    console.log("DeadEnemy-Sound abgespielt");
-    this.dead_enemy_sound.play();
+    this.dead_enemy_sound.play()
   }
 
+  /**
+   * Starts the animation for a dead small chicken and sets its speed to zero.
+   */
   startDeadEnemyAnimation() {
-    console.log("DeadEnemyAnimation gestartet");
-    this.speed = 0; // Feind bleibt stehen
-    this.loadImage(this.IMAGE_DEAD); //Dead-Image laden
-    // Animation für den toten Enemy einfügen
+    this.speed = 0
+    this.loadImage(this.IMAGE_DEAD)
   }
 
+  /**
+   * Stops all animation intervals for the small chicken.
+   */
   stopAnimation() {
-    clearInterval(this.walkingInterval); // Bewegen stoppen
-    clearInterval(this.animationInterval); // Animation stoppen
+    clearInterval(this.walkingInterval)
+    clearInterval(this.animationInterval)
   }
 
+  /**
+   * Removes the small chicken from the game world after a delay.
+   */
   removeDeadEnemyFromWorld() {
-    console.log("Feind wird entfernt");
-    const index = world.level.enemies.indexOf(this);
+    const index = world.level.enemies.indexOf(this)
     if (index > -1) {
-      world.level.enemies.splice(index, 1);
+      world.level.enemies.splice(index, 1)
     }
   }
 
+  /**
+   * Deactivates the small chicken's hitbox by setting collision dimensions to zero.
+   */
   deactivateHitBox() {
-    this.collisionOffsetX = 0;
-    this.collisionOffsetY = 0;
-    this.collisionWidth = 0;
-    this.collisionHeight = 0;
+    this.collisionOffsetX = 0
+    this.collisionOffsetY = 0
+    this.collisionWidth = 0
+    this.collisionHeight = 0
   }
 }

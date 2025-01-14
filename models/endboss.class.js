@@ -80,10 +80,6 @@ class Endboss extends MovableObject {
     this.lastHit = 0
   }
 
-  /**
-   * Hier in `animate()` gibt es nur noch ein zentrales Intervall,
-   * das alle Zustände im Auge behält.
-   */
   animate() {
     const minX = 2200
     const maxX = 2600
@@ -97,10 +93,6 @@ class Endboss extends MovableObject {
     }, 16)
   }
 
-  /**
-   * In `evaluateState` entscheidest du je nach `this.currentState`,
-   * was als Nächstes passieren soll.
-   */
   evaluateState(minX, maxX) {
     switch (this.currentState) {
       case 'idle':
@@ -125,9 +117,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * State: Idle (bzw. "Normalzustand")
-   */
   handleIdle(minX, maxX) {
     this.frameCounterWalk++
     const FRAMES_TO_SKIP = 11
@@ -143,9 +132,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * State: Alert
-   */
   handleAlert() {
     this.incrementAlertFrame()
     this.handleAlertAnimation()
@@ -158,7 +144,7 @@ class Endboss extends MovableObject {
 
   handleAlertAnimation() {
     const FRAMES_TO_SKIP = 13
-    this.otherDirection = false //schaut nach links
+    this.otherDirection = false
     if (this.frameCounterAlert >= FRAMES_TO_SKIP) {
       this.frameCounterAlert = 0
       if (this.currentImageIndex < this.IMAGES_ALERT.length) {
@@ -178,9 +164,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * State: Attack
-   */
   handleAttack() {
     this.incrementAttackFrame()
     this.handleAttackAnimation()
@@ -209,9 +192,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * State: Hurt
-   */
   handleHurt() {
     this.frameCounterHurt++
     const FRAMES_TO_SKIP = 11
@@ -231,9 +211,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * State: Dead
-   */
   handleDead() {
     this.incrementDeadFrames()
     if (!this.showDeadAnimation()) {
@@ -242,55 +219,35 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * Erhöht den frameCounterDead und prüft, ob wir den Frame wechseln.
-   */
   incrementDeadFrames() {
     this.frameCounterDead++
     const FRAMES_TO_SKIP = 5
     if (this.frameCounterDead >= FRAMES_TO_SKIP) {
       this.frameCounterDead = 0
-      // Wir haben genug Frames gesammelt, um ein Bild weiterzuspringen
       return true
     }
     return false
   }
 
-  /**
-   * Zeigt die Dead-Animation. Returnt **true**, solange es noch Bilder zu zeigen gibt,
-   * und **false**, wenn wir schon fertig sind.
-   */
   showDeadAnimation() {
-    // Noch nicht alle Dead-Frames durch
     if (this.currentImageIndex < this.IMAGES_DEAD.length) {
       this.img = this.imageCache[this.IMAGES_DEAD[this.currentImageIndex]]
       this.currentImageIndex++
       return true
     }
-    // Wir sind mit der Death-Animation fertig
     return false
   }
 
-  /**
-   * Startet den "dying_sound" und wartet z.B. 2 Sekunden.
-   * Danach ruft sie "manageEndbossDefeat" auf.
-   */
   playDyingSoundThenDefeat() {
     if (!this.hasPlayedDyingSound) {
       this.hasPlayedDyingSound = true
       this.dying_sound.play()
-
-      // Warte 2 Sekunden, damit der dying_sound zu Ende gespielt wird
       setTimeout(() => {
         this.manageEndbossDefeat()
       }, 1800)
     }
   }
 
-  /**
-   * Diese Methode übernehmen wir größtenteils aus deinem Code.
-   * Bewegung: von rechts nach links, bzw. Richtungswechsel an Grenzen.
-   */
   moveBoss(minX, maxX) {
     if (!this.isDead() && this.currentState !== 'hurt') {
       if (this.direction === -1) {
@@ -308,9 +265,6 @@ class Endboss extends MovableObject {
     }
   }
 
-  /**
-   * isCharacterClose() bleibt unverändert
-   */
   isCharacterClose() {
     if (!this.character || typeof this.character.x === 'undefined') {
       console.warn('Character oder Position nicht definiert!')
@@ -320,27 +274,19 @@ class Endboss extends MovableObject {
     return distance < 300
   }
 
-  /**
-   * Hit-Logik bleibt ähnlich,
-   * ABER wir setzen am Ende den State auf "hurt".
-   */
   endbossHit() {
     if (this.preventHitDuringAttack()) {
       return
     }
-
     this.logHitInformation()
-
     if (this.isAlreadyDead()) {
       return
     }
-
     this.checkAndApplyHit()
   }
-
   preventHitDuringAttack() {
     if (this.currentState === 'attack') {
-      return true // Wenn gerade Attack-State, beenden wir sofort
+      return true
     }
     return false
   }
@@ -361,7 +307,7 @@ class Endboss extends MovableObject {
   checkAndApplyHit() {
     const currentTime = new Date().getTime()
     if (currentTime - this.lastHit > 500) {
-      this.energy -= 20
+      this.energy -= 10
       console.log('EndbossEnergie nach dem Treffer:', this.energy)
       if (this.energy <= 0) {
         this.setDeadState()
@@ -385,9 +331,6 @@ class Endboss extends MovableObject {
     this.currentImageIndex = 0
   }
 
-  /**
-   * Deine Fall-Logik (nach dead)
-   */
   fallDown() {
     if (this.hasFallen) {
       return
@@ -402,10 +345,6 @@ class Endboss extends MovableObject {
     }, 50)
   }
 
-  /**
-   * isDead() kannst du so lassen wie bisher,
-   * oder du sagst: "dead" wenn energy == 0
-   */
   isDead() {
     return this.energy <= 0
   }
@@ -430,11 +369,6 @@ class Endboss extends MovableObject {
     this.currentState = 'final'
   }
 
-  /**
-   * Stoppe ggf. alle alten Intervalle beim Tod,
-   * falls du da etwas aufräumen willst.
-   * Oder du verwendest nur noch das `stateMachineInterval`.
-   */
   stopAnimation() {
     clearInterval(this.stateMachineInterval)
     clearInterval(this.checkDeadInterval)

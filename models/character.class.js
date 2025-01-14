@@ -1,7 +1,11 @@
+/**
+ * Class representing the main character.
+ * Inherits from MovableObject and includes animations, sounds, and interactions.
+ */
 class Character extends MovableObject {
-  height = 310 //CAVE: wenn ich hier was ändere, muss ich Schwellenwert für Gravitation anpassen!
+  height = 310
   width = 150
-  y = 120 //muss gleich sein wie y in aboveGround(), sonst fällt er ins Bild, anstatt zu stehen.
+  y = 120
   speed = 10
 
   IMAGES_IDLE = [
@@ -74,6 +78,9 @@ class Character extends MovableObject {
   jumping_sound = new Audio('audio/jump2.mp3')
   gameOver_sound = new Audio('audio/game_over2.mp3')
 
+  /**
+   * Creates the main character instance and initializes its properties.
+   */
   constructor() {
     super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png')
     this.loadImages(this.IMAGES_IDLE)
@@ -92,6 +99,9 @@ class Character extends MovableObject {
     this.collisionHeight = 180
   }
 
+  /**
+   * Animates the character based on its state (walking, jumping, idle, etc.).
+   */
   animate() {
     const idleThreshold = 50000
     this.intervalID1 = setInterval(() => {
@@ -164,13 +174,20 @@ class Character extends MovableObject {
     }, 50)
   }
 
+  /**
+   * Makes the character jump.
+   */
   jump() {
     this.speedY = 30
     this.jumping_sound.play()
   }
 
+  /**
+   * Handles all events related to the character's death.
+   */
   handleCharacterDeathEvents() {
     this.playAnimation(this.IMAGES_DEAD, 40, false)
+    this.deactivateHitBox()
     const animationDuration = this.IMAGES_DEAD.length * 200
     setTimeout(() => {
       this.world.backgroundMusic.volume = 0
@@ -185,6 +202,19 @@ class Character extends MovableObject {
     }, animationDuration)
   }
 
+  /**
+   * Deactivates the hitbox by resetting collision dimensions to zero.
+   */
+  deactivateHitBox() {
+    this.collisionOffsetX = 0
+    this.collisionOffsetY = 0
+    this.collisionWidth = 0
+    this.collisionHeight = 0
+  }
+
+  /**
+   * Stops all animations and sounds for the character.
+   */
   stop() {
     clearInterval(this.intervalID1)
     clearInterval(this.intervalID2)

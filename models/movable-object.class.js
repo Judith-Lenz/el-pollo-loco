@@ -99,7 +99,7 @@ class MovableObject extends DrawableObject {
     }
     const currentTime = new Date().getTime()
     if (currentTime - this.lastHit > 500) {
-      this.energy -= 5
+      this.energy -= 10
       if (this.energy < 0) {
         this.energy = 0
       } else {
