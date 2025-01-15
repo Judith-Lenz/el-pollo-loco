@@ -1,3 +1,6 @@
+/**
+ * Represents a level in the game with various objects and enemies.
+ */
 class Level {
   enemies
   clouds
@@ -7,7 +10,9 @@ class Level {
 
   level_end_x = 2300
 
-  //hier werden die Objekte aus level1 übergebeben
+  /**
+   * Creates a new Level instance.
+   */
   constructor(bottles, coins, enemies, clouds, backgroundObjects) {
     this.bottles = bottles
     this.coins = coins

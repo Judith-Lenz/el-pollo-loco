@@ -1,77 +1,86 @@
+/**
+ * MovableObject extends DrawableObject and adds movement and physics.
+ */
 class MovableObject extends DrawableObject {
-  speed = 0.15 //standard, wird jeweils evtl. überschrieben
+  speed = 0.15
   otherDirection = false
   speedY = 0
-  acceleration = 2.5 //so schnell fällt das Objekt, 2.5
-  energy = 100 //100%
+  acceleration = 2.5
+  energy = 100
   lastHit = 0
-  lastHurtSoundTime = 0 // Zeitpunkt des letzten abgespielten Sounds
-  // Eigenschaften für die Hitbox
-  collisionOffsetX = 0 // Abstand zur linken Kante
-  collisionOffsetY = 0 // Abstand zur oberen Kante
-  collisionWidth = this.width // Breite der Hitbox
-  collisionHeight = this.height // Höhe der Hitbox
+  lastHurtSoundTime = 0
+  collisionOffsetX = 0
+  collisionOffsetY = 0
+  collisionWidth = this.width
+  collisionHeight = this.height
 
-  //solange isAboveGround() oder this.speedY > 0 wahr sind, läuft die Funktion weiter.
+  /**
+   * Applies gravity to the object.
+   */
   applyGravity() {
     setInterval(() => {
-      this.applyGravityStep() // Gravitation auf das Objekt anwenden
+      this.applyGravityStep()
       if (this instanceof ThrowableObject) {
-        this.limitBottleFall() // Begrenzung der Flaschenhöhe
+        this.limitBottleFall()
       } else {
-        this.resetCharacterToGround() // Charakter auf Bodenhöhe zurücksetzen
+        this.resetCharacterToGround()
       }
     }, 1000 / 60)
   }
 
-  // Schwerkraft auf das Objekt anwenden
+  /**
+   * Executes a single gravity step.
+   */
   applyGravityStep() {
     if (this instanceof ThrowableObject && !this.gravityEnabled) {
-      return // Gravitation deaktivieren nur für Flaschen
+      return
     }
-
     if (this.isAboveGround() || this.speedY > 0) {
       this.y -= this.speedY
       this.speedY -= this.acceleration
     }
   }
 
-  // Begrenzung für Flaschen
+  /**
+   * Limits bottle fall position.
+   */
   limitBottleFall() {
     if (!this.gravityEnabled) {
-      return // Keine Aktion, wenn Gravitation deaktiviert ist
+      return
     }
     if (this.y > 1000) {
-      this.y = 600 // Begrenze die Y-Position
-      this.speedY = 0 // Stoppe die Gravitation
+      this.y = 600
+      this.speedY = 0
     }
   }
 
-  // Rücksetzung des Charakters auf die Bodenhöhe
+  /**
+   * Resets character to ground level.
+   */
   resetCharacterToGround() {
     if (this.y > 120) {
-      // Beispielbodenhöhe 120
       this.y = 120
-      this.speedY = 0 // Stoppe die Bewegung
+      this.speedY = 0
     }
   }
 
-  //gibt zurück, ob Y vom Objekt kleiner ist als 120. Wenn nein, dann fällt Objekt.
-  //hier Bodenniveau einstellen.
+  /**
+   * Checks if the object is above the ground.
+   * @returns {boolean} True if above ground.
+   */
   isAboveGround() {
     if (this instanceof ThrowableObject) {
-      //wenn es eine Instanz ist von ThrowableObject, hört sie nicht auf zu fallen
-      //Bottles sollen immer weiter fallen.
       return true
     } else {
-      // console.log("ist in der Luft");
       return this.y < 120
     }
-    //Bodenniveau, muss gleich sein y Character, sonst fällt er ins Bild
-    //ab diesem Wert wird Objekt von Gravitation beeinflusst. Muss gleich sein Y in Character
-    //die Flaschen sollen nicht auf dem Boden aufkommen und liegen bleiben, daher die if Abfrage.
   }
 
+  /**
+   * Checks collision with another object.
+   * @param {Object} obj - The other object.
+   * @returns {boolean} True if colliding.
+   */
   isColliding(obj) {
     const thisBox = this.getCollisionBox()
     const otherBox = obj.getCollisionBox()
@@ -83,6 +92,10 @@ class MovableObject extends DrawableObject {
     )
   }
 
+  /**
+   * Gets the collision box.
+   * @returns {Object} Collision box with x, y, width, and height.
+   */
   getCollisionBox() {
     return {
       x: this.x + this.collisionOffsetX,
@@ -92,8 +105,10 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Reduces energy when hit.
+   */
   hit() {
-    console.log('Die Methode hit() wurde ausgeführt!')
     if (this.energy === 0) {
       return
     }
@@ -108,6 +123,10 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Checks if the object is hurt.
+   * @returns {boolean} True if recently hit.
+   */
   isHurt() {
     if (this.energy === 0) {
       return false
@@ -117,10 +136,20 @@ class MovableObject extends DrawableObject {
     return timepassed < 1
   }
 
+  /**
+   * Checks if the object is dead.
+   * @returns {boolean} True if energy is 0.
+   */
   isDead() {
     return this.energy == 0
   }
 
+  /**
+   * Plays an animation.
+   * @param {string[]} images - Array of image paths.
+   * @param {number} [frameRate=1] - Frames per image.
+   * @param {boolean} [loop=true] - Whether to loop the animation.
+   */
   playAnimation(images, frameRate = 1, loop = true) {
     if (this.currentImage % frameRate === 0) {
       let i = Math.floor(this.currentImage / frameRate)
@@ -137,14 +166,23 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Moves the object to the right.
+   */
   moveRight() {
     this.x += this.speed
   }
 
+  /**
+   * Moves the object to the left.
+   */
   moveLeft() {
     this.x -= this.speed
   }
 
+  /**
+   * Makes the object jump.
+   */
   jump() {
     this.speedY = 30
   }

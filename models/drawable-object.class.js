@@ -1,24 +1,37 @@
+/**
+ * Represents an object that can be drawn on the canvas.
+ */
 class DrawableObject {
-  img;
-  imageCache = {}; //in dieses JSON laden wir Bilder rein.
-  currentImage = 0;
-  x = 0; //hier startet der Character,also camera auch direkt um soviel verschoben
-  y = 280;
-  height = 150;
-  width = 90;
+  img
+  imageCache = {}
+  currentImage = 0
+  x = 0
+  y = 280
+  height = 150
+  width = 90
 
-  //loadImage('img/test.png);
+  /**
+   * Loads an image from the specified path.
+   * @param {string} path - The path to the image file.
+   */
   loadImage(path) {
-    //lädt ein einzelnes Bild und speichert es im Objekt.
-    this.img = new Image(); //this.img =dasselbe wie: document.getElementById ('image') <img id = "image" src>
-    this.img.src = path;
+    this.img = new Image()
+    this.img.src = path
   }
 
+  /**
+   * Draws the object on the canvas using the specified context.
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   */
   draw(ctx) {
-    //womit wir zeichnen wollen, ist ctx.
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    ctx.drawImage(this.img, this.x, this.y, this.width, this.height)
   }
 
+  /**
+   * Draws a rectangular frame around the object if it matches specific classes.
+   * Used for debugging purposes to visualize object boundaries.
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
+   */
   drawFrame(ctx) {
     if (
       this instanceof Character ||
@@ -26,35 +39,26 @@ class DrawableObject {
       this instanceof ChickenSmall ||
       this instanceof Coin ||
       this instanceof Bottle ||
-      // this instanceof Cloud ||
       this instanceof ThrowableObject ||
       this instanceof Endboss
     ) {
-      //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.
-      ctx.beginPath();
-      ctx.lineWidth = "3";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height); //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
-      ctx.stroke();
-      // Zeichne die Hitbox (roter Rahmen)
-      const box = this.getCollisionBox();
-      ctx.beginPath();
-      ctx.lineWidth = "2";
-      ctx.strokeStyle = "red";
-      ctx.rect(box.x, box.y, box.width, box.height);
-      ctx.stroke();
+      ctx.beginPath()
+      ctx.lineWidth = '3'
+      ctx.strokeStyle = 'blue'
+      ctx.rect(this.x, this.y, this.width, this.height)
+      ctx.stroke()
     }
   }
 
-  //lädt mehrere Bilder, indem es ein Array von Bildpfaden verwendet und diese in einem Cache speichert.
+  /**
+   * Preloads multiple images and stores them in the image cache.
+   * @param {string[]} arr - An array of image file paths.
+   */
   loadImages(arr) {
-    // hier wurde als Parameter das ganze Array reingegeben. und dann iteriert man durch
     arr.forEach((path) => {
-      //path hat jedes mal den Pfad von einem Bild
-      let img = new Image(); //hier laden wir das Bild in das image Objekt.
-      img.src = path; // hier ist nur innerhalb dieser Funktion gültige Variable
-      this.imageCache[path] = img; //hier greifen wir auf die Variable von dem Objekt zu (s.o.) ,
-      //Update vom imageCache
-    });
+      let img = new Image()
+      img.src = path
+      this.imageCache[path] = img
+    })
   }
 }

@@ -2,10 +2,17 @@ let canvas
 let world
 let keyboard = new Keyboard()
 
+/**
+ * Initializes the canvas element for the game.
+ */
 function init() {
   canvas = document.getElementById('canvas')
 }
 
+/**
+ * Starts the game by hiding the start screen, setting up the UI,
+ * and initializing the game world after a delay.
+ */
 function startGame() {
   if (world) {
     world.stop()
@@ -17,23 +24,30 @@ function startGame() {
   toggleMobileButtons()
   bindMobileButtonEvents()
   window.addEventListener('resize', toggleMobileButtons)
-  setTimeout(() => {
-    document.getElementById('startScreen').classList.add('d-none')
-    document.getElementById('gameOverScreen').classList.add('d-none')
-    document.getElementById('winningScreen').classList.add('d-none')
-    const canvasElement = document.getElementById('canvas')
-    canvasElement.classList.remove('d-none')
-    canvasElement.classList.add('show')
-    initLevel()
-    world = new World(canvas, keyboard)
-  }, 300)
+  setTimeout(initializeGameWorld, 300)
 }
 
+/**
+ * Sets up the game world, hides unnecessary screens, and initializes the world object.
+ */
+function initializeGameWorld() {
+  document.getElementById('startScreen').classList.add('d-none')
+  document.getElementById('gameOverScreen').classList.add('d-none')
+  document.getElementById('winningScreen').classList.add('d-none')
+  const canvasElement = document.getElementById('canvas')
+  canvasElement.classList.remove('d-none')
+  canvasElement.classList.add('show')
+  initLevel()
+  world = new World(canvas, keyboard)
+}
+
+/**
+ * Toggles the visibility of mobile buttons based on the screen size and orientation.
+ */
 function toggleMobileButtons() {
   const isMobile = window.innerWidth <= 768 || window.matchMedia('(orientation: portrait)').matches
   const btnArrows = document.getElementById('mblTouchBtnArrows')
   const btnAction = document.getElementById('mblTouchBtnAction')
-
   if (isMobile) {
     btnArrows.classList.remove('d-none')
     btnAction.classList.remove('d-none')
@@ -43,6 +57,11 @@ function toggleMobileButtons() {
   }
 }
 
+/**
+ * Handles keyboard events to track the state of arrow keys, spacebar, and "D" key.
+ *
+ * @param {KeyboardEvent} e - The keyboard event object.
+ */
 window.addEventListener('keydown', (e) => {
   switch (e.code) {
     case 'ArrowLeft':
@@ -66,6 +85,11 @@ window.addEventListener('keydown', (e) => {
   }
 })
 
+/**
+ * Handles keyboard events to reset the state of arrow keys, spacebar, and "D" key.
+ *
+ * @param {KeyboardEvent} e - The keyboard event object.
+ */
 window.addEventListener('keyup', (e) => {
   switch (e.code) {
     case 'ArrowLeft':
@@ -89,6 +113,9 @@ window.addEventListener('keyup', (e) => {
   }
 })
 
+/**
+ * Binds touch events to the mobile buttons for controlling the game using touch input.
+ */
 function bindMobileButtonEvents() {
   document.getElementById('mblTouchBtnLeft').addEventListener(
     'touchstart',

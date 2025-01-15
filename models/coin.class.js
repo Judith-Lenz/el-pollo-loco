@@ -1,3 +1,7 @@
+/**
+ * Class representing a coin in the game.
+ * Extends the MovableObject class.
+ */
 class Coin extends MovableObject {
   height = 100
   width = 100
@@ -9,13 +13,16 @@ class Coin extends MovableObject {
 
   collect_coin_sound = new Audio('audio/coins.mp3')
 
+  /**
+   * Creates a new Coin instance.
+   * @param {number} x - The x-coordinate of the coin.
+   * @param {number} y - The y-coordinate of the coin.
+   */
   constructor(x, y) {
     super().loadImage('img/8_coin/coin_1.png')
-    // this.x = 200 + Math.random() * 500; // x-Wert zwischen 200 und 700
-    // this.y = 100 + Math.random() * 200; // y-Wert zwischen 100 (MindestY Wert) und 300
-    this.x = x //bei Bedarf an der Stelle, die ich übergebe
-    this.y = y //bei Bedarf an der Stelle, die ich übergebe
-    this.baseY = this.y // Grundposition an den Startwert anpassen
+    this.x = x
+    this.y = y
+    this.baseY = this.y
     this.animateFloating()
     this.collisionOffsetX = 34
     this.collisionOffsetY = 35
@@ -23,6 +30,9 @@ class Coin extends MovableObject {
     this.collisionHeight = 30
   }
 
+  /**
+   * Animates the coin to float up and down.
+   */
   animateFloating() {
     setInterval(() => {
       this.y += this.floatDirection * this.floatSpeed
@@ -32,21 +42,24 @@ class Coin extends MovableObject {
     }, 1000 / 60)
   }
 
+  /**
+   * Collects the coin, playing a sound and removing it from the world.
+   */
   collectCoin() {
     this.playSound()
-    this.startAnimation()
     this.removeCoinFromWorld()
   }
 
+  /**
+   * Plays the coin collection sound effect.
+   */
   playSound() {
-    console.log('Coin-Sound abgespielt')
     this.collect_coin_sound.play()
   }
 
-  startAnimation() {
-    console.log('Coin-Animation gestartet')
-  }
-
+  /**
+   * Removes the coin from the world's level coin array.
+   */
   removeCoinFromWorld() {
     const index = world.level.coins.indexOf(this)
     if (index > -1) {

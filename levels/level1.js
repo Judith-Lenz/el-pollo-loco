@@ -1,5 +1,20 @@
+/**
+ * Initializes the first level of the game.
+ * This level includes bottles, coins, enemies, clouds, and background objects.
+ */
 let level1
 
+/**
+ * Creates and initializes the first game level with predefined game elements.
+ *
+ * @function initLevel
+ * @description Sets up the level with the following:
+ * - Bottles at specific positions
+ * - Coins with positions and values
+ * - Enemies, including normal chickens, small chickens, and an end boss
+ * - Clouds with specific images and positions
+ * - Background layers for scenery
+ */
 function initLevel() {
   level1 = new Level(
     [
