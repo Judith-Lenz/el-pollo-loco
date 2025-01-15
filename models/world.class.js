@@ -1,3 +1,6 @@
+/**
+ * Represents the game world, managing the character, level, objects, and sounds.
+ */
 class World {
   allSoundsMuted = false
   character = new Character()
@@ -17,6 +20,11 @@ class World {
   collectedBottles = 0
   totalBottles = 0
 
+  /**
+   * Initializes the game world with a canvas and keyboard input.
+   * @param {HTMLCanvasElement} canvas - The game canvas element.
+   * @param {Object} keyboard - The keyboard input handler.
+   */
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext('2d')
     this.canvas = canvas
@@ -33,18 +41,23 @@ class World {
     this.run()
   }
 
+  /**
+   * Links the world to the character and enemies, setting up animations and interactions.
+   */
   setWorld() {
     this.character.world = this
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Endboss) {
         enemy.character = this.character
         enemy.world = this
-        console.log('Character dem Endboss zugewiesen:', enemy.character)
         enemy.animate()
       }
     })
   }
 
+  /**
+   * Starts the main game loops for collision detection and throwable object handling.
+   */
   run() {
     this.intervalID1 = setInterval(() => {
       this.checkCollisionCoins()
@@ -58,13 +71,15 @@ class World {
     }, 25)
   }
 
+  /**
+   * Checks if throwable objects should be created and handles throwing mechanics.
+   */
   checkThrowObjects() {
     if (!this.character.isDead() && this.keyboard.D && this.collectedBottles > 0 && !this.throwCooldown) {
       let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100)
       this.throwableObjects.push(bottle)
       this.collectedBottles--
       this.updateBottleStatusBar()
-      console.log(`Flasche geworfen. Verbleibend: ${this.collectedBottles}`)
       this.character.idleStartTime = null
       this.throwCooldown = true
       setTimeout(() => {
@@ -73,6 +88,9 @@ class World {
     }
   }
 
+  /**
+   * Checks for collisions between the character and coins.
+   */
   checkCollisionCoins() {
     this.level.coins.forEach((coin) => {
       if (this.character.isColliding(coin)) {
@@ -81,6 +99,9 @@ class World {
     })
   }
 
+  /**
+   * Checks for collisions between the character and bottles.
+   */
   checkCollisionBottles() {
     this.level.bottles.forEach((bottle) => {
       if (this.character.isColliding(bottle)) {
@@ -89,6 +110,9 @@ class World {
     })
   }
 
+  /**
+   * Checks for collisions between the character and enemies.
+   */
   checkCollisionEnemies() {
     this.level.enemies.forEach((enemy) => {
       if (!enemy.isDead()) {
@@ -96,7 +120,6 @@ class World {
           this.character.speedY = 25
           this.handleJumpOnEnemy(enemy)
         } else if (this.character.isColliding(enemy)) {
-          console.log('Kollision mit Gegner! Energie:', this.character.energy)
           this.character.hit()
           this.statusBarHealth.setPercentage(this.character.energy)
         }
@@ -104,17 +127,18 @@ class World {
     })
   }
 
+  /**
+   * Checks for collisions between throwable bottles and enemies.
+   */
   checkCollisionBottlesWithEnemies() {
     this.throwableObjects.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy)) {
           if (enemy instanceof Endboss) {
             if (!enemy.isDead()) {
-              console.log('Flasche trifft Endboss!')
               this.handleBottleEnemyCollision(bottle, bottleIndex, enemy)
             }
           } else if (!enemy.isDead()) {
-            console.log('Flasche trifft Chicken!')
             this.handleBottleEnemyCollision(bottle, bottleIndex, enemy)
           }
         }
@@ -122,11 +146,16 @@ class World {
     })
   }
 
+  /**
+   * Handles a bottle colliding with an enemy, triggering effects and animations.
+   * @param {Object} bottle - The throwable bottle.
+   * @param {number} bottleIndex - The index of the bottle in the array.
+   * @param {Object} enemy - The enemy being hit.
+   */
   handleBottleEnemyCollision(bottle, bottleIndex, enemy) {
     bottle.stopMovement()
     bottle.disableGravity()
     bottle.stopCurrentAnimation()
-    console.log('Splash-Animation gestartet!')
     bottle.startSplashAnimation()
     if (enemy.isEndboss) {
       enemy.endbossHit()
@@ -136,7 +165,6 @@ class World {
     }
     setTimeout(() => {
       this.throwableObjects.splice(bottleIndex, 1)
-      console.log('Flasche entfernt.')
     }, bottle.BOTTLE_SPLASH_IMAGES.length * 80)
   }
 
@@ -144,41 +172,45 @@ class World {
     coin.collectCoin()
     this.collectedCoins++
     this.updateCoinStatusBar()
-    console.log(`Kollision mit Münze: ${this.collectedCoins}`)
   }
 
+  /**
+   * Updates the status bar after collecting a coin.
+   */
   updateCoinStatusBar() {
     const percentage = Math.min((this.collectedCoins / this.totalCoins) * 100, 100)
     this.statusBarCoin.setPercentage(percentage)
-    console.log('----- Debugging StatusBarCoin -----')
-    console.log(`Gesammelte Münzen: ${this.collectedCoins}`)
-    console.log(`Ursprüngliche Anzahl Münzen (totalCoins): ${this.totalCoins}`)
-    console.log(`Berechneter Prozentsatz für StatusBar: ${percentage}%`)
-    console.log('-----------------------------------')
   }
 
+  /**
+   * Handles a bottle collision with the character and updates the bottle status bar.
+   * @param {Object} bottle - The bottle object that collided.
+   */
   handleBottleCollision(bottle) {
     bottle.collectBottle()
     this.collectedBottles++
     this.updateBottleStatusBar()
-    console.log(`Flasche eingesammelt: ${this.collectedBottles}`)
   }
 
+  /**
+   * Updates the status bar after collecting a bottle.
+   */
   updateBottleStatusBar() {
     const percentage = Math.min((this.collectedBottles / this.totalBottles) * 100, 100)
     this.statusBarBottle.setPercentage(percentage)
-    console.log('----- Debugging StatusBarBottle -----')
-    console.log(`Eingesammelte Flaschen: ${this.collectedBottles}`)
-    console.log(`Ursprüngliche Anzahl Flaschen (totalBottles): ${this.totalBottles}`)
-    console.log(`Berechneter Prozentsatz für StatusBar: ${percentage}%`)
-    console.log('-------------------------------------')
   }
 
+  /**
+   * Handles character jumping on an enemy to defeat it.
+   * @param {Object} enemy - The enemy being jumped on.
+   */
   handleJumpOnEnemy(enemy) {
     enemy.deadEnemy()
-    console.log('jumped on enemy')
   }
 
+  /**
+   * Draws all game elements onto the canvas and handles camera adjustments.
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.ctx.translate(this.camera_x, 0)
@@ -200,12 +232,20 @@ class World {
     })
   }
 
+  /**
+   * Adds an array of objects to the canvas map.
+   * @param {Array} objects - The objects to be drawn on the canvas.
+   */
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o)
     })
   }
 
+  /**
+   * Adds a single movable object to the canvas map, flipping if necessary.
+   * @param {Object} mo - The movable object to be added.
+   */
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo)
@@ -217,6 +257,10 @@ class World {
     }
   }
 
+  /**
+   * Flips an object's image horizontally for drawing in the opposite direction.
+   * @param {Object} mo - The object to flip.
+   */
   flipImage(mo) {
     this.ctx.save()
     this.ctx.translate(mo.width, 0)
@@ -224,6 +268,10 @@ class World {
     mo.x = mo.x * -1
   }
 
+  /**
+   * Restores an object's original orientation after being flipped.
+   * @param {Object} mo - The object to restore.
+   */
   flipImageBack(mo) {
     mo.x = mo.x * -1
     this.ctx.restore()
@@ -231,6 +279,9 @@ class World {
 
   // Sounds ----------------------------------------------------------------------------
 
+  /**
+   * Toggles the mute state for all game sounds.
+   */
   toggleMuteAllSounds() {
     this.allSoundsMuted = !this.allSoundsMuted
     this.toggleCharacterSounds()
@@ -239,9 +290,11 @@ class World {
     this.toggleEnemySounds()
     this.backgroundMusic.muted = this.allSoundsMuted
     this.updateMuteButton()
-    console.log(`Sounds ${this.allSoundsMuted ? 'stummgeschaltet' : 'aktiviert'}`)
   }
 
+  /**
+   * Toggles the mute state of all character-related sounds.
+   */
   toggleCharacterSounds() {
     this.character.walking_sound.muted = this.allSoundsMuted
     this.character.snoring_sound.muted = this.allSoundsMuted
@@ -250,18 +303,27 @@ class World {
     this.character.gameOver_sound.muted = this.allSoundsMuted
   }
 
+  /**
+   * Toggles the mute state of all coin-related sounds.
+   */
   toggleCoinSounds() {
     this.level.coins.forEach((coin) => {
       coin.collect_coin_sound.muted = this.allSoundsMuted
     })
   }
 
+  /**
+   * Toggles the mute state of all bottle-related sounds.
+   */
   toggleBottleSounds() {
     this.level.bottles.forEach((bottle) => {
       bottle.collect_bottle_sound.muted = this.allSoundsMuted
     })
   }
 
+  /**
+   * Toggles the mute state of all enemy-related sounds.
+   */
   toggleEnemySounds() {
     this.level.enemies.forEach((enemy) => {
       if (enemy.walking_sound) {
@@ -274,6 +336,9 @@ class World {
     this.toggleEndbossSounds()
   }
 
+  /**
+   * Toggles the mute state of all Endboss-related sounds.
+   */
   toggleEndbossSounds() {
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Endboss) {
@@ -285,6 +350,9 @@ class World {
     })
   }
 
+  /**
+   * Updates the mute button icon based on the current mute state.
+   */
   updateMuteButton() {
     const muteDiv = document.getElementById('muteDiv')
     muteDiv.innerHTML = this.allSoundsMuted
@@ -292,6 +360,9 @@ class World {
       : '<img src="img/icons/volume_up.svg" alt="Volume Icon">'
   }
 
+  /**
+   * Stops all Endboss sounds and resets their playback state.
+   */
   stopEndbossSounds() {
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Endboss) {
@@ -305,6 +376,9 @@ class World {
     })
   }
 
+  /**
+   * Stops all game sounds and resets their playback state.
+   */
   stop() {
     this.backgroundMusic.pause()
     this.backgroundMusic.currentTime = 0

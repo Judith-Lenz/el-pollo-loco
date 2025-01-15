@@ -1,3 +1,7 @@
+/**
+ * Represents the Endboss character in the game, extending MovableObject.
+ * Handles animations, state transitions, movement, and interactions with the player.
+ */
 class Endboss extends MovableObject {
   height = 450
   width = 350
@@ -53,6 +57,9 @@ class Endboss extends MovableObject {
   winning_sound = new Audio('audio/arriba.mp3')
   dying_sound = new Audio('audio/dying_endboss.mp3')
 
+  /**
+   * Initializes the Endboss with default properties and loads images and sounds.
+   */
   constructor() {
     super().loadImage(this.IMAGES_WALKING[1])
     this.world = world
@@ -80,6 +87,9 @@ class Endboss extends MovableObject {
     this.lastHit = 0
   }
 
+  /**
+   * Starts the Endboss animation and state evaluation loops.
+   */
   animate() {
     const minX = 2200
     const maxX = 2600
@@ -93,6 +103,9 @@ class Endboss extends MovableObject {
     }, 16)
   }
 
+  /**
+   * Evaluates and transitions the Endboss state based on proximity to the player.
+   */
   evaluateState(minX, maxX) {
     switch (this.currentState) {
       case 'idle':
@@ -112,11 +125,12 @@ class Endboss extends MovableObject {
         break
       case 'final':
         break
-      default:
-        console.warn('Unbekannter State:', this.currentState)
     }
   }
 
+  /**
+   * Handles the idle state behavior and animations.
+   */
   handleIdle(minX, maxX) {
     this.frameCounterWalk++
     const FRAMES_TO_SKIP = 11
@@ -132,6 +146,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles the alert state behavior and animations.
+   */
   handleAlert() {
     this.incrementAlertFrame()
     this.handleAlertAnimation()
@@ -164,6 +181,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles the attack state behavior and animations.
+   */
   handleAttack() {
     this.incrementAttackFrame()
     this.handleAttackAnimation()
@@ -192,6 +212,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles the hurt state behavior and animations.
+   */
   handleHurt() {
     this.frameCounterHurt++
     const FRAMES_TO_SKIP = 11
@@ -211,6 +234,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Handles the dead state behavior and animations.
+   */
   handleDead() {
     this.incrementDeadFrames()
     if (!this.showDeadAnimation()) {
@@ -248,6 +274,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Moves the Endboss within the defined boundaries.
+   */
   moveBoss(minX, maxX) {
     if (!this.isDead() && this.currentState !== 'hurt') {
       if (this.direction === -1) {
@@ -265,15 +294,21 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Checks if the character is within a close distance to the Endboss.
+   * @returns {boolean} True if the character is close, false otherwise.
+   */
   isCharacterClose() {
     if (!this.character || typeof this.character.x === 'undefined') {
-      console.warn('Character oder Position nicht definiert!')
       return false
     }
     const distance = Math.abs(this.character.x - this.x)
     return distance < 300
   }
 
+  /**
+   * Applies damage to the Endboss when hit.
+   */
   endbossHit() {
     if (this.preventHitDuringAttack()) {
       return
@@ -291,14 +326,10 @@ class Endboss extends MovableObject {
     return false
   }
 
-  logHitInformation() {
-    console.log('Endboss getroffen!')
-    console.log('EndbossEnergie vor dem Treffer:', this.energy)
-  }
+  logHitInformation() {}
 
   isAlreadyDead() {
     if (this.energy === 0) {
-      console.log('Endboss ist bereits tot!')
       return true
     }
     return false
@@ -308,7 +339,6 @@ class Endboss extends MovableObject {
     const currentTime = new Date().getTime()
     if (currentTime - this.lastHit > 500) {
       this.energy -= 10
-      console.log('EndbossEnergie nach dem Treffer:', this.energy)
       if (this.energy <= 0) {
         this.setDeadState()
       } else {
@@ -317,6 +347,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Sets the Endboss to the dead state and plays the dying animation.
+   */
   setDeadState() {
     this.energy = 0
     this.currentImageIndex = 0
@@ -331,6 +364,9 @@ class Endboss extends MovableObject {
     this.currentImageIndex = 0
   }
 
+  /**
+   * Drops the Endboss off-screen after death.
+   */
   fallDown() {
     if (this.hasFallen) {
       return
@@ -340,15 +376,21 @@ class Endboss extends MovableObject {
       this.y += 5
       if (this.y > 720) {
         clearInterval(fallInterval)
-        console.log('Endboss ist aus dem Bild geflogen')
       }
     }, 50)
   }
 
+  /**
+   * Determines if the Endboss is dead based on energy level.
+   * @returns {boolean} True if dead, false otherwise.
+   */
   isDead() {
     return this.energy <= 0
   }
 
+  /**
+   * Manages the Endboss defeat sequence, showing the winning screen.
+   */
   manageEndbossDefeat() {
     if (!this.hasPlayedWinningSound) {
       this.winning_sound.play()
@@ -369,9 +411,11 @@ class Endboss extends MovableObject {
     this.currentState = 'final'
   }
 
+  /**
+   * Stops all Endboss animations and intervals.
+   */
   stopAnimation() {
     clearInterval(this.stateMachineInterval)
     clearInterval(this.checkDeadInterval)
-    console.log('Alle laufenden Animationen und Intervalle gestoppt')
   }
 }
