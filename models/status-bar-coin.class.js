@@ -49,7 +49,7 @@ class StatusBarCoin extends DrawableObject {
       return 2
     } else if (this.percentage <= 60) {
       return 3
-    } else if (this.percentage <= 80) {
+    } else if (this.percentage < 100) {
       return 4
     } else {
       return 5

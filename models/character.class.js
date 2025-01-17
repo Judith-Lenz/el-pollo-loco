@@ -103,7 +103,7 @@ class Character extends MovableObject {
    * Animates the character based on its state (walking, jumping, idle, etc.).
    */
   animate() {
-    const idleThreshold = 50000
+    const idleThreshold = 5000
     this.intervalID1 = setInterval(() => {
       this.walking_sound.pause()
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {

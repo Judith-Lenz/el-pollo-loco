@@ -26,6 +26,7 @@ class World {
    * @param {Object} keyboard - The keyboard input handler.
    */
   constructor(canvas, keyboard) {
+    this.allSoundsMuted = JSON.parse(localStorage.getItem('allSoundsMuted')) || false
     this.ctx = canvas.getContext('2d')
     this.canvas = canvas
     this.keyboard = keyboard
@@ -35,7 +36,15 @@ class World {
     this.backgroundMusic.loop = true
     this.backgroundMusic.volume = 0.1
     this.backgroundMusic.play()
-    this.toggleMuteAllSounds()
+    if (this.allSoundsMuted) {
+      // anstatt toggleMuteAllSounds():
+      this.toggleCharacterSounds()
+      this.toggleCoinSounds()
+      this.toggleBottleSounds()
+      this.toggleEnemySounds()
+      this.backgroundMusic.muted = true
+      this.updateMuteButton()
+    }
     this.draw()
     this.setWorld()
     this.run()
@@ -290,6 +299,7 @@ class World {
     this.toggleEnemySounds()
     this.backgroundMusic.muted = this.allSoundsMuted
     this.updateMuteButton()
+    localStorage.setItem('allSoundsMuted', JSON.stringify(this.allSoundsMuted))
   }
 
   /**
