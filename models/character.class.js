@@ -100,78 +100,173 @@ class Character extends MovableObject {
   }
 
   /**
-   * Animates the character based on its state (walking, jumping, idle, etc.).
+   * Initiates character animation by starting movement and animation intervals.
    */
   animate() {
-    const idleThreshold = 5000
+    this.startMovementInterval()
+    this.startAnimationInterval()
+  }
+
+  /**
+   * Starts the interval for handling movement and camera updates at 60 FPS.
+   */
+  startMovementInterval() {
     this.intervalID1 = setInterval(() => {
-      this.walking_sound.pause()
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-        this.moveRight()
-        this.otherDirection = false
-        if (!this.isAboveGround()) {
-          if (this.walking_sound.paused) {
-            this.walking_sound.play()
-          }
-        } else {
-          this.walking_sound.pause()
-        }
-        this.idleStartTime = null
-      }
-      if (this.world.keyboard.LEFT && this.x >= -100) {
-        this.moveLeft()
-        this.otherDirection = true
-        if (!this.isAboveGround()) {
-          if (this.walking_sound.paused) {
-            this.walking_sound.play()
-          }
-        } else {
-          this.walking_sound.pause()
-        }
-        this.idleStartTime = null
-      }
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        this.jump()
-        this.idleStartTime = null
-      }
-      this.world.camera_x = -this.x + 100
+      this.handleMovementAndCamera()
     }, 1000 / 60)
+  }
+
+  /**
+   * Starts the interval for handling animation states every 50ms.
+   * Pauses snoring sound and manages animation transitions.
+   */
+  startAnimationInterval() {
+    const idleThreshold = 5000
     this.intervalID2 = setInterval(() => {
       this.snoring_sound.pause()
-      if (this.isDead()) {
-        this.handleCharacterDeathEvents()
-        this.idleStartTime = null
-        return
-      } else if (this.isHurt()) {
-        const currentTime = new Date().getTime()
-        const hurtSoundCooldown = 1500
-        if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
-          this.hurting_sound.play()
-          this.lastHurtSoundTime = currentTime
-        }
-        this.playAnimation(this.IMAGES_HURT)
-        this.idleStartTime = null
-      } else if (this.isAboveGround()) {
-        if (this.speedY > 0) {
-          this.playAnimation(this.IMAGES_JUMPING_UP, 4)
-        } else {
-          this.playAnimation(this.IMAGES_JUMPING_DOWN, 10)
-        }
-        this.idleStartTime = null
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.playAnimation(this.IMAGES_WALKING)
-        this.idleStartTime = null
-      } else {
-        if (!this.idleStartTime) {
-          this.idleStartTime = Date.now()
-        } else if (Date.now() - this.idleStartTime >= idleThreshold) {
-          this.playAnimation(this.IMAGES_LONG_IDLE, 4)
-          this.snoring_sound.play()
-          return
-        }
-        this.playAnimation(this.IMAGES_IDLE, 4)
-      }
+      this.handleAnimationStates(idleThreshold)
     }, 50)
+  }
+
+  /**
+   * Updates animation states based on the character's condition (e.g., dead, hurt, jumping, walking, or idle).
+   * @param {number} idleThreshold - Time in ms to trigger the long idle state.
+   */
+  handleAnimationStates(idleThreshold) {
+    if (this.isDead()) {
+      this.handleDeath()
+      return
+    } else if (this.isHurt()) {
+      this.handleHurt()
+    } else if (this.isAboveGround()) {
+      this.handleJumpAnimation()
+    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      this.handleWalkAnimation()
+    } else {
+      this.handleIdleState(idleThreshold)
+    }
+  }
+
+  /**
+   * Handles character movement and updates the camera position.
+   * Pauses walking sound when no movement occurs.
+   */
+  handleMovementAndCamera() {
+    this.walking_sound.pause()
+    this.handleRightMovement()
+    this.handleLeftMovement()
+    this.handleJumpAction()
+    this.handleCamera()
+  }
+
+  /**
+   * Handles movement to the right, plays walking sound, and resets idle state.
+   */
+  handleRightMovement() {
+    if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+      this.moveRight()
+      this.otherDirection = false
+      if (!this.isAboveGround()) {
+        if (this.walking_sound.paused) {
+          this.walking_sound.play()
+        }
+      } else {
+        this.walking_sound.pause()
+      }
+      this.idleStartTime = null
+    }
+  }
+
+  /**
+   * Handles movement to the left, plays walking sound, and resets idle state.
+   */
+  handleLeftMovement() {
+    if (this.world.keyboard.LEFT && this.x >= -100) {
+      this.moveLeft()
+      this.otherDirection = true
+      if (!this.isAboveGround()) {
+        if (this.walking_sound.paused) {
+          this.walking_sound.play()
+        }
+      } else {
+        this.walking_sound.pause()
+      }
+      this.idleStartTime = null
+    }
+  }
+
+  /**
+   * Handles jumping action when the space key is pressed, resetting idle state.
+   */
+  handleJumpAction() {
+    if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+      this.jump()
+      this.idleStartTime = null
+    }
+  }
+
+  /**
+   * Updates the camera position based on the character's current position.
+   */
+  handleCamera() {
+    this.world.camera_x = -this.x + 100
+  }
+
+  /**
+   * Handles character death logic and resets idle state.
+   */
+  handleDeath() {
+    this.handleCharacterDeathEvents()
+    this.idleStartTime = null
+  }
+
+  /**
+   * Handles character being hurt, plays hurt sound with cooldown, and updates animation.
+   */
+  handleHurt() {
+    const currentTime = new Date().getTime()
+    const hurtSoundCooldown = 1500
+    if (currentTime - this.lastHurtSoundTime > hurtSoundCooldown) {
+      this.hurting_sound.play()
+      this.lastHurtSoundTime = currentTime
+    }
+    this.playAnimation(this.IMAGES_HURT)
+    this.idleStartTime = null
+  }
+
+  /**
+   * Plays jumping animation depending on the character's vertical speed and resets idle state.
+   */
+  handleJumpAnimation() {
+    if (this.speedY > 0) {
+      this.playAnimation(this.IMAGES_JUMPING_UP, 4)
+    } else {
+      this.playAnimation(this.IMAGES_JUMPING_DOWN, 10)
+    }
+    this.idleStartTime = null
+  }
+
+  /**
+   * Plays walking animation and resets idle state.
+   */
+  handleWalkAnimation() {
+    this.playAnimation(this.IMAGES_WALKING)
+    this.idleStartTime = null
+  }
+
+  /**
+   * Handles idle state animations. If idle time exceeds the threshold, triggers long idle state.
+   * @param {number} idleThreshold - Time in ms to trigger the long idle state.
+   */
+  handleIdleState(idleThreshold) {
+    if (!this.idleStartTime) {
+      this.idleStartTime = Date.now()
+    } else if (Date.now() - this.idleStartTime >= idleThreshold) {
+      this.playAnimation(this.IMAGES_LONG_IDLE, 4)
+      this.snoring_sound.play()
+      return
+    }
+    this.playAnimation(this.IMAGES_IDLE, 4)
   }
 
   /**

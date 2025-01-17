@@ -31,6 +31,6 @@
 @media (any-pointer: coarse) {
   #mblTouchBtnArrows,
   #mblTouchBtnAction {
-    display: flex !important;
+    display: flex;
   }
 }
