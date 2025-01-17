@@ -20,3 +20,17 @@
 .flex {
   display: flex;
 }
+
+/* Standard: ausgeblendet */
+#mblTouchBtnArrows,
+#mblTouchBtnAction {
+  display: none;
+}
+
+/* Falls device "coarse pointer" hat -> einblenden */
+@media (any-pointer: coarse) {
+  #mblTouchBtnArrows,
+  #mblTouchBtnAction {
+    display: flex !important;
+  }
+}

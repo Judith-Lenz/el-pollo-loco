@@ -45,9 +45,10 @@ function initializeGameWorld() {
  * Toggles the visibility of mobile buttons based on the screen size and orientation.
  */
 function toggleMobileButtons() {
-  const isMobile = window.innerWidth <= 768 || window.matchMedia('(orientation: portrait)').matches
+  const isMobile = window.innerWidth <= 1024 || window.matchMedia('(orientation: portrait)').matches
   const btnArrows = document.getElementById('mblTouchBtnArrows')
   const btnAction = document.getElementById('mblTouchBtnAction')
+
   if (isMobile) {
     btnArrows.classList.remove('d-none')
     btnAction.classList.remove('d-none')
