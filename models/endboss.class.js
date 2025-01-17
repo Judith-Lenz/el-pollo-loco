@@ -155,10 +155,16 @@ class Endboss extends MovableObject {
     this.handleAlertIdleCheck()
   }
 
+  /**
+   * Increments the frame counter for alert animations.
+   */
   incrementAlertFrame() {
     this.frameCounterAlert++
   }
 
+  /**
+   * Handles the alert animation by updating frames and transitioning to 'attack' state if completed.
+   */
   handleAlertAnimation() {
     const FRAMES_TO_SKIP = 13
     this.otherDirection = false
@@ -174,6 +180,9 @@ class Endboss extends MovableObject {
     }
   }
 
+  /**
+   * Checks if the character is not close and not dead, transitioning to 'idle' state if true.
+   */
   handleAlertIdleCheck() {
     if (!this.isCharacterClose() && !this.isDead()) {
       this.currentState = 'idle'
@@ -319,6 +328,7 @@ class Endboss extends MovableObject {
     }
     this.checkAndApplyHit()
   }
+
   preventHitDuringAttack() {
     if (this.currentState === 'attack') {
       return true

@@ -121,7 +121,7 @@ class Character extends MovableObject {
    * Pauses snoring sound and manages animation transitions.
    */
   startAnimationInterval() {
-    const idleThreshold = 5000
+    const idleThreshold = 6000
     this.intervalID2 = setInterval(() => {
       this.snoring_sound.pause()
       this.handleAnimationStates(idleThreshold)

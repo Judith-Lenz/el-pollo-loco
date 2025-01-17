@@ -33,17 +33,9 @@ class World {
     this.totalCoins = this.level.coins.length
     this.totalBottles = this.level.bottles.length
     this.updateBottleStatusBar()
-    this.backgroundMusic.loop = true
-    this.backgroundMusic.volume = 0.1
-    this.backgroundMusic.play()
-    if (this.allSoundsMuted) {
-      // anstatt toggleMuteAllSounds():
-      this.toggleCharacterSounds()
-      this.toggleCoinSounds()
-      this.toggleBottleSounds()
-      this.toggleEnemySounds()
-      this.backgroundMusic.muted = true
-      this.updateMuteButton()
+    this.soundManager = new SoundManager(this)
+    if (this.soundManager.allSoundsMuted) {
+      this.soundManager.toggleMuteAllSounds()
     }
     this.draw()
     this.setWorld()
@@ -177,6 +169,10 @@ class World {
     }, bottle.BOTTLE_SPLASH_IMAGES.length * 80)
   }
 
+  /**
+   * Handles coin collision by collecting the coin, incrementing the coin count, and updating the status bar.
+   * @param {Object} coin - The coin object being collected.
+   */
   handleCoinCollision(coin) {
     coin.collectCoin()
     this.collectedCoins++
@@ -218,13 +214,43 @@ class World {
   }
 
   /**
-   * Draws all game elements onto the canvas and handles camera adjustments.
+   * Draws the entire game frame.
    */
   draw() {
+    this.clearCanvas()
+    this.moveCamera()
+    this.drawBackground()
+    this.drawMovableObjects()
+    this.drawUI()
+    this.startAnimation()
+  }
+
+  /**
+   * Clears the canvas for a new frame.
+   */
+  clearCanvas() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+  }
+
+  /**
+   * Moves the camera based on the current position.
+   */
+  moveCamera() {
     this.ctx.translate(this.camera_x, 0)
+  }
+
+  /**
+   * Draws background and cloud objects.
+   */
+  drawBackground() {
     this.addObjectsToMap(this.level.backgroundObjects)
     this.addObjectsToMap(this.level.clouds)
+  }
+
+  /**
+   * Draws all movable objects like enemies and collectibles.
+   */
+  drawMovableObjects() {
     this.addObjectsToMap(this.level.bottles)
     this.addObjectsToMap(this.level.coins)
     this.addObjectsToMap(this.level.enemies)
@@ -232,9 +258,21 @@ class World {
     this.addToMap(this.character)
     this.addToMap(this.statusBarEndboss)
     this.ctx.translate(-this.camera_x, 0)
+  }
+
+  /**
+   * Draws the UI elements such as status bars.
+   */
+  drawUI() {
     this.addToMap(this.statusBarHealth)
     this.addToMap(this.statusBarCoin)
     this.addToMap(this.statusBarBottle)
+  }
+
+  /**
+   * Starts the animation loop by recursively calling draw.
+   */
+  startAnimation() {
     let self = this
     this.frameId = requestAnimationFrame(function () {
       self.draw()
@@ -286,143 +324,28 @@ class World {
     this.ctx.restore()
   }
 
-  // Sounds ----------------------------------------------------------------------------
-
   /**
-   * Toggles the mute state for all game sounds.
-   */
-  toggleMuteAllSounds() {
-    this.allSoundsMuted = !this.allSoundsMuted
-    this.toggleCharacterSounds()
-    this.toggleCoinSounds()
-    this.toggleBottleSounds()
-    this.toggleEnemySounds()
-    this.backgroundMusic.muted = this.allSoundsMuted
-    this.updateMuteButton()
-    localStorage.setItem('allSoundsMuted', JSON.stringify(this.allSoundsMuted))
-  }
-
-  /**
-   * Toggles the mute state of all character-related sounds.
-   */
-  toggleCharacterSounds() {
-    this.character.walking_sound.muted = this.allSoundsMuted
-    this.character.snoring_sound.muted = this.allSoundsMuted
-    this.character.hurting_sound.muted = this.allSoundsMuted
-    this.character.jumping_sound.muted = this.allSoundsMuted
-    this.character.gameOver_sound.muted = this.allSoundsMuted
-  }
-
-  /**
-   * Toggles the mute state of all coin-related sounds.
-   */
-  toggleCoinSounds() {
-    this.level.coins.forEach((coin) => {
-      coin.collect_coin_sound.muted = this.allSoundsMuted
-    })
-  }
-
-  /**
-   * Toggles the mute state of all bottle-related sounds.
-   */
-  toggleBottleSounds() {
-    this.level.bottles.forEach((bottle) => {
-      bottle.collect_bottle_sound.muted = this.allSoundsMuted
-    })
-  }
-
-  /**
-   * Toggles the mute state of all enemy-related sounds.
-   */
-  toggleEnemySounds() {
-    this.level.enemies.forEach((enemy) => {
-      if (enemy.walking_sound) {
-        enemy.walking_sound.muted = this.allSoundsMuted
-      }
-      if (enemy.dead_enemy_sound) {
-        enemy.dead_enemy_sound.muted = this.allSoundsMuted
-      }
-    })
-    this.toggleEndbossSounds()
-  }
-
-  /**
-   * Toggles the mute state of all Endboss-related sounds.
-   */
-  toggleEndbossSounds() {
-    this.level.enemies.forEach((enemy) => {
-      if (enemy instanceof Endboss) {
-        enemy.alert_sound.muted = this.allSoundsMuted
-        enemy.hurt_sound.muted = this.allSoundsMuted
-        enemy.winning_sound.muted = this.allSoundsMuted
-        enemy.dying_sound.muted = this.allSoundsMuted
-      }
-    })
-  }
-
-  /**
-   * Updates the mute button icon based on the current mute state.
-   */
-  updateMuteButton() {
-    const muteDiv = document.getElementById('muteDiv')
-    muteDiv.innerHTML = this.allSoundsMuted
-      ? '<img src="img/icons/volume_off.svg" alt="Mute Icon">'
-      : '<img src="img/icons/volume_up.svg" alt="Volume Icon">'
-  }
-
-  /**
-   * Stops all Endboss sounds and resets their playback state.
-   */
-  stopEndbossSounds() {
-    this.level.enemies.forEach((enemy) => {
-      if (enemy instanceof Endboss) {
-        enemy.alert_sound.pause()
-        enemy.alert_sound.currentTime = 0
-        enemy.hurt_sound.pause()
-        enemy.hurt_sound.currentTime = 0
-        enemy.winning_sound.pause()
-        enemy.winning_sound.currentTime = 0
-      }
-    })
-  }
-
-  /**
-   * Stops all game sounds and resets their playback state.
+   * Stops all game-related activities, including sounds, animations,
+   * and intervals. Clears the canvas and halts the character's actions.
    */
   stop() {
-    this.backgroundMusic.pause()
-    this.backgroundMusic.currentTime = 0
-    this.character.walking_sound.pause()
-    this.character.walking_sound.currentTime = 0
-    this.character.snoring_sound.pause()
-    this.character.snoring_sound.currentTime = 0
-    this.character.hurting_sound.pause()
-    this.character.hurting_sound.currentTime = 0
-    this.character.jumping_sound.pause()
-    this.character.jumping_sound.currentTime = 0
-    this.stopEndbossSounds()
-    this.level.coins.forEach((coin) => {
-      coin.collect_coin_sound.pause()
-      coin.collect_coin_sound.currentTime = 0
-    })
-    this.level.bottles.forEach((bottle) => {
-      bottle.collect_bottle_sound.pause()
-      bottle.collect_bottle_sound.currentTime = 0
-    })
-    this.level.enemies.forEach((enemy) => {
-      if (enemy.walking_sound) {
-        enemy.walking_sound.pause()
-        enemy.walking_sound.currentTime = 0
-      }
-      if (enemy.dead_enemy_sound) {
-        enemy.dead_enemy_sound.pause()
-        enemy.dead_enemy_sound.currentTime = 0
-      }
-    })
+    this.soundManager.stopBackgroundMusic()
+    this.soundManager.stopCharacterSounds()
+    this.soundManager.stopCoinSounds()
+    this.soundManager.stopBottleSounds()
+    this.soundManager.stopOtherEnemySounds()
+    this.soundManager.stopEndbossSounds()
     clearInterval(this.intervalID1)
     clearInterval(this.intervalID2)
     cancelAnimationFrame(this.frameId)
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.character.stop()
+  }
+
+  /**
+   * Toggles the mute state for all game sounds.
+   */
+  toggleMuteAllSounds() {
+    this.soundManager.toggleMuteAllSounds()
   }
 }

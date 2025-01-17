@@ -79,7 +79,6 @@ class ThrowableObject extends MovableObject {
    */
   startSplashAnimation() {
     this.deactivateHitBox()
-
     this.currentImage = 0
     const splashInterval = setInterval(() => {
       if (this.currentImage < this.BOTTLE_SPLASH_IMAGES.length) {
