@@ -1,6 +1,7 @@
 let canvas
 let world
 let keyboard = new Keyboard()
+let canThrow = true
 
 /**
  * Initializes the canvas element for the game.
@@ -21,9 +22,7 @@ function startGame() {
   document.getElementById('home').classList.add('d-none')
   document.getElementById('btnNewGame').classList.add('d-none')
   document.getElementById('muteDiv').classList.remove('d-none')
-  toggleMobileButtons()
   bindMobileButtonEvents()
-  window.addEventListener('resize', toggleMobileButtons)
   setTimeout(initializeGameWorld, 300)
 }
 
@@ -39,22 +38,6 @@ function initializeGameWorld() {
   canvasElement.classList.add('show')
   initLevel()
   world = new World(canvas, keyboard)
-}
-
-/**
- * Toggles the visibility of mobile buttons based on the screen size and orientation.
- */
-function toggleMobileButtons() {
-  const isMobile = window.innerWidth <= 1024 || window.matchMedia('(orientation: portrait)').matches
-  const btnArrows = document.getElementById('mblTouchBtnArrows')
-  const btnAction = document.getElementById('mblTouchBtnAction')
-  if (isMobile) {
-    btnArrows.classList.remove('d-none')
-    btnAction.classList.remove('d-none')
-  } else {
-    btnArrows.classList.add('d-none')
-    btnAction.classList.add('d-none')
-  }
 }
 
 /**

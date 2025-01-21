@@ -285,7 +285,7 @@ class Character extends MovableObject {
     this.deactivateHitBox()
     const animationDuration = this.IMAGES_DEAD.length * 200
     setTimeout(() => {
-      this.world.backgroundMusic.volume = 0
+      this.world.soundManager.backgroundMusic.volume = 0
       this.gameOver_sound.play()
       document.getElementById('gameOverScreen').classList.remove('d-none')
       document.getElementById('home').classList.remove('d-none')

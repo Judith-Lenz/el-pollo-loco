@@ -33,29 +33,7 @@ class DrawableObject {
    * @param {CanvasRenderingContext2D} ctx - The canvas rendering context.
    */
   drawFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof ChickenNormal ||
-      this instanceof ChickenSmall ||
-      this instanceof Coin ||
-      this instanceof Bottle ||
-      this instanceof ThrowableObject ||
-      this instanceof Endboss
-    ) {
-      //hier lege ich fest bei welchen Objekten ich einen Rand sehen möchte.
-      ctx.beginPath()
-      ctx.lineWidth = '3'
-      ctx.strokeStyle = 'blue'
-      ctx.rect(this.x, this.y, this.width, this.height) //hier brauchen wir die Koordinaten vom jeweiligen Objekt!
-      ctx.stroke()
-      // Zeichne die Hitbox (roter Rahmen)
-      const box = this.getCollisionBox()
-      ctx.beginPath()
-      ctx.lineWidth = '2'
-      ctx.strokeStyle = 'red'
-      ctx.rect(box.x, box.y, box.width, box.height)
-      ctx.stroke()
-    }
+    // Debugging-Rahmen aktuell deaktiviert
   }
 
   /**

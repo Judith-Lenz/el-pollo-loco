@@ -1,11 +1,13 @@
 class SoundManager {
   constructor(world) {
-    this.world = world // Verbindung zur World-Klasse
-    this.allSoundsMuted = JSON.parse(localStorage.getItem('allSoundsMuted')) || false
-    this.backgroundMusic = new Audio('audio/Bassa Island Game Loop.mp3')
+    this.world = world
+    if (localStorage.getItem('allSoundsMuted') === null) {
+      localStorage.setItem('allSoundsMuted', JSON.stringify(true))
+    }
+    this.allSoundsMuted = JSON.parse(localStorage.getItem('allSoundsMuted'))
+    this.backgroundMusic = new Audio('audio/Bassa_Island_Game_Loop.mp3')
     this.backgroundMusic.loop = true
     this.backgroundMusic.volume = 0.1
-
     if (!this.allSoundsMuted) {
       this.backgroundMusic.play()
     } else {
@@ -14,17 +16,39 @@ class SoundManager {
   }
 
   /**
-   * Toggles the mute state for all game sounds.
+   * Applies the initial mute state based on local storage settings.
+   * Ensures background music and all sound effects are toggled accordingly.
    */
-  toggleMuteAllSounds() {
-    this.allSoundsMuted = !this.allSoundsMuted
+  applyInitialMuteState() {
+    this.allSoundsMuted = JSON.parse(localStorage.getItem('allSoundsMuted'))
+    this.backgroundMusic.muted = this.allSoundsMuted
+    if (!this.allSoundsMuted) {
+      this.backgroundMusic.play()
+    }
     this.toggleCharacterSounds()
     this.toggleCoinSounds()
     this.toggleBottleSounds()
     this.toggleEnemySounds()
-    this.backgroundMusic.muted = this.allSoundsMuted
     this.updateMuteButton()
+  }
+
+  /**
+   * Toggles the mute state for all game sounds.
+   */
+  toggleMuteAllSounds() {
+    this.allSoundsMuted = !this.allSoundsMuted
     localStorage.setItem('allSoundsMuted', JSON.stringify(this.allSoundsMuted))
+    this.backgroundMusic.muted = this.allSoundsMuted
+    if (!this.allSoundsMuted) {
+      this.backgroundMusic.play()
+    } else {
+      this.backgroundMusic.pause()
+    }
+    this.toggleCharacterSounds()
+    this.toggleCoinSounds()
+    this.toggleBottleSounds()
+    this.toggleEnemySounds()
+    this.updateMuteButton()
   }
 
   /**

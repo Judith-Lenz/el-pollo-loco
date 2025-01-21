@@ -8,7 +8,7 @@ class World {
   canvas
   ctx
   keyboard
-  backgroundMusic = new Audio('audio/Bassa Island Game Loop.mp3')
+  backgroundMusic = new Audio('audio/Bassa_Island_Game_Loop.mp3')
   camera_x = 0
   statusBarHealth = new StatusBarHealth()
   statusBarCoin = new StatusBarCoin()
@@ -34,9 +34,7 @@ class World {
     this.totalBottles = this.level.bottles.length
     this.updateBottleStatusBar()
     this.soundManager = new SoundManager(this)
-    if (this.soundManager.allSoundsMuted) {
-      this.soundManager.toggleMuteAllSounds()
-    }
+    this.soundManager.applyInitialMuteState()
     this.draw()
     this.setWorld()
     this.run()
@@ -65,7 +63,7 @@ class World {
       this.checkCollisionBottles()
       this.checkCollisionEnemies()
       this.checkCollisionBottlesWithEnemies()
-    }, 18)
+    }, 1000 / 60)
 
     this.intervalID2 = setInterval(() => {
       this.checkThrowObjects()
@@ -85,7 +83,7 @@ class World {
       this.throwCooldown = true
       setTimeout(() => {
         this.throwCooldown = false
-      }, 300)
+      }, 900)
     }
   }
 
@@ -112,18 +110,45 @@ class World {
   }
 
   /**
-   * Checks for collisions between the character and enemies.
+   * Checks collisions between the character and enemies.
+   * If the character is jumping on an enemy, it kills the enemy.
+   * Otherwise, the character takes damage.
    */
   checkCollisionEnemies() {
+    let hasJumpedOnEnemy = this.checkJumpOnEnemy()
+    if (!hasJumpedOnEnemy) {
+      this.checkEnemyCollisionDamage()
+    }
+  }
+
+  /**
+   * Checks if the character is jumping on any enemy.
+   * If so, it kills that enemy and returns true; otherwise false.
+   * @returns {boolean} - True if the character jumped on an enemy, otherwise false.
+   */
+  checkJumpOnEnemy() {
+    let jumpedOnEnemy = false
     this.level.enemies.forEach((enemy) => {
       if (!enemy.isDead()) {
         if (this.character.isAboveGround() && this.character.speedY < 0 && this.character.isColliding(enemy)) {
           this.character.speedY = 25
-          this.handleJumpOnEnemy(enemy)
-        } else if (this.character.isColliding(enemy)) {
-          this.character.hit()
-          this.statusBarHealth.setPercentage(this.character.energy)
+          this.handleJumpOnEnemy(enemy) // kills enemy
+          jumpedOnEnemy = true
         }
+      }
+    })
+    return jumpedOnEnemy
+  }
+
+  /**
+   * Deals damage to the character if it collides with any still-alive enemy
+   * and does not jump on them first.
+   */
+  checkEnemyCollisionDamage() {
+    this.level.enemies.forEach((enemy) => {
+      if (!enemy.isDead() && this.character.isColliding(enemy)) {
+        this.character.hit()
+        this.statusBarHealth.setPercentage(this.character.energy)
       }
     })
   }

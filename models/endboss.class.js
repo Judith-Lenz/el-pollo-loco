@@ -399,13 +399,30 @@ class Endboss extends MovableObject {
   }
 
   /**
-   * Manages the Endboss defeat sequence, showing the winning screen.
+   * Manages actions to handle the defeat of the endboss.
    */
   manageEndbossDefeat() {
+    this.playWinningSound()
+    this.showWinnerScreen()
+    this.stopCharacterAndAnimation()
+    this.adjustBackgroundMusic()
+    this.setFinalState()
+  }
+
+  /**
+   * Plays the winning sound once if it hasn't been played yet.
+   */
+  playWinningSound() {
     if (!this.hasPlayedWinningSound) {
       this.winning_sound.play()
       this.hasPlayedWinningSound = true
     }
+  }
+
+  /**
+   * Displays the winner screen and adjusts the UI elements accordingly.
+   */
+  showWinnerScreen() {
     const winnerScreen = document.getElementById('winningScreen')
     if (winnerScreen) {
       winnerScreen.classList.remove('d-none')
@@ -415,9 +432,27 @@ class Endboss extends MovableObject {
       document.getElementById('mblTouchBtnArrows').classList.add('d-none')
       document.getElementById('mblTouchBtnAction').classList.add('d-none')
     }
+  }
+
+  /**
+   * Stops the character's movement and animation.
+   */
+  stopCharacterAndAnimation() {
     this.character.stop()
     this.stopAnimation()
-    this.world.backgroundMusic.volume = 0
+  }
+
+  /**
+   * Mutes the background music by setting its volume to zero.
+   */
+  adjustBackgroundMusic() {
+    this.world.soundManager.backgroundMusic.volume = 0
+  }
+
+  /**
+   * Sets the game state to the final state.
+   */
+  setFinalState() {
     this.currentState = 'final'
   }
 

@@ -17,20 +17,16 @@
   height: 30px;
 }
 
+.touchBtns {
+  display: none;
+}
+
 .flex {
   display: flex;
 }
 
-/* Standard: ausgeblendet */
-#mblTouchBtnArrows,
-#mblTouchBtnAction {
-  display: none;
-}
-
-/* Falls device "coarse pointer" hat -> einblenden */
-@media (any-pointer: coarse) {
-  #mblTouchBtnArrows,
-  #mblTouchBtnAction {
+@media (pointer: coarse) {
+  .touchBtns {
     display: flex;
   }
 }
